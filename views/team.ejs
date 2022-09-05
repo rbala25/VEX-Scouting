@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%=team.number%> Information
+    </title>
+</head>
+
+<body>
+    <h1>
+        Specific Team Information
+    </h1>
+
+    <h2>Basic Info</h2>
+    <div id="basicInf">
+        <ul>
+            <li>
+                <b>
+                    <%=team.number%>:
+                        <%=team.team_name%>
+                </b>
+            </li>
+            <li>Team ID: <%=team.id%>
+            </li>
+            <% if(team.organization) { %>
+                <li>
+                    <%=team.organization%>
+                </li>
+
+                <% } %>
+
+                    <% if(team.location.country !=='United States' ) { %>
+
+                        <% if(team.location.region) { %>
+                            <li>
+                                <%=team.location.city%>, <%=team.location.region%>, <%=team.location.country%>
+                            </li>
+                            <% } else { %>
+                                <li>
+                                    <%=team.location.city%>, <%=team.location.country%>
+                                </li>
+                                <% } %>
+
+                                    <% } else {%>
+                                        <li>
+                                            <%=team.location.city%>, <%=team.location.region%>
+                                        </li>
+                                        <% } %>
+
+                                            <li>
+                                                Program Level: <%=team.grade%>
+                                            </li>
+        </ul>
+    </div>
+
+    <h2>Specific Stats</h2>
+    <div id="specificInf">
+        <ul>
+            <h3>Skills</h3>
+            <li>Driver Skills: <%=team.skills.driving%>
+            </li>
+            <li>Programming Skills: <%=team.skills.auton%>
+            </li>
+            <li>Total Skills Score: <%=team.skills.total%>
+            </li>
+            <li><b>World Skills Rank: <%=team.worldSkillsRank%></b></li>
+
+            <h3>Match Play</h3>
+            <li>Total Win-Loss Record (this season): <%=team.rankings.wins%>-<%=team.rankings.losses%>
+            </li>
+            <li>W-L Ratio: <%=team.rankings.unweightedRate%>
+            </li>
+            <li>Average Strength of Schedule (per match): <%=team.rankings.avgSoS%>
+            </li>
+
+            <h3>Algorithm Specific</h3>
+            <li>True Skill Calculation: <%=team.trueSkill.toFixed(3)%>
+            </li>
+            <li>Weighted W-L Ratio: <%=team.rankings.weightedRate%>
+            </li>
+
+        </ul>
+    </div>
+
+    <h2>Award Count</h2>
+    <h3>Spin Up:</h3>
+    <p>
+        <% if(team.awards.excellence> 0) { %>
+            <span>Excellence Awards:
+                <%=team.awards.excellence%>
+            </span>
+            <%} else if(team.awards.champion> 0) { %>
+                <span>Tournament Champions:
+                    <%=team.awards.champion%>
+                </span>
+                <% } else if(team.awards.skills> 0) { %>
+                    <span>Robot Skills Champions:
+                        <%=team.awards.skills%>
+                    </span>
+                    <% } else if(team.awards.finalist> 0) { %>
+                        <span>Tournament Finalists:
+                            <%=team.awards.finalist%>
+                                </spa <% } else if(team.awards.skills2> 0) { %>
+                                <span>Robot Skills 2nd Place:
+                                    <%=team.awards.skills2%>
+                                </span>
+                                <% } else if(team.awards.skills3> 0) { %>
+                                    <span>Robot Skills 3rd Place:
+                                        <%=team.awards.skills3%>
+                                    </span>
+                                    <% } else if(team.awards.think> 0) { %>
+                                        <span>Think Awards:
+                                            <%=team.awards.think%>
+                                        </span>
+                                        <% } else { %>
+                                            <h5>No Spin Up Awards</h5>
+                                            <% } %>
+    </p>
+
+    <h3>Tipping Point:</h3>
+    <p>
+        <% if(team.tpawards.excellence> 0) { %>
+            <span>Excellence Awards:
+                <%=team.tpawards.excellence%>
+            </span>
+            <%} else if(team.tpawards.champion> 0) { %>
+                <span>Tournamtpent Champions:
+                    <%=team.tpawards.champion%>
+                </span>
+                <% } else if(team.tpawards.skills> 0) { %>
+                    <span>Robot Skills Champions:
+                        <%=team.tpawards.skills%>
+                    </span>
+                    <% } else if(team.tpawards.finalist> 0) { %>
+                        <span>Tournament Finalists:
+                            <%=team.tpawards.finalist%>
+                        </span>
+                        <% } else if(team.tpawards.skills2> 0) { %>
+                            <span>Robot Skills 2nd Place:
+                                <%=team.tpawards.skills2%>
+                            </span>
+                            <% } else if(team.tpawards.skills3> 0) { %>
+                                <span>Robot Skills 3rd Place:
+                                    <%=team.tpawards.skills3%>
+                                </span>
+                                <% } else if(team.tpawards.think> 0) { %>
+                                    <span>Think Awards:
+                                        <%=team.tpawards.think%>
+                                    </span>
+                                    <% } else { %>
+                                        <h5>No Tipping Point Awards</h5>
+                                        <% } %>
+    </p>
+
+
+</body>
+
+</html>

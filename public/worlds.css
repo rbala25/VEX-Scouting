@@ -1,0 +1,117 @@
+body {
+    background-color: lightgray;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+h1 {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+
+}
+
+h2 {
+    font-weight: 600;
+    text-align: center;
+    font: Helvetica;
+}
+
+#nav {
+    font: Helvetica;
+    text-align: center;
+}
+
+.onset {
+    width: 22%;
+    height: 2.5em;
+    display: inline-block;
+    padding: 0.35em 1.2em;
+    border: 0.1em solid #FFFFFF;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 0.12em;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: black;
+    text-align: center;
+    transition: all 0.2s;
+    font: Georgia;
+    font-weight: 500;
+}
+
+.onset:hover {
+    color: #FFFFFF;
+    background-color: black;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+thead {
+    background-color: #972988;
+    color: #ffffff;
+    text-align: left;
+}
+
+td {
+    padding: 12px 15px;
+}
+
+tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+tbody tr.active-row {
+    font-weight: bold;
+    color: #7c18b6;
+}
+
+.number {
+    font-weight: 600;
+}
+
+.link {
+    text-align: center;
+    width: 10%;
+    box-shadow: 0 5px 0 darkred;
+    color: rgb(0, 0, 0);
+    padding: 0.5em 0.75em;
+    position: relative;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.link:hover {
+    cursor: pointer;
+    background-color: darkred;
+}
+
+.link.active {
+    box-shadow: none;
+    top: 5px;
+}
+
+form {
+    padding-top: 25px;
+    width: 100%;
+    height: 2.5em;
+    display: inline;
+    justify-content: end;
+
+}
+
+#submit {
+    display: none;
+}

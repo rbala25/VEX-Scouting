@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Teams Data</title>
+
+    <style type="text/css">
+        #container {
+            overflow: scroll;
+            max-height: 500px;
+            border: 2px solid;
+        }
+    </style>
+
+    <link rel="stylesheet" href="/public/worlds.css" type="text/css">
+</head>
+
+</head>
+
+<body>
+    <h1>VRC Team Information</h1>
+
+    <div id="nav">
+        <nav>
+            <a href="/nj"><button class="onset">New Jersey</button></a>
+            <a href="/matchpicker"><button class="onset">Alliance Picker</button></a>
+            <a href="/info"><button class="onset">Website Information</button></a>
+
+            <form action="/team/" method="post">
+                <input name="teamSearcher" type="text" id="dropdown" placeholder="Search for a Team">
+                <button type="submit" id="submit">Submit</button>
+
+            </form>
+
+        </nav>
+    </div>
+
+    <h2>All Teams</h2>
+
+    <div id="table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Team</th>
+                    <th>Team Name</th>
+                    <th>Region</th>
+                    <th>Country</th>
+                    <th>Organization</th>
+                    <th>Algorithm Score</th>
+                    <th>Driver Skills</th>
+                    <th>Auton Skills</th>
+                    <th>Total Skills</th>
+                    <th>Worlds Skills Rank</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                <% for(i=0; i<teams.length; i++) { %>
+                    <tr>
+                        <td>
+                            <a class="link" href="/team/<%=teams[i].number%>">
+                                <%=teams[i].number%>
+                            </a>
+
+                        </td>
+                        <td>
+                            <%=teams[i].team_name%>
+                        </td>
+                        <% if (teams[i].location.region) {%>
+                            <td>
+                                <%=teams[i].location.region%>
+                            </td>
+                            <% } else { %>
+                                <td>UNKNOWN</td>
+                                <% } %>
+
+                                    <td>
+                                        <%=teams[i].location.country%>
+                                    </td>
+
+                                    <td>
+                                        <% if (teams[i].organization) { %>
+                                            <%=teams[i].organization%>
+                                                <%} else { %>
+                                                    <b>No Organization Found</b>
+                                                    <% } %>
+                                    </td>
+                                    <td>
+                                        <%=teams[i].showableTrueSkill%>
+                                    </td>
+                                    <td>
+                                        <%=teams[i].skills.driving%>
+                                    </td>
+                                    <td>
+                                        <%=teams[i].skills.auton%>
+                                    </td>
+                                    <td>
+                                        <%=teams[i].skills.total%>
+                                    </td>
+
+                                    <td><b>
+                                            <%=teams[i].worldSkillsRank%>
+                                        </b>
+                                    </td>
+
+
+                    </tr>
+                    <%} %>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
