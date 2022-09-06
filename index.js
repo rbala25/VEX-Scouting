@@ -17,7 +17,7 @@ async function forceSchedule() {
     await sortTeams()
 }
 
-forceSchedule()
+// forceSchedule()
 
 // cron.schedule('0 */12 * * *', async () => {
 //     console.log('scheduled')
@@ -57,6 +57,17 @@ app.post('/team/', async (req, res) => {
 app.get('/teams/worlds', async (req, res) => {
     const teams = await Team.find({})
     res.render('worlds', { teams })
+})
+
+app.get('/teams/nj', async (req, res) => {
+    const teams = await Team.find({})
+    const newArr = []
+    for (team of teams) {
+        if (team.location.region === 'New Jersey') {
+            newArr.push(team)
+        }
+    }
+    res.render('nj', { teams: newArr })
 })
 
 app.get('/team/:teamNumber', async (req, res) => {
