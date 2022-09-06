@@ -1,7 +1,6 @@
 const express = require('express')
 const app = express();
 const path = require('path');
-const axios = require('axios').default;
 const mongoose = require('mongoose');
 var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,12 +19,12 @@ async function forceSchedule() {
 
 forceSchedule()
 
-cron.schedule('0 */12 * * *', async () => {
-    console.log('scheduled')
-    await insertTeams()
-    await algorithm()
-    sortTeams()
-})
+// cron.schedule('0 */12 * * *', async () => {
+//     console.log('scheduled')
+//     await insertTeams()
+//     await algorithm()
+//     sortTeams()
+// })
 
 // cron.schedule('* * * * *', () => {
 //     console.log('scheduled')

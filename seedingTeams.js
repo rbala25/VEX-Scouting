@@ -1,4 +1,5 @@
 const { Template } = require('ejs');
+const e = require('express');
 const mongoose = require('mongoose');
 const { count } = require('./models/teams');
 const Team = require('./models/teams');
@@ -54,6 +55,8 @@ async function getAllElse() {
     let counter = 0;
 
     for (arr of arrs) {
+        // for (i = 0; i < 50; i++) {
+        // const arr = arrs[i];
         const teamId = arr.id;
         console.log("Skills Request ", counter)
         counter++;
@@ -418,21 +421,21 @@ async function getAllElse() {
         console.log("Rankings for team ", counter)
         counter++;
 
-        let wins = 0;
-        let losses = 0;
-        let weightedRate = 0;
-        let unweightedRate = 0;
-        let avgSoS = 0;
-        const id = arr.id;
-
-        let weightedWins = 0;
-        let SosCalc = 0;
-
         try {
+            let wins = 0;
+            let losses = 0;
+            let unweightedRate = 0;
+            let avgSoS = 0;
+            const id = arr.id;
+
+            let weightedWins = 0;
+            let SosCalc = 0;
+
             const config = { headers: { 'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZjNiMzA2NDJlNGUyNmVjYzc0MGNiNzU4M2E3N2MwYjZhZmNjZjNkZDNkZjJiNDIwYTY5ODhjNjU0OWE1NTJmY2Q5MTExM2NmODc5MmY5YmMiLCJpYXQiOjE2NjE2MzIxMjAuOTQ5OTE5LCJuYmYiOjE2NjE2MzIxMjAuOTQ5OTIyMSwiZXhwIjoyNjA4NDA2OTIwLjkzOTM4NjgsInN1YiI6IjEwMDk0OCIsInNjb3BlcyI6W119.OCxtefDO9asOhFySsZP8vOlAEACl3zUTBgZRx8pFxssOkOYsaPXHoOA2LT6L_wH6wjEH_ilRrM0fXyXreb6ofF_SzbXLE2QXJGnCJMa3gcAS3QjHyib-bcB6QrLmcyJ-vk8JTgog_k9BgEwxSbjtHB1kjSvo--AkB8jghp6V7noGQzr2cGhLdJEK2FH8VKi7ni5DTXPl0e5fdDGlbKW-ylRhFOO8sdBgRPAFiV040H33EJ50HfbWAatapcfvYpBjaVC5O7wE67RiUB2ufNV7n7W4as8SyEGGVwyEKi5KnTt28hsRFKqCQg-0JB-0CapisBBXpr4wPsojsiCAR8YiZqHDGxQYRmdlJHsmeJcBzOvvjokVrsJmBRB1iMZeVBOYzcl1J7_PiBKfekrjPsCnWTOkZIiyGLVOYP9xqw_qmvYh3xd0XQAaIuKxzGbVlaalQzOHDENnqY7QhDjLp2wPEvyj0MStyD5H8Uhx7TKKeI55b2zcZqinCc8ye5Alt12ltpoBJNkXn8c5asCxUVGC8lNhUlb7e-kveXCWXpihEt1XCftDCrALAvZl-NZikMvhx7gezL51vVlKd_pbCFiNny_1KYVp_GMFSIIVydX7bgrUnyMjH_931DOb6PwVFEjy3zQ6p6Tur_KiaW1aMVQYoYMyP9lUn1I2peqp_XgKIbE' } }
             const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=173&per_page=250&page=1`, config)
 
             const usables = res.data.data;
+            // console.log(usables)
             for (i = 0; i < usables.length; i++) {
                 // console.log(arr.number)
                 const usable = usables[i];
@@ -449,33 +452,47 @@ async function getAllElse() {
 
                 // console.log(eventId)
                 try {
-                    let level = '';
                     const eventId = usable.event.id;
 
                     const config = { headers: { 'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZjNiMzA2NDJlNGUyNmVjYzc0MGNiNzU4M2E3N2MwYjZhZmNjZjNkZDNkZjJiNDIwYTY5ODhjNjU0OWE1NTJmY2Q5MTExM2NmODc5MmY5YmMiLCJpYXQiOjE2NjE2MzIxMjAuOTQ5OTE5LCJuYmYiOjE2NjE2MzIxMjAuOTQ5OTIyMSwiZXhwIjoyNjA4NDA2OTIwLjkzOTM4NjgsInN1YiI6IjEwMDk0OCIsInNjb3BlcyI6W119.OCxtefDO9asOhFySsZP8vOlAEACl3zUTBgZRx8pFxssOkOYsaPXHoOA2LT6L_wH6wjEH_ilRrM0fXyXreb6ofF_SzbXLE2QXJGnCJMa3gcAS3QjHyib-bcB6QrLmcyJ-vk8JTgog_k9BgEwxSbjtHB1kjSvo--AkB8jghp6V7noGQzr2cGhLdJEK2FH8VKi7ni5DTXPl0e5fdDGlbKW-ylRhFOO8sdBgRPAFiV040H33EJ50HfbWAatapcfvYpBjaVC5O7wE67RiUB2ufNV7n7W4as8SyEGGVwyEKi5KnTt28hsRFKqCQg-0JB-0CapisBBXpr4wPsojsiCAR8YiZqHDGxQYRmdlJHsmeJcBzOvvjokVrsJmBRB1iMZeVBOYzcl1J7_PiBKfekrjPsCnWTOkZIiyGLVOYP9xqw_qmvYh3xd0XQAaIuKxzGbVlaalQzOHDENnqY7QhDjLp2wPEvyj0MStyD5H8Uhx7TKKeI55b2zcZqinCc8ye5Alt12ltpoBJNkXn8c5asCxUVGC8lNhUlb7e-kveXCWXpihEt1XCftDCrALAvZl-NZikMvhx7gezL51vVlKd_pbCFiNny_1KYVp_GMFSIIVydX7bgrUnyMjH_931DOb6PwVFEjy3zQ6p6Tur_KiaW1aMVQYoYMyP9lUn1I2peqp_XgKIbE' } }
                     const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/${eventId}`, config)
 
-                    level = res2.data.level;
+                    const level = res2.data.level;
+                    // console.log(level)
 
-                    if (level === 'Signature') {
+                    if (level == 'Signature') {
                         const weightedWinsCalc = wins * 1.1;
                         weightedWins += weightedWinsCalc;
-                    } else if (level === "World") {
+                    } else if (level == "World") {
                         const weightedWinsCalc = wins * 1.2;
                         weightedWins += weightedWinsCalc;
                     } else {
                         weightedWins += wins;
+                        // console.log(arr.number)
+                        // console.log(weightedWins)
+                        // console.log('else state')
                     }
 
                 } catch (e) {
                     console.log(e)
                 }
             }
+
+            console.log(avgSoS, weightedWins)
+
             const totalMatches = wins + losses;
-            weightedRate = weightedWins / totalMatches;
+            if (totalMatches > 0) {
+                weightedRate = weightedWins / totalMatches;
+            } else {
+                weightedRate = unweightedRate;
+            }
 
             const i1 = usables.length;
-            avgSoS = SosCalc / i1;
+            if (i1 > 0) {
+                avgSoS = SosCalc / i1;
+            } else {
+                avgSoS = 0;
+            }
 
             const Obj = {
                 wins: wins,

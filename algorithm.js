@@ -12,6 +12,7 @@ mongoose.connect('mongodb://localhost:27017/vexScouting')
 
 async function algorithm() {
     const arrs = await Team.find({});
+    console.log('found')
     let counter = 0;
 
     for (arr of arrs) {
@@ -29,6 +30,7 @@ async function algorithm() {
         const autonTrue = skills.auton / 25;
         const skillsTrue = driverTrue + autonTrue;
 
+        console.log(weightedRate)
         const weightedRateTrue = rankings.weightedRate * 12;
         const SoSTrue = rankings.avgSoS / 50;
         const rankingsTrue = weightedRateTrue + SoSTrue;
@@ -103,4 +105,5 @@ async function algorithm() {
     }
 }
 
+// algorithm()
 module.exports = algorithm;
