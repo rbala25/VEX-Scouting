@@ -1,4 +1,4 @@
-const Team = require('./models/teams');
+const Team = require('../../models/teams');
 const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost:27017/vexScouting')

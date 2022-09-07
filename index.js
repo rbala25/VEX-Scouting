@@ -9,11 +9,10 @@ const cron = require('node-cron');
 const Team = require('./models/teams');
 const Event = require('./models/upcomingEvents');
 const allevents = require('./models/allEvents');
-const insertTeams = require('./seedingTeams')
-const algorithm = require('./algorithm');
-const sortTeams = require('./sorter')
-const insertEvents = require('./seedingEvents');
-const { rmSync } = require('fs');
+const insertTeams = require('./public/js/seedingTeams')
+const algorithm = require('./public/js/algorithm');
+const sortTeams = require('./public/js/sorter')
+const insertEvents = require('./public/js/seedingEvents');
 const { events } = require('./models/teams');
 
 async function forceSchedule() {
@@ -58,6 +57,8 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/public', express.static('public'));
+app.use(express.static('public'));
+
 
 app.post('/team/', async (req, res) => {
     const searcher = req.body.teamSearcher;

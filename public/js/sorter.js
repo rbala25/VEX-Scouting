@@ -1,4 +1,4 @@
-const Team = require('./models/teams');
+const Team = require('../../models/teams');
 const mongoose = require('mongoose');
 const naturalSort = require('javascript-natural-sort')
 

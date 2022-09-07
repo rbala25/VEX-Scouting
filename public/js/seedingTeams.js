@@ -1,8 +1,8 @@
 const { Template } = require('ejs');
 const e = require('express');
 const mongoose = require('mongoose');
-const { count } = require('./models/teams');
-const Team = require('./models/teams');
+const { count } = require('../../models/teams');
+const Team = require('../../models/teams');
 const axios = require('axios').default;
 
 mongoose.connect('mongodb://localhost:27017/vexScouting')

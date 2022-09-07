@@ -1,7 +1,7 @@
 const e = require('express');
 const mongoose = require('mongoose');
-const Event = require('./models/upcomingEvents');
-const allevents = require('./models/allEvents');
+const Event = require('../../models/upcomingEvents');
+const allevents = require('../../models/allEvents');
 const axios = require('axios').default;
 
 mongoose.connect('mongodb://localhost:27017/vexScouting')
