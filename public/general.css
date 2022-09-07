@@ -22,7 +22,7 @@ h2 {
 }
 
 .onset {
-    width: 22%;
+    width: 19%;
     height: 2.5em;
     display: inline-block;
     padding: 0.35em 1.2em;
@@ -38,6 +38,7 @@ h2 {
     transition: all 0.2s;
     font: Georgia;
     font-weight: 500;
+    margin-bottom: 2%;
 }
 
 .onset:hover {
@@ -113,5 +114,18 @@ form {
 }
 
 #submit {
+    display: none;
+}
+
+#eventp {
+    text-align: center;
+    font-size: medium;
+}
+
+#past {
+    text-align: center;
+}
+
+.remove {
     display: none;
 }

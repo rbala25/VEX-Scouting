@@ -7,7 +7,7 @@ const axios = require('axios').default;
 
 mongoose.connect('mongodb://localhost:27017/vexScouting')
     .then(() => {
-        console.log('mongo connection open')
+        console.log('mongo connection open: seedingTeams')
     })
     .catch((err) => {
         console.log('mongo error')
@@ -478,7 +478,7 @@ async function getAllElse() {
                 }
             }
 
-            console.log(avgSoS, weightedWins)
+            // console.log(avgSoS, weightedWins)
 
             const totalMatches = wins + losses;
             if (totalMatches > 0) {

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Specific Event Information
+    </title>
+</head>
+
+<body>
+    <h1>
+        Specific Event Information
+    </h1>
+
+    <a href="/events"><button>Back to Events Data</button></a>
+
+    <h2>Basic Info</h2>
+    <div id="basicInf">
+        <ul>
+            <li>
+                <b>
+                    <%=event.name%>
+                </b>
+            </li>
+            <li>
+                Venue: <%=event.location.venue%>
+            </li>
+            <li>
+                <%=event.location.city%>, <%=event.location.region%>, <%=event.location.country%>
+            </li>
+            <li>
+                Start Date: <%=event.unformatStart%>
+            </li>
+            <li>
+                End Date: <%=event.unformatEnd%>
+            </li>
+            <li>Level: <%=event.level%>
+            </li>
+        </ul>
+    </div>
+
+    <h2>Specific Stats</h2>
+    <div id="specificInf">
+        <ul>
+            <li>Event ID: <%=event.id%>
+            </li>
+            <li>Event SKU: <%=event.sku%>
+            </li>
+            <li>Season ID: <%=event.season.id%>
+            </li>
+            <li>Season Name: <%=event.season.name%>
+            </li>
+            <% if(event.season.awards_finalized===true) { %>
+                <li>Awards Finalized: True </li>
+                <% } else { %>
+                    <li>Awards Finalized: False </li>
+                    <% } %>
+
+                        <h4>Divisions:</h4>
+                        <% for(event.division of event.divisions) { %>
+                            <li>Division ID: <%=event.division.id%>
+                            </li>
+                            <li>Division Name: <%=event.division.name%>
+                            </li>
+                            <li>Division Order: <%=event.division.order%>
+                            </li>
+
+                            <% } %>
+        </ul>
+    </div>
+
+
+</body>
+
+</html>

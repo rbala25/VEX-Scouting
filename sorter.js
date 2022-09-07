@@ -4,7 +4,7 @@ const naturalSort = require('javascript-natural-sort')
 
 mongoose.connect('mongodb://localhost:27017/vexScouting')
     .then(() => {
-        console.log('mongo connection open')
+        console.log('mongo connection open: sorter')
     })
     .catch((err) => {
         console.log('mongo error')

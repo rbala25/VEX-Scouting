@@ -7,24 +7,35 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const cron = require('node-cron');
 
 const Team = require('./models/teams');
+const Event = require('./models/upcomingEvents');
+const allevents = require('./models/allEvents');
 const insertTeams = require('./seedingTeams')
 const algorithm = require('./algorithm');
 const sortTeams = require('./sorter')
+const insertEvents = require('./seedingEvents');
+const { rmSync } = require('fs');
+const { events } = require('./models/teams');
 
 async function forceSchedule() {
     await insertTeams()
     await algorithm()
     await sortTeams()
+    await insertEvents()
 }
 
 // forceSchedule()
 
-// cron.schedule('0 */12 * * *', async () => {
-//     console.log('scheduled')
-//     await insertTeams()
-//     await algorithm()
-//     sortTeams()
-// })
+cron.schedule('0 */12 * * *', async () => {
+    console.log('scheduled')
+    await insertTeams()
+    await algorithm()
+    sortTeams()
+})
+
+cron.schedule('0 * * * *', async () => {
+    console.log('Seeding Events')
+    await insertEvents()
+})
 
 // cron.schedule('* * * * *', () => {
 //     console.log('scheduled')
@@ -34,7 +45,7 @@ async function forceSchedule() {
 
 mongoose.connect('mongodb://localhost:27017/vexScouting')
     .then(() => {
-        console.log('mongo connection open')
+        console.log('mongo connection open: index')
     })
     .catch((err) => {
         console.log('mongo error')
@@ -49,9 +60,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/public', express.static('public'));
 
 app.post('/team/', async (req, res) => {
-    const teamSearcher = req.body.teamSearcher;
-    const newTeam = await Team.find({ number: teamSearcher })
-    res.redirect(`/team/${newTeam[0].number}`)
+    const searcher = req.body.teamSearcher;
+    const newTeam = await Team.findOne({ number: searcher })
+
+    if (newTeam !== null) {
+        res.redirect(`/team/${newTeam.number}`)
+    } else {
+        const type = 'team';
+        res.render('default', { type, searcher })
+    }
 })
 
 app.get('/teams/worlds', async (req, res) => {
@@ -73,10 +90,117 @@ app.get('/teams/nj', async (req, res) => {
 app.get('/team/:teamNumber', async (req, res) => {
     const { teamNumber } = req.params;
     const foundTeam = await Team.find({ number: teamNumber })
-    console.log(foundTeam[0])
     const teamObject = foundTeam[0];
 
     res.render('team', { team: teamObject })
+})
+
+app.get('/event/:id', async (req, res) => {
+    const { id } = req.params;
+    const foundEvent = await allevents.find({ id: id });
+    const foundEventObj = foundEvent[0];
+
+    res.render('eventOne', { event: foundEventObj })
+})
+
+app.post('/event/', async (req, res) => {
+    let searcher = req.body.eventSearcher;
+    const newEvent = await allevents.findOne({ id: searcher })
+
+    if (newEvent !== null) {
+        res.redirect(`/event/${newEvent.id}`)
+    } else {
+        const type = 'event';
+        res.render('default', { type, searcher })
+    }
+})
+
+app.get('/events', async (req, res) => {
+    const events = await Event.find({})
+    // const allEvents = await allevents.find({})
+    res.render('event', { events })
+})
+
+app.get('/events/pastIncluded', async (req, res) => {
+    const events = await allevents.find({});
+    res.render('pastIncluded', { events })
+})
+
+
+app.post('/events/pastIncluded', async (req, res) => {
+    res.redirect('pastIncluded')
+})
+
+app.get('/events/region/:region', async (req, res) => {
+    const { region: place } = req.params;
+    const list = await Event.find({});
+    const placelower = place.toLowerCase()
+
+    const events = []
+    for (lists of list) {
+        const region2 = lists.location.region;
+        if (region2 !== null) {
+            const lower = region2.toLowerCase()
+            if (lower === placelower) {
+                events.push(lists);
+            }
+        }
+    }
+
+    res.render('specificplace', { events, place })
+})
+
+app.get('/events/country/:country', async (req, res) => {
+    const { country: place } = req.params;
+    const list = await Event.find({});
+    const placelower = place.toLowerCase()
+
+    const events = []
+    for (lists of list) {
+        const region2 = lists.location.country;
+        if (region2 !== null) {
+            const lower = region2.toLowerCase()
+            if (lower === placelower) {
+                events.push(lists);
+            }
+        }
+    }
+
+    res.render('specificplace', { events, place })
+})
+
+app.post('/events/region/', async (req, res) => {
+    const region = req.body.search;
+    res.redirect(`/events/region/${region}`)
+})
+
+app.post('/events/country/', async (req, res) => {
+    const country = req.body.search;
+    res.redirect(`/events/country/${country}`)
+})
+
+app.get('/events/level/:level', async (req, res) => {
+    const { level } = req.params;
+    const list = await Event.find({});
+    const lvllower = level.toLowerCase()
+
+    const events = []
+    for (lists of list) {
+        const leveled = lists.level;
+        if (leveled !== null) {
+            const lower = leveled.toLowerCase()
+            if (lower === lvllower) {
+                events.push(lists);
+            }
+        }
+    }
+
+    res.render('level', { events, level })
+})
+
+app.post('/events/level', async (req, res) => {
+    const level = req.body.select;
+    res.redirect(`/events/level/${level}`)
 })
 
 app.listen(3000, () => {
