@@ -59,7 +59,15 @@ const teamSchema = new mongoose.Schema({
     },
     trueSkill: Number,
     showableTrueSkill: Number,
-    worldSkillsRank: Number
+    worldSkillsRank: Number,
+    fourmdrive: Boolean,
+    twomdrive: Boolean,
+    sixmdrive: Boolean,
+    dbflywheel: Boolean,
+    snflywheel: Boolean,
+    cata: Boolean,
+    auton: Boolean,
+    wpauton: Boolean,
 })
 
 const Team = mongoose.model('Team', teamSchema);

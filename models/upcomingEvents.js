@@ -29,7 +29,8 @@ const eventSchema = new mongoose.Schema({
     ongoing: Boolean,
     awards_finalized: Boolean,
     unformatStart: String,
-    unformatEnd: String
+    unformatEnd: String,
+    teamID: [Number]
 })
 
 const Event = mongoose.model('Event', eventSchema);

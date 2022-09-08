@@ -13,13 +13,15 @@ const insertTeams = require('./public/js/seedingTeams')
 const algorithm = require('./public/js/algorithm');
 const sortTeams = require('./public/js/sorter')
 const insertEvents = require('./public/js/seedingEvents');
-const { events } = require('./models/teams');
+const { events, findOne } = require('./models/teams');
+const { on } = require('events');
+const e = require('express');
 
 async function forceSchedule() {
-    await insertTeams()
-    await algorithm()
-    await sortTeams()
-    await insertEvents()
+    // await insertTeams()
+    // await algorithm()
+    // await sortTeams()
+    // await insertEvents()
 }
 
 // forceSchedule()
@@ -202,6 +204,156 @@ app.get('/events/level/:level', async (req, res) => {
 app.post('/events/level', async (req, res) => {
     const level = req.body.select;
     res.redirect(`/events/level/${level}`)
+})
+
+app.get('/matchpicker', async (req, res) => {
+    const events = await Event.find({})
+    // const allEvents = await allevents.find({})
+    res.render('picker', { events })
+})
+
+app.get('/matchpicker/region/:region', async (req, res) => {
+    const { region: place } = req.params;
+    const list = await Event.find({});
+    const placelower = place.toLowerCase()
+
+    const events = []
+    for (lists of list) {
+        const region2 = lists.location.region;
+        if (region2 !== null) {
+            const lower = region2.toLowerCase()
+            if (lower === placelower) {
+                events.push(lists);
+            }
+        }
+    }
+
+    res.render('specificplacepick', { events, place })
+})
+
+app.get('/matchpicker/country/:country', async (req, res) => {
+    const { country: place } = req.params;
+    const list = await Event.find({});
+    const placelower = place.toLowerCase()
+
+    const events = []
+    for (lists of list) {
+        const region2 = lists.location.country;
+        if (region2 !== null) {
+            const lower = region2.toLowerCase()
+            if (lower === placelower) {
+                events.push(lists);
+            }
+        }
+    }
+
+    res.render('specificplacepick', { events, place })
+})
+
+app.post('/matchpicker/region/', async (req, res) => {
+    const region = req.body.search;
+    res.redirect(`/matchpicker/region/${region}`)
+})
+
+app.post('/matchpicker/country/', async (req, res) => {
+    const country = req.body.search;
+    res.redirect(`/matchpicker/country/${country}`)
+})
+
+app.get('/matchpicker/level/:level', async (req, res) => {
+    const { level } = req.params;
+    const list = await Event.find({});
+    const lvllower = level.toLowerCase()
+
+    const events = []
+    for (lists of list) {
+        const leveled = lists.level;
+        if (leveled !== null) {
+            const lower = leveled.toLowerCase()
+            if (lower === lvllower) {
+                events.push(lists);
+            }
+        }
+    }
+
+    res.render('levelteampicker', { events, level })
+})
+
+app.post('/matchpicker/level', async (req, res) => {
+    const level = req.body.select;
+    res.redirect(`/matchpicker/level/${level}`)
+})
+
+app.get('/picker/:id', async (req, res) => {
+    const { id } = req.params;
+    const foundEvent = await allevents.find({ id: id });
+    const foundEventObj = foundEvent[0];
+
+    res.render('pickerOne', { event: foundEventObj })
+})
+
+app.post('/picker/', async (req, res) => {
+    let searcher = req.body.eventSearcher;
+    const newEvent = await allevents.findOne({ id: searcher })
+
+    if (newEvent !== null) {
+        res.redirect(`/picker/${newEvent.id}`)
+    } else {
+        const type = 'event';
+        res.render('default', { type, searcher })
+    }
+})
+
+app.post('/boxes/:id', async (req, res) => {
+    const { id } = req.params;
+    let { fourmd, twomd, sixmd, twomf, onemf, cata, aut, autwp } = req.body;
+
+    if (fourmd === 'on') {
+        await Team.findOneAndUpdate({ id: id }, { fourmdrive: true })
+    }
+    else {
+        await Team.findOneAndUpdate({ id: id }, { fourmdrive: false })
+    }
+    if (twomd === 'on') {
+        await Team.findOneAndUpdate({ id: id }, { twomdrive: true })
+    }
+    else {
+        await Team.findOneAndUpdate({ id: id }, { twomdrive: false })
+    }
+    if (sixmd === 'on') {
+        await Team.findOneAndUpdate({ id: id }, { sixmdrive: true })
+    } else {
+        await Team.findOneAndUpdate({ id: id }, { sixmdrive: false })
+    }
+    if (twomf === 'on') {
+        await Team.findOneAndUpdate({ id: id }, { dbflywheel: true })
+    } else {
+        await Team.findOneAndUpdate({ id: id }, { dbflywheel: false })
+    }
+    if (onemf === 'on') {
+        await Team.findOneAndUpdate({ id: id }, { snflywheel: true })
+    } else {
+        await Team.findOneAndUpdate({ id: id }, { snflywheel: false })
+    }
+    if (cata === 'on') {
+        await Team.findOneAndUpdate({ id: id }, { cata: true })
+    } else {
+        await Team.findOneAndUpdate({ id: id }, { cata: false })
+    }
+    if (aut === 'on') {
+        await Team.findOneAndUpdate({ id: id }, { auton: true })
+        // const team = await findOne({ id: id })
+        // console.log(team)
+    } else {
+        await Team.findOneAndUpdate({ id: id }, { auton: false })
+    }
+    if (autwp === 'on') {
+        await Team.findOneAndUpdate({ id: id }, { autonwp: true })
+    } else {
+        await Team.findOneAndUpdate({ id: id }, { autonwp: false })
+    }
+
+    res.redirect('/teams/worlds')
 })
 
 app.listen(3000, () => {

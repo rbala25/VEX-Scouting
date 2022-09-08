@@ -157,7 +157,29 @@
                                         <h5>No Tipping Point Awards</h5>
                                         <% } %>
     </p>
+    <div id="scoutingBox">
+        <h3>Robot Features</h3>
+        <form method="post" action='/boxes/<%=team.id%>'>
+            <label for="4md">4 Motor Drive</label>
+            <input type="checkbox" name="fourmd" id="4md" <%=team.fourmdrive ? "checked" : "" %>>
+            <label for="2md">2 Motor Drive</label>
+            <input type="checkbox" name="twomd" id="2md" <%=team.twomdrive ? "checked" : "" %>>
+            <label for="6md">6 Motor Drive</label>
+            <input type="checkbox" name="sixmd" id="6md" <%=team.sixmdrive ? "checked" : "" %>>
+            <label for="2mf">Double Flywheel</label>
+            <input type="checkbox" name="twomf" id="2mf" <%=team.dbflywheel ? "checked" : "" %>>
+            <label for="1mf">Single Flywheel</label>
+            <input type="checkbox" name="onemf" id="1mf" <%=team.snflywheel ? "checked" : "" %>>
+            <label for="cata">Catapult</label>
+            <input type="checkbox" name="cata" id="cata" <%=team.cata ? "checked" : "" %>>
+            <label for="aut">Match Auton</label>
+            <input type="checkbox" name="aut" id="aut" <%=team.auton ? "checked" : "" %>>
+            <label for="autwp">Match Auton Win Point</label>
+            <input type="checkbox" name="autwp" id="autwp" <%=team.autonwp ? "checked" : "" %>>
 
+            <button>Save</button>
+        </form>
+    </div>
 
 </body>
 

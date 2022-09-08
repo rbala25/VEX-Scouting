@@ -5,14 +5,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Specific Event</title>
+    <title>Specific Events</title>
 
     <link rel="stylesheet" href="/css/general.css" type="text/css">
 </head>
 
 <body>
-    <h1>Upcoming VRC Events</h1>
-    <p id="eventp">This page only shows tournaments and leagues (not workshops or virtual remote competitions).</p>
+    <h1>Alliance Selector Help Tool</h1>
+    <h3 id="past">Only '<%=level.toUpperCase()%>'' Events
+    </h3>
 
     <div id="nav">
         <nav>
@@ -21,38 +22,12 @@
             <a href="/matchpicker"><button class="onset">Alliance Picker</button></a>
             <a href="/info"><button class="onset">Website Information</button></a>
 
-            <form action="/event/" method="post">
+            <form action="/selector/" method="post">
                 <input name="eventSearcher" type="text" id="dropdown" placeholder="Event Search (id)">
                 <button type="submit" id="submit">Submit</button>
-
             </form>
 
         </nav>
-    </div>
-
-    <h4>Filters</h4>
-    <div id="filters">
-        <form action="/events/pastIncluded" method: "POST">
-            <button class="filteredButton">See Completed Events</button>
-        </form>
-        <form action="/events/region/" method="post">
-            <input type="text" name="search" placeholder="Search by Region" id="filteredInp1">
-            <button class="remove">Submit</button>
-        </form>
-        <form action="/events/country/" method="post">
-            <input type="text" name="search" placeholder="Search by Country" id="filteredInp2">
-            <button class="remove">Submit</button>
-        </form>
-        <form action="/events/level/" method="post">
-            <select name="select" id="select">
-                <option value="choose" selected disabled hidden>Choose an option</option>
-                <option value="regional">Regional</option>
-                <option value="signature">Signature</option>
-                <option value="other">Other</option>
-            </select>
-            <button class="remove">Submit</button>
-        </form>
-
     </div>
 
     <div id="table">
@@ -73,7 +48,7 @@
                 <% for(i=0; i<events.length; i++) { %>
                     <tr>
                         <td>
-                            <a class="link" href="/event/<%=events[i].id%>">
+                            <a class="link" href="/picker/<%=events[i].id%>">
                                 <%=events[i].id%>
                             </a>
 
