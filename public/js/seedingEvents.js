@@ -41,47 +41,50 @@ async function getEvents() {
     return arr;
 }
 
-// async function getSecond() {
-//     console.log("Adding teams to Events")
-//     const usables = await getEvents();
-//     console.log('got events')
-//     const arr = []
-//     let counter = 0;
-//     for (i = 0; i < usables.length; i++) {
-//         // for (usable of usables) {
-//         const usable = usables[i]
-//         console.log(usable.id, 'Team ', counter)
-//         counter++;
-//         const id = usable.id;
-//         const config = { headers: { 'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZjNiMzA2NDJlNGUyNmVjYzc0MGNiNzU4M2E3N2MwYjZhZmNjZjNkZDNkZjJiNDIwYTY5ODhjNjU0OWE1NTJmY2Q5MTExM2NmODc5MmY5YmMiLCJpYXQiOjE2NjE2MzIxMjAuOTQ5OTE5LCJuYmYiOjE2NjE2MzIxMjAuOTQ5OTIyMSwiZXhwIjoyNjA4NDA2OTIwLjkzOTM4NjgsInN1YiI6IjEwMDk0OCIsInNjb3BlcyI6W119.OCxtefDO9asOhFySsZP8vOlAEACl3zUTBgZRx8pFxssOkOYsaPXHoOA2LT6L_wH6wjEH_ilRrM0fXyXreb6ofF_SzbXLE2QXJGnCJMa3gcAS3QjHyib-bcB6QrLmcyJ-vk8JTgog_k9BgEwxSbjtHB1kjSvo--AkB8jghp6V7noGQzr2cGhLdJEK2FH8VKi7ni5DTXPl0e5fdDGlbKW-ylRhFOO8sdBgRPAFiV040H33EJ50HfbWAatapcfvYpBjaVC5O7wE67RiUB2ufNV7n7W4as8SyEGGVwyEKi5KnTt28hsRFKqCQg-0JB-0CapisBBXpr4wPsojsiCAR8YiZqHDGxQYRmdlJHsmeJcBzOvvjokVrsJmBRB1iMZeVBOYzcl1J7_PiBKfekrjPsCnWTOkZIiyGLVOYP9xqw_qmvYh3xd0XQAaIuKxzGbVlaalQzOHDENnqY7QhDjLp2wPEvyj0MStyD5H8Uhx7TKKeI55b2zcZqinCc8ye5Alt12ltpoBJNkXn8c5asCxUVGC8lNhUlb7e-kveXCWXpihEt1XCftDCrALAvZl-NZikMvhx7gezL51vVlKd_pbCFiNny_1KYVp_GMFSIIVydX7bgrUnyMjH_931DOb6PwVFEjy3zQ6p6Tur_KiaW1aMVQYoYMyP9lUn1I2peqp_XgKIbE' } }
-//         const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/${id}/teams?registered=true&myTeams=false&page=1&per_page=250`, config)
-//         const reusables = res2.data.data;
-//         const iterator = res2.data.meta.last_page;
-//         if (iterator > 1) {
-//             for (i = 0; i < reusables.length; i++) {
-//                 const config = { headers: { 'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZjNiMzA2NDJlNGUyNmVjYzc0MGNiNzU4M2E3N2MwYjZhZmNjZjNkZDNkZjJiNDIwYTY5ODhjNjU0OWE1NTJmY2Q5MTExM2NmODc5MmY5YmMiLCJpYXQiOjE2NjE2MzIxMjAuOTQ5OTE5LCJuYmYiOjE2NjE2MzIxMjAuOTQ5OTIyMSwiZXhwIjoyNjA4NDA2OTIwLjkzOTM4NjgsInN1YiI6IjEwMDk0OCIsInNjb3BlcyI6W119.OCxtefDO9asOhFySsZP8vOlAEACl3zUTBgZRx8pFxssOkOYsaPXHoOA2LT6L_wH6wjEH_ilRrM0fXyXreb6ofF_SzbXLE2QXJGnCJMa3gcAS3QjHyib-bcB6QrLmcyJ-vk8JTgog_k9BgEwxSbjtHB1kjSvo--AkB8jghp6V7noGQzr2cGhLdJEK2FH8VKi7ni5DTXPl0e5fdDGlbKW-ylRhFOO8sdBgRPAFiV040H33EJ50HfbWAatapcfvYpBjaVC5O7wE67RiUB2ufNV7n7W4as8SyEGGVwyEKi5KnTt28hsRFKqCQg-0JB-0CapisBBXpr4wPsojsiCAR8YiZqHDGxQYRmdlJHsmeJcBzOvvjokVrsJmBRB1iMZeVBOYzcl1J7_PiBKfekrjPsCnWTOkZIiyGLVOYP9xqw_qmvYh3xd0XQAaIuKxzGbVlaalQzOHDENnqY7QhDjLp2wPEvyj0MStyD5H8Uhx7TKKeI55b2zcZqinCc8ye5Alt12ltpoBJNkXn8c5asCxUVGC8lNhUlb7e-kveXCWXpihEt1XCftDCrALAvZl-NZikMvhx7gezL51vVlKd_pbCFiNny_1KYVp_GMFSIIVydX7bgrUnyMjH_931DOb6PwVFEjy3zQ6p6Tur_KiaW1aMVQYoYMyP9lUn1I2peqp_XgKIbE' } }
-//                 const res3 = await axios.get(`https://www.robotevents.com/api/v2/events/${id}/teams?registered=true&myTeams=false&page=${i}&per_page=250`, config)
-//                 const rereusables = res3.data.data;
-//                 for (rereusable of rereusables) {
-//                     const teamID = rereusable.id;
-//                     arr.push(teamID);
-//                 }
-//             }
-//         } else {
-//             for (reusable of reusables) {
-//                 const teamID = reusable.id;
-//                 arr.push(teamID);
-//             }
-//         }
-//     }
-//     usables.teamID = arr;
-//     console.log("Finished getting team IDs")
-//     return usables;
-// }
+async function getSecond() {
+    console.log("Adding teams to Events")
+    const usables = await getEvents();
+    console.log('got events')
+    let counter = 0;
+    // for (usable of usables) {
+    for (i = 0; i < 50; i++) {
+        const arr = []
+        const usable = usables[i]
+        console.log(usable.id, 'Team ', counter)
+        counter++;
+        const id = usable.id;
+        const config = { headers: { 'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZjNiMzA2NDJlNGUyNmVjYzc0MGNiNzU4M2E3N2MwYjZhZmNjZjNkZDNkZjJiNDIwYTY5ODhjNjU0OWE1NTJmY2Q5MTExM2NmODc5MmY5YmMiLCJpYXQiOjE2NjE2MzIxMjAuOTQ5OTE5LCJuYmYiOjE2NjE2MzIxMjAuOTQ5OTIyMSwiZXhwIjoyNjA4NDA2OTIwLjkzOTM4NjgsInN1YiI6IjEwMDk0OCIsInNjb3BlcyI6W119.OCxtefDO9asOhFySsZP8vOlAEACl3zUTBgZRx8pFxssOkOYsaPXHoOA2LT6L_wH6wjEH_ilRrM0fXyXreb6ofF_SzbXLE2QXJGnCJMa3gcAS3QjHyib-bcB6QrLmcyJ-vk8JTgog_k9BgEwxSbjtHB1kjSvo--AkB8jghp6V7noGQzr2cGhLdJEK2FH8VKi7ni5DTXPl0e5fdDGlbKW-ylRhFOO8sdBgRPAFiV040H33EJ50HfbWAatapcfvYpBjaVC5O7wE67RiUB2ufNV7n7W4as8SyEGGVwyEKi5KnTt28hsRFKqCQg-0JB-0CapisBBXpr4wPsojsiCAR8YiZqHDGxQYRmdlJHsmeJcBzOvvjokVrsJmBRB1iMZeVBOYzcl1J7_PiBKfekrjPsCnWTOkZIiyGLVOYP9xqw_qmvYh3xd0XQAaIuKxzGbVlaalQzOHDENnqY7QhDjLp2wPEvyj0MStyD5H8Uhx7TKKeI55b2zcZqinCc8ye5Alt12ltpoBJNkXn8c5asCxUVGC8lNhUlb7e-kveXCWXpihEt1XCftDCrALAvZl-NZikMvhx7gezL51vVlKd_pbCFiNny_1KYVp_GMFSIIVydX7bgrUnyMjH_931DOb6PwVFEjy3zQ6p6Tur_KiaW1aMVQYoYMyP9lUn1I2peqp_XgKIbE' } }
+        const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/${id}/teams?registered=true&myTeams=false&page=1&per_page=250`, config)
+        const reusables = res2.data.data;
+        const iterator = res2.data.meta.last_page;
+        if (iterator > 1) {
+            console.log(reusables.length)
+            for (i = 0; i < reusables.length; i++) {
+                const config = { headers: { 'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZjNiMzA2NDJlNGUyNmVjYzc0MGNiNzU4M2E3N2MwYjZhZmNjZjNkZDNkZjJiNDIwYTY5ODhjNjU0OWE1NTJmY2Q5MTExM2NmODc5MmY5YmMiLCJpYXQiOjE2NjE2MzIxMjAuOTQ5OTE5LCJuYmYiOjE2NjE2MzIxMjAuOTQ5OTIyMSwiZXhwIjoyNjA4NDA2OTIwLjkzOTM4NjgsInN1YiI6IjEwMDk0OCIsInNjb3BlcyI6W119.OCxtefDO9asOhFySsZP8vOlAEACl3zUTBgZRx8pFxssOkOYsaPXHoOA2LT6L_wH6wjEH_ilRrM0fXyXreb6ofF_SzbXLE2QXJGnCJMa3gcAS3QjHyib-bcB6QrLmcyJ-vk8JTgog_k9BgEwxSbjtHB1kjSvo--AkB8jghp6V7noGQzr2cGhLdJEK2FH8VKi7ni5DTXPl0e5fdDGlbKW-ylRhFOO8sdBgRPAFiV040H33EJ50HfbWAatapcfvYpBjaVC5O7wE67RiUB2ufNV7n7W4as8SyEGGVwyEKi5KnTt28hsRFKqCQg-0JB-0CapisBBXpr4wPsojsiCAR8YiZqHDGxQYRmdlJHsmeJcBzOvvjokVrsJmBRB1iMZeVBOYzcl1J7_PiBKfekrjPsCnWTOkZIiyGLVOYP9xqw_qmvYh3xd0XQAaIuKxzGbVlaalQzOHDENnqY7QhDjLp2wPEvyj0MStyD5H8Uhx7TKKeI55b2zcZqinCc8ye5Alt12ltpoBJNkXn8c5asCxUVGC8lNhUlb7e-kveXCWXpihEt1XCftDCrALAvZl-NZikMvhx7gezL51vVlKd_pbCFiNny_1KYVp_GMFSIIVydX7bgrUnyMjH_931DOb6PwVFEjy3zQ6p6Tur_KiaW1aMVQYoYMyP9lUn1I2peqp_XgKIbE' } }
+                const res3 = await axios.get(`https://www.robotevents.com/api/v2/events/${id}/teams?registered=true&myTeams=false&page=${i}&per_page=250`, config)
+                const rereusables = res3.data.data;
+                for (rereusable of rereusables) {
+                    console.log(rereusable.id)
+                    const teamID = rereusable.id;
+                    arr.push(teamID);
+                }
+            }
+        } else {
+            for (reusable of reusables) {
+                const teamID = reusable.id;
+                arr.push(teamID);
+            }
+        }
+        usable.teamID = arr;
+    }
+
+    console.log("Finished getting team IDs")
+    return usables;
+}
 
 
 async function getElse() {
-    const arrs = await getEvents();
+    const arrs = await getSecond();
     const sortedArrs = arrs.sort((a, b) => b.start - a.start)
 
     const today = new Date();

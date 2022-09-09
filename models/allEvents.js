@@ -30,7 +30,12 @@ const alleventschema = new mongoose.Schema({
     awards_finalized: Boolean,
     unformatStart: String,
     unformatEnd: String,
-    teamID: [Number]
+    // teamID: {
+    //     type: Array,
+    //     require: true,
+    //     default: []
+    // }
+    teamID: Array
 })
 
 const allevents = mongoose.model('allevents', alleventschema);
