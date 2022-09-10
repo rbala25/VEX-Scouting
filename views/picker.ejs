@@ -21,7 +21,7 @@
             <a href="/events"><button class="onset">Upcoming Events</button></a>
             <a href="/info"><button class="onset">Website Information</button></a>
 
-            <form action="/selector/" method="post">
+            <form action="/picker/" method="post">
                 <input name="eventSearcher" type="text" id="dropdown" placeholder="Event Search (id)">
                 <button type="submit" id="submit">Submit</button>
 
@@ -42,7 +42,7 @@
         </form>
         <form action="/matchpicker/level/" method="post">
             <select name="select" id="select">
-                <option value="choose" selected disabled hidden>Choose an option</option>
+                <option value="choose" selected disabled hidden>Choose a level</option>
                 <option value="regional">Regional</option>
                 <option value="signature">Signature</option>
                 <option value="other">Other</option>

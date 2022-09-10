@@ -288,72 +288,125 @@ app.get('/picker/:id', async (req, res) => {
     const { id } = req.params;
     const foundEvent = await allevents.find({ id: id });
     const foundEventObj = foundEvent[0];
+    const teams = foundEventObj.teamID;
+    const usedArr = [];
 
-    res.render('pickerOne', { event: foundEventObj })
+    function compare(a, b) {
+        if (a.trueSkill > b.trueSkill) {
+            return -1;
+        }
+        if (a.trueSkill < b.trueSkill) {
+            return 1;
+        }
+        return 0;
+    }
+
+    for (team of teams) {
+        const usableTeam = await Team.find({ id: team })
+        const canUse = usableTeam[0]
+        if (canUse) {
+            usedArr.push(canUse);
+        }
+    }
+
+    const sorted = usedArr.sort(compare)
+
+    const finalArr = []
+    for (sort of sorted) {
+        const usable = sort;
+        finalArr.push(usable)
+    }
+
+    // for (finalAr of finalArr) {
+    //     console.log(finalAr)
+    // }
+
+    res.render('pickerOne', { event: foundEventObj, sorted: finalArr })
 })
 
 app.post('/picker/', async (req, res) => {
     let searcher = req.body.eventSearcher;
-    const newEvent = await allevents.findOne({ id: searcher })
-
-    if (newEvent !== null) {
-        res.redirect(`/picker/${newEvent.id}`)
-    } else {
+    if (searcher.type !== Number) {
         const type = 'event';
         res.render('default', { type, searcher })
+    } else {
+        const newEvent = await allevents.findOne({ id: searcher })
+
+        console.log(newEvent)
+        if (newEvent !== null) {
+            res.redirect(`/picker/${newEvent.id}`)
+        } else {
+            const type = 'event';
+            res.render('default', { type, searcher })
+        }
     }
 })
 
 app.post('/boxes/:id', async (req, res) => {
     const { id } = req.params;
-    let { fourmd, twomd, sixmd, twomf, onemf, cata, aut, autwp } = req.body;
+    const checker = await Team.findOne({ id: id })
+    if (!checker) {
+        const type = 'team';
+        const searcher = id
+        res.render('default', { type, searcher })
+    } else {
+        let { fourmd, twomd, sixmd, twomf, onemf, cata, aut, autwp } = req.body;
 
-    if (fourmd === 'on') {
-        await Team.findOneAndUpdate({ id: id }, { fourmdrive: true })
-    }
-    else {
-        await Team.findOneAndUpdate({ id: id }, { fourmdrive: false })
-    }
-    if (twomd === 'on') {
-        await Team.findOneAndUpdate({ id: id }, { twomdrive: true })
-    }
-    else {
-        await Team.findOneAndUpdate({ id: id }, { twomdrive: false })
-    }
-    if (sixmd === 'on') {
-        await Team.findOneAndUpdate({ id: id }, { sixmdrive: true })
-    } else {
-        await Team.findOneAndUpdate({ id: id }, { sixmdrive: false })
-    }
-    if (twomf === 'on') {
-        await Team.findOneAndUpdate({ id: id }, { dbflywheel: true })
-    } else {
-        await Team.findOneAndUpdate({ id: id }, { dbflywheel: false })
-    }
-    if (onemf === 'on') {
-        await Team.findOneAndUpdate({ id: id }, { snflywheel: true })
-    } else {
-        await Team.findOneAndUpdate({ id: id }, { snflywheel: false })
-    }
-    if (cata === 'on') {
-        await Team.findOneAndUpdate({ id: id }, { cata: true })
-    } else {
-        await Team.findOneAndUpdate({ id: id }, { cata: false })
-    }
-    if (aut === 'on') {
-        await Team.findOneAndUpdate({ id: id }, { auton: true })
-        // const team = await findOne({ id: id })
-        // console.log(team)
-    } else {
-        await Team.findOneAndUpdate({ id: id }, { auton: false })
-    }
-    if (autwp === 'on') {
-        await Team.findOneAndUpdate({ id: id }, { autonwp: true })
-    } else {
-        await Team.findOneAndUpdate({ id: id }, { autonwp: false })
-    }
+        if (fourmd === 'on') {
+            await Team.findOneAndUpdate({ id: id }, { fourmdrive: true })
+        }
+        else {
+            await Team.findOneAndUpdate({ id: id }, { fourmdrive: false })
+        }
+        if (twomd === 'on') {
+            await Team.findOneAndUpdate({ id: id }, { twomdrive: true })
+        }
+        else {
+            await Team.findOneAndUpdate({ id: id }, { twomdrive: false })
+        }
+        if (sixmd === 'on') {
+            await Team.findOneAndUpdate({ id: id }, { sixmdrive: true })
+        } else {
+            await Team.findOneAndUpdate({ id: id }, { sixmdrive: false })
+        }
+        if (twomf === 'on') {
+            await Team.findOneAndUpdate({ id: id }, { dbflywheel: true })
+        } else {
+            await Team.findOneAndUpdate({ id: id }, { dbflywheel: false })
+        }
+        if (onemf === 'on') {
+            await Team.findOneAndUpdate({ id: id }, { snflywheel: true })
+        } else {
+            await Team.findOneAndUpdate({ id: id }, { snflywheel: false })
+        }
+        if (cata === 'on') {
+            await Team.findOneAndUpdate({ id: id }, { cata: true })
+        } else {
+            await Team.findOneAndUpdate({ id: id }, { cata: false })
+        }
+        if (aut === 'on') {
+            await Team.findOneAndUpdate({ id: id }, { auton: true })
+            // const team = await findOne({ id: id })
+            // console.log(team)
+        } else {
+            await Team.findOneAndUpdate({ id: id }, { auton: false })
+        }
+        if (autwp === 'on') {
+            await Team.findOneAndUpdate({ id: id }, { autonwp: true })
+        } else {
+            await Team.findOneAndUpdate({ id: id }, { autonwp: false })
+        }
 
-    res.redirect('/teams/worlds')
+        res.redirect('/teams/worlds')
+    }
+})
+
+app.get('/display/:event/:number', async (req, res) => {
+    const { number, event } = req.params;
+    const team = await Team.findOne({ number: number })
+    const foundEvent = await allevents.findOne({ id: event })
+
+    res.render('displayPicker', { team, foundEvent })
 })
 
 app.listen(3000, () => {

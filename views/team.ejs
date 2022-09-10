@@ -92,94 +92,125 @@
     <h3>Spin Up:</h3>
     <p>
         <% if(team.awards.excellence> 0) { %>
-            <span>Excellence Awards:
+            <span class="tpaward">Excellence Awards:
                 <%=team.awards.excellence%>
             </span>
-            <%} else if(team.awards.champion> 0) { %>
-                <span>Tournament Champions:
+            <%} if(team.awards.champion> 0) { %>
+                <span class="tpaward">Tournament Champions:
                     <%=team.awards.champion%>
                 </span>
-                <% } else if(team.awards.skills> 0) { %>
-                    <span>Robot Skills Champions:
+                <% } if(team.awards.skills> 0) { %>
+                    <span class="tpaward">Robot Skills Champions:
                         <%=team.awards.skills%>
                     </span>
-                    <% } else if(team.awards.finalist> 0) { %>
-                        <span>Tournament Finalists:
+                    <% } if(team.awards.finalist> 0) { %>
+                        <span class="tpaward">Tournament Finalists:
                             <%=team.awards.finalist%>
-                                </spa <% } else if(team.awards.skills2> 0) { %>
-                                <span>Robot Skills 2nd Place:
-                                    <%=team.awards.skills2%>
-                                </span>
-                                <% } else if(team.awards.skills3> 0) { %>
-                                    <span>Robot Skills 3rd Place:
-                                        <%=team.awards.skills3%>
-                                    </span>
-                                    <% } else if(team.awards.think> 0) { %>
-                                        <span>Think Awards:
-                                            <%=team.awards.think%>
-                                        </span>
-                                        <% } else { %>
-                                            <h5>No Spin Up Awards</h5>
-                                            <% } %>
-    </p>
-
-    <h3>Tipping Point:</h3>
-    <p>
-        <% if(team.tpawards.excellence> 0) { %>
-            <span>Excellence Awards:
-                <%=team.tpawards.excellence%>
-            </span>
-            <%} else if(team.tpawards.champion> 0) { %>
-                <span>Tournamtpent Champions:
-                    <%=team.tpawards.champion%>
-                </span>
-                <% } else if(team.tpawards.skills> 0) { %>
-                    <span>Robot Skills Champions:
-                        <%=team.tpawards.skills%>
-                    </span>
-                    <% } else if(team.tpawards.finalist> 0) { %>
-                        <span>Tournament Finalists:
-                            <%=team.tpawards.finalist%>
                         </span>
-                        <% } else if(team.tpawards.skills2> 0) { %>
-                            <span>Robot Skills 2nd Place:
-                                <%=team.tpawards.skills2%>
+                        <% } if(team.awards.skills2> 0) { %>
+                            <span class="tpaward">Robot Skills 2nd
+                                Place:
+                                <%=team.awards.skills2%>
                             </span>
-                            <% } else if(team.tpawards.skills3> 0) { %>
-                                <span>Robot Skills 3rd Place:
-                                    <%=team.tpawards.skills3%>
+                            <% } if(team.awards.skills3> 0) { %>
+                                <span class="tpaward">Robot Skills
+                                    3rd Place:
+                                    <%=team.awards.skills3%>
                                 </span>
-                                <% } else if(team.tpawards.think> 0) { %>
-                                    <span>Think Awards:
-                                        <%=team.tpawards.think%>
+                                <% } if(team.awards.think> 0) { %>
+                                    <span class="tpaward">Think
+                                        Awards:
+                                        <%=team.awards.think%>
                                     </span>
-                                    <% } else { %>
-                                        <h5>No Tipping Point Awards</h5>
-                                        <% } %>
-    </p>
-    <div id="scoutingBox">
-        <h3>Robot Features</h3>
-        <form method="post" action='/boxes/<%=team.id%>'>
-            <label for="4md">4 Motor Drive</label>
-            <input type="checkbox" name="fourmd" id="4md" <%=team.fourmdrive ? "checked" : "" %>>
-            <label for="2md">2 Motor Drive</label>
-            <input type="checkbox" name="twomd" id="2md" <%=team.twomdrive ? "checked" : "" %>>
-            <label for="6md">6 Motor Drive</label>
-            <input type="checkbox" name="sixmd" id="6md" <%=team.sixmdrive ? "checked" : "" %>>
-            <label for="2mf">Double Flywheel</label>
-            <input type="checkbox" name="twomf" id="2mf" <%=team.dbflywheel ? "checked" : "" %>>
-            <label for="1mf">Single Flywheel</label>
-            <input type="checkbox" name="onemf" id="1mf" <%=team.snflywheel ? "checked" : "" %>>
-            <label for="cata">Catapult</label>
-            <input type="checkbox" name="cata" id="cata" <%=team.cata ? "checked" : "" %>>
-            <label for="aut">Match Auton</label>
-            <input type="checkbox" name="aut" id="aut" <%=team.auton ? "checked" : "" %>>
-            <label for="autwp">Match Auton Win Point</label>
-            <input type="checkbox" name="autwp" id="autwp" <%=team.autonwp ? "checked" : "" %>>
+                                    <% } %>
+                                        <%const l=team.awards%>
+                                            <% if((l.excellence==false ) && (l.champion==false ) && (l.think==false) &&
+                                                (l.skills==false) && (l.finalist==false) && (l.skills2==false) &&
+                                                (l.skills3==false)) { %>
+                                                <h5>No Spin Up Awards</h5>
+                                                <% } %>
 
-            <button>Save</button>
-        </form>
-    </div>
+
+
+
+
+                                                    <h3>Tipping Point:</h3>
+                                                    <p>
+                                                        <% if(team.tpawards.excellence> 0) { %>
+                                                            <span class="tpaward">Excellence Awards:
+                                                                <%=team.tpawards.excellence%>
+                                                            </span>
+                                                            <%} if(team.tpawards.champion> 0) { %>
+                                                                <span class="tpaward">Tournament Champions:
+                                                                    <%=team.tpawards.champion%>
+                                                                </span>
+                                                                <% } if(team.tpawards.skills> 0) { %>
+                                                                    <span class="tpaward">Robot Skills Champions:
+                                                                        <%=team.tpawards.skills%>
+                                                                    </span>
+                                                                    <% } if(team.tpawards.finalist> 0) { %>
+                                                                        <span class="tpaward">Tournament Finalists:
+                                                                            <%=team.tpawards.finalist%>
+                                                                        </span>
+                                                                        <% } if(team.tpawards.skills2> 0) { %>
+                                                                            <span class="tpaward">Robot Skills 2nd
+                                                                                Place:
+                                                                                <%=team.tpawards.skills2%>
+                                                                            </span>
+                                                                            <% } if(team.tpawards.skills3> 0) { %>
+                                                                                <span class="tpaward">Robot Skills
+                                                                                    3rd Place:
+                                                                                    <%=team.tpawards.skills3%>
+                                                                                </span>
+                                                                                <% } if(team.tpawards.think> 0) { %>
+                                                                                    <span class="tpaward">Think
+                                                                                        Awards:
+                                                                                        <%=team.tpawards.think%>
+                                                                                    </span>
+                                                                                    <% } %>
+                                                                                        <%const t=team.tpawards%>
+                                                                                            <% if((t.excellence==false )
+                                                                                                && (t.champion==false )
+                                                                                                && (t.think==false) &&
+                                                                                                (t.skills==false) &&
+                                                                                                (t.finalist==false) &&
+                                                                                                (t.skills2==false) &&
+                                                                                                (t.skills3==false)) { %>
+                                                                                                <h5>No Tipping Point
+                                                                                                    Awards</h5>
+                                                                                                <% } %>
+                                                    </p>
+                                                    <div id="scoutingBox">
+                                                        <h3>Robot Features</h3>
+                                                        <form method="post" action='/boxes/<%=team.id%>'>
+                                                            <label for="4md">4 Motor Drive</label>
+                                                            <input type="checkbox" name="fourmd" id="4md"
+                                                                <%=team.fourmdrive ? "checked" : "" %>>
+                                                            <label for="2md">2 Motor Drive</label>
+                                                            <input type="checkbox" name="twomd" id="2md"
+                                                                <%=team.twomdrive ? "checked" : "" %>>
+                                                            <label for="6md">6 Motor Drive</label>
+                                                            <input type="checkbox" name="sixmd" id="6md"
+                                                                <%=team.sixmdrive ? "checked" : "" %>>
+                                                            <label for="2mf">Double Flywheel</label>
+                                                            <input type="checkbox" name="twomf" id="2mf"
+                                                                <%=team.dbflywheel ? "checked" : "" %>>
+                                                            <label for="1mf">Single Flywheel</label>
+                                                            <input type="checkbox" name="onemf" id="1mf"
+                                                                <%=team.snflywheel ? "checked" : "" %>>
+                                                            <label for="cata">Catapult</label>
+                                                            <input type="checkbox" name="cata" id="cata" <%=team.cata
+                                                                ? "checked" : "" %>>
+                                                            <label for="aut">Match Auton</label>
+                                                            <input type="checkbox" name="aut" id="aut" <%=team.auton
+                                                                ? "checked" : "" %>>
+                                                            <label for="autwp">Match Auton Win Point</label>
+                                                            <input type="checkbox" name="autwp" id="autwp"
+                                                                <%=team.autonwp ? "checked" : "" %>>
+
+                                                            <button>Save</button>
+                                                        </form>
+                                                    </div>
 
 </body>
 

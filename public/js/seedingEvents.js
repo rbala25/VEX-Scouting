@@ -46,10 +46,10 @@ async function getSecond() {
     const usables = await getEvents();
     console.log('got events')
     let counter = 0;
-    // for (usable of usables) {
-    for (i = 0; i < 50; i++) {
+    for (usable of usables) {
+        // for (i = 0; i < 50; i++) {
         const arr = []
-        const usable = usables[i]
+        // const usable = usables[i]
         console.log(usable.id, 'Team ', counter)
         counter++;
         const id = usable.id;

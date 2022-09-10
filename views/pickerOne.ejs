@@ -72,6 +72,33 @@
         </ul>
     </div>
 
+    <!-- <h3>What do you want to value?</h3>
+    <button id="4md">4 Motor Drive</button>
+    <button id="6md">6 Motor Drive</button>
+    <button id="2md">2 Motor Drive</button>
+    <button id="2mf">Double Flywheel</button>
+    <button id="1mf">Single Flywheel</button>
+    <button id="cata">Catapult</button>
+    <button id="aut">Match Auton</button>
+    <button id="autwp">Auton Win Point</button> -->
+
+    <% for(i=0; i < sorted.length; i++) { %>
+        <% const sort=sorted[i]%>
+            <div>
+                <h3>#<%=i+1%> Choice: </h3>
+                <p><b><a href="/display/<%=event.id%>/<%=sort.number%>">Team Number: <%=sort.number%></a></b></p>
+                <p>TrueSkill Ranking: <%=sort.trueSkill%>
+                </p>
+                <p>Skills:
+                    <br>
+                    Driver: <%=sort.skills.driving%>
+                        <br>
+                        Auton: <%=sort.skills.auton%>
+                            <br>
+                            Total: <%=sort.skills.total%>
+                </p>
+            </div>
+            <% } %>
 
 </body>
 
