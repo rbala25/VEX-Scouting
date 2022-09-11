@@ -1,9 +1,94 @@
-<h1>About VRC Scouting and Analysis</h1>
+<!DOCTYPE html>
+<html lang="en">
 
-<div>
-    <p><b>Author:</b> Rishi Bala/4610J</p>
-    <p><b>Email:</b> rishibala2007@gmail.com</p>
-    <p><b>Github Repository:</b> <a href="https://github.com/rbala25/VEX-Scouting">VEX-Scouting</a></p>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website information</title>
+    <link rel="stylesheet" href="../public/css/general.css">
+</head>
 
+<body>
 
-</div>
+    <h1>About VRC Scouting and Analysis</h1>
+
+    <div id="nav">
+        <nav>
+            <a href="/teams/nj"><button class="onset">New Jersey</button></a>
+            <a href="/teams/worlds"><button class="onset">Worlds Teams</button></a>
+            <a href="/matchpicker"><button class="onset">Alliance Picker</button></a>
+            <a href="/events"><button class="onset">Upcoming Events</button></a>
+
+            <form action="/team/" method="post">
+                <input name="teamSearcher" type="text" id="dropdown" placeholder="Search for a Team">
+                <button type="submit" id="submit">Submit</button>
+
+            </form>
+
+        </nav>
+    </div>
+
+    <div>
+        <p><b>Author:</b> Rishi Bala</p>
+        <p><b>Email:</b> rishibala2007@gmail.com</p>
+        <p><b>Github Repository:</b> <a href="https://github.com/rbala25/VEX-Scouting">VEX-Scouting</a></p>
+        <br>
+        <p><b>Languages:</b> JavaScript, HTML5, CSS3</p>
+        <p><b>Technology:</b> Express.js, Node.js, EJS, MongoDB, Mongoose</p>
+        <p><b>Robot Events API:</b> <a href="https://www.robotevents.com/api/v2">API v2</a></p>
+
+        <br>
+        <h3>Inspiration</h3>
+        <p>I have competed in some form of VEX Robotics since 2015, over 7 years as of right now. In my last 2 years of
+            VRC,
+            I have come to realize that winning tournaments takes more than building a good robot. While that is
+            certainly
+            important, picking alliance partners and broadcasting your team's name out there is as imporant, if not
+            more.
+        </p>
+        <p>Scouting teams takes tons of effort. Even with dedicated team members at competitions, you can't hope to meet
+            every single team. It's an extremely tedious process, using your 5 minutes of downtime between matches to
+            look
+            for a team, realize they aren't even there, and then have to scramble back to the field for your next match.
+            Even when you do find the team, oftentimes the chances that they are someone you'd consider to pick is
+            extremely
+            low. With
+            this website, we are able to record every team we meet with efficiently, as well as
+            having the knowledge of which teams are more experienced and skillful than others.</p>
+
+        <br>
+        <h3>How it Works</h3>
+
+        <b><u>The Algorithm and Data Requests</u></b>
+        <p>Every 12 hours, the website requests data from the public <a
+                href="https://www.robotevents.com/">RobotEvents</a>
+            API. The website takes all the information it can find about every single registered team, storing it on a
+            database, and then using a series of mathamatical operations to calculate a teams <b>True Skill.</b></p>
+        <p><u>Every team starts with a True Skill of 0.</u> As the website sifts through each and every single
+            registered
+            robot, it adds points depending on the teams <b>proven success</b>. It takes in factors such as if the team
+            made
+            VEX World's
+            last
+            year, and it adds a certain amount of points for every single award the team has earned over the last two
+            seasons. Furthermore, while RobotEvents does not directly release much team information to the public, the
+            website still goes through every team and manages to calculate dozens of different factors, such as World
+            Skills
+            Standings. This leads to an accurate depiction of any teams skill level. </p>
+
+        <br>
+        <b><u>The Alliance Selector</u></b>
+        <p>The Alliance Selector is largely based off of our TrueSkill rankings. When a user requests team rankings for
+            any
+            given event, the website sorts through all participating teams in that event and lists them based off of
+            their
+            calculated True Skill. If the user selects certain filter valuations that they want in a robot, the website
+            will
+            again go through all partcipating teams and temporarily add more points to their True Skill ranking if they
+            apply to this category. Once again, this leads to an accurate ranking for all participating teams.</p>
+
+    </div>
+</body>
+
+</html>

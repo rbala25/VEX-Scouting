@@ -16,6 +16,7 @@ const insertEvents = require('./public/js/seedingEvents');
 const { events, findOne } = require('./models/teams');
 const { on } = require('events');
 const e = require('express');
+const { type } = require('os');
 
 async function forceSchedule() {
     // await insertTeams()
@@ -524,6 +525,12 @@ app.post('/picker/:id/filtered', async (req, res) => {
 
 app.get('/info', (req, res) => {
     res.render('info')
+})
+
+app.get('/picker/:id/filtered', async (req, res) => {
+    const type = 'event';
+    const searcher = req.params.id;
+    res.render('default', { type, searcher })
 })
 
 app.listen(3000, () => {
