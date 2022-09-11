@@ -320,9 +320,9 @@ app.get('/picker/:id', async (req, res) => {
     // for (finalAr of finalArr) {
     //     console.log(finalAr)
     // }
-
     res.render('pickerOne', { event: foundEventObj, sorted: finalArr })
 })
+
 
 app.post('/picker/', async (req, res) => {
     let searcher = req.body.eventSearcher;
@@ -392,9 +392,9 @@ app.post('/boxes/:id', async (req, res) => {
             await Team.findOneAndUpdate({ id: id }, { auton: false })
         }
         if (autwp === 'on') {
-            await Team.findOneAndUpdate({ id: id }, { autonwp: true })
+            await Team.findOneAndUpdate({ id: id }, { wpauton: true })
         } else {
-            await Team.findOneAndUpdate({ id: id }, { autonwp: false })
+            await Team.findOneAndUpdate({ id: id }, { wpauton: false })
         }
 
         res.redirect('/teams/worlds')
@@ -407,6 +407,123 @@ app.get('/display/:event/:number', async (req, res) => {
     const foundEvent = await allevents.findOne({ id: event })
 
     res.render('displayPicker', { team, foundEvent })
+})
+
+app.post('/picker/:id/filtered', async (req, res) => {
+    const select = req.body.selectBox;
+    const { id } = req.params;
+
+    const foundEvent = await allevents.find({ id: id });
+    const foundEventObj = foundEvent[0];
+    const teams = foundEventObj.teamID;
+    const usedArr = [];
+
+    function compare(a, b) {
+        if (a.trueSkill > b.trueSkill) {
+            return -1;
+        }
+        if (a.trueSkill < b.trueSkill) {
+            return 1;
+        }
+        return 0;
+    }
+
+    for (team of teams) {
+        const usableTeam = await Team.find({ id: team })
+        const canUse = usableTeam[0]
+        if (canUse) {
+            usedArr.push(canUse);
+        }
+    }
+
+    const sorted = usedArr.sort(compare)
+
+    const finalArr = []
+    for (sort of sorted) {
+        const usable = sort;
+        finalArr.push(usable)
+    }
+
+    if (select) {
+        for (option of select) {
+            if (option == 'fourmd') {
+                for (finalAr of finalArr) {
+                    if (finalAr.fourmdrive) {
+                        finalAr.trueSkill += 3;
+                    }
+                }
+            } if (option == 'twomd') {
+                for (finalAr of finalArr) {
+                    if (finalAr.twomdrive) {
+                        finalAr.trueSkill += 3;
+                    }
+                }
+            } if (option == 'sixmd') {
+                for (finalAr of finalArr) {
+                    if (finalAr.sixmdrive) {
+                        finalAr.trueSkill += 3;
+                    }
+                }
+            } if (option == 'onemf') {
+                for (finalAr of finalArr) {
+                    if (finalAr.snflywheel) {
+                        finalAr.trueSkill += 3;
+                    }
+                }
+            } if (option == 'twomf') {
+                for (finalAr of finalArr) {
+                    if (finalAr.dbflywheel) {
+                        finalAr.trueSkill += 3;
+                    }
+                }
+            } if (option == 'aut') {
+                for (finalAr of finalArr) {
+                    if (finalAr.auton) {
+                        finalAr.trueSkill += 3;
+                    }
+                }
+            } if (option == 'cata') {
+                for (finalAr of finalArr) {
+                    if (finalAr.cata) {
+                        finalAr.trueSkill += 3;
+                    }
+                }
+            } if (option == 'autwp') {
+                for (finalAr of finalArr) {
+                    if (finalAr.wpauton) {
+                        finalAr.trueSkill += 3;
+                    }
+                }
+            }
+        }
+    }
+
+
+    res.render('filtered', { sorted: finalArr, event: foundEventObj })
+
+    // let { fourmd, twomd, sixmd, twomf, onemf, cata, aut, autwp } = req.body;
+    // if (fourmd === 'on') {
+
+    // } if (twomd === 'on') {
+
+    // } if (cata === 'on') {
+
+    // } if (autwp === 'on') {
+
+    // } if (aut === 'on') {
+
+    // } if (sixmd === 'on') {
+
+    // } if (twomf === 'on') {
+
+    // } if (onemf === 'on') {
+
+    // }
+
+})
+
+app.get('/info', (req, res) => {
+    res.render('info')
 })
 
 app.listen(3000, () => {

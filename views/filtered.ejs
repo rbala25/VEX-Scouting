@@ -12,10 +12,10 @@
 
 <body>
     <h1>
-        Specific Event Information (Alliance Picker)
+        Specific Event Information (FILTERED)
     </h1>
 
-    <a href="/matchpicker"><button>Back to Alliance Selector Home Page</button></a>
+    <a href="/picker/<%=event.id%>"><button>Back to Alliance Selector Home Page</button></a>
 
     <h2>Basic Info</h2>
     <div id="basicInf">
@@ -81,22 +81,6 @@
     <button id="cata">Catapult</button>
     <button id="aut">Match Auton</button>
     <button id="autwp">Auton Win Point</button> -->
-
-    <form action="/picker/<%=event.id%>/filtered" method="POST">
-        <h3>Higher Valuation</h3>
-        <select name="selectBox" id="selectBox" multiple>
-            <option value="choose" selected disabled hidden>Choose an option</option>
-            <option value="fourmd">4 Motor Drive</option>
-            <option value="twomd">2 Motor Drive</option>
-            <option value="sixmd">6 Motor Drive</option>
-            <option value="twomf">2 Motor Flywheel</option>
-            <option value="onemf">1 Motor Flywheel</option>
-            <option value="cata">Catapult</option>
-            <option value="aut">Match Auton</option>
-            <option value="autwp">Auton Win Point</option>
-        </select>
-        <button>Save</button>
-    </form>
 
     <% for(i=0; i < sorted.length; i++) { %>
         <% const sort=sorted[i]%>
