@@ -323,19 +323,23 @@ app.get('/picker/:id', async (req, res) => {
 
 app.post('/picker/', async (req, res) => {
     let searcher = req.body.eventSearcher;
-    if (searcher.type !== Number) {
-        const type = 'event';
-        res.render('default', { type, searcher })
-    } else {
+    if (searcher > 0) {
         const newEvent = await allevents.findOne({ id: searcher })
-
-        console.log(newEvent)
-        if (newEvent !== null) {
-            res.redirect(`/picker/${newEvent.id}`)
+        if (newEvent) {
+            console.log(newEvent)
+            if (newEvent !== null) {
+                res.redirect(`/picker/${newEvent.id}`)
+            } else {
+                const type = 'event';
+                res.render('default', { type, searcher })
+            }
         } else {
             const type = 'event';
             res.render('default', { type, searcher })
         }
+    } else {
+        const type = 'event';
+        res.render('default', { type, searcher })
     }
 })
 
@@ -527,6 +531,17 @@ app.get('/picker/:id/filtered', async (req, res) => {
     const type = 'event';
     const searcher = req.params.id;
     res.render('default', { type, searcher })
+})
+
+app.get('/picker/filtered/pastIncluded', async (req, res) => {
+    console.log('redirect')
+    const events = await allevents.find({});
+    res.render('pickerPast', { events })
+})
+
+
+app.post('/picker/filtered/', async (req, res) => {
+    res.redirect('pastIncluded')
 })
 
 app.listen(3000, () => {
