@@ -39,11 +39,6 @@ cron.schedule('0 * * * *', async () => {
     await insertEvents()
 })
 
-// cron.schedule('* * * * *', () => {
-//     console.log('scheduled')
-//     insertTeams()
-// })
-
 
 mongoose.connect('mongodb://localhost:27017/vexScouting')
     .then(() => {
@@ -65,8 +60,8 @@ app.use(express.static('public'));
 
 app.post('/team/', async (req, res) => {
     const searcher = req.body.teamSearcher;
-    const newTeam = await Team.findOne({ number: searcher })
-
+    const usable = searcher.toUpperCase()
+    const newTeam = await Team.findOne({ number: usable })
     if (newTeam !== null) {
         res.redirect(`/team/${newTeam.number}`)
     } else {
@@ -93,7 +88,8 @@ app.get('/teams/nj', async (req, res) => {
 
 app.get('/team/:teamNumber', async (req, res) => {
     const { teamNumber } = req.params;
-    const foundTeam = await Team.find({ number: teamNumber })
+    const usable = teamNumber.toUpperCase()
+    const foundTeam = await Team.find({ number: usable })
     const teamObject = foundTeam[0];
 
     res.render('team', { team: teamObject })

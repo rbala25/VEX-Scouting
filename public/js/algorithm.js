@@ -16,7 +16,7 @@ async function algorithm() {
     let counter = 0;
 
     for (arr of arrs) {
-        console.log('Team #', counter);
+        console.log(arr.number, counter);
         counter++;
 
         const skills = arr.skills;
@@ -30,7 +30,6 @@ async function algorithm() {
         const autonTrue = skills.auton / 25;
         const skillsTrue = driverTrue + autonTrue;
 
-        console.log(weightedRate)
         const weightedRateTrue = rankings.weightedRate * 12;
         const SoSTrue = rankings.avgSoS / 50;
         const rankingsTrue = weightedRateTrue + SoSTrue;
@@ -86,11 +85,24 @@ async function algorithm() {
             awardsTrue += 0.05;
         }
 
-        trueSkill += skillsTrue;
-        trueSkill += rankingsTrue;
-        trueSkill += awardsTrue;
-        trueSkill += worldsTrue;
-        trueSkill += tpAwardsTrue;
+
+
+        console.log(skills)
+        if (skillsTrue) {
+            trueSkill += skillsTrue;
+        }
+        if (rankingsTrue) {
+            trueSkill += rankingsTrue;
+        }
+        if (awardsTrue) {
+            trueSkill += awardsTrue;
+        }
+        if (worldsTrue) {
+            trueSkill += worldsTrue;
+        }
+        if (tpAwardsTrue) {
+            trueSkill += tpAwardsTrue;
+        }
 
         // console.log(rankings)
         // console.log(skillsTrue)
@@ -101,6 +113,7 @@ async function algorithm() {
 
         // console.log(trueSkill)
         const id = arr.id;
+        // console.log(id, trueSkill)
         await Team.findOneAndUpdate({ id: id }, { trueSkill: trueSkill });
     }
 }
