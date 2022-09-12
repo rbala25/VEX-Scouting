@@ -53,6 +53,12 @@
             <button class="remove">Submit</button>
         </form>
 
+        <% if(filtered===true) { %>
+            <form action="/events">
+                <button>Clear Filters</button>
+            </form>
+            <% }%>
+
     </div>
 
     <div id="table">

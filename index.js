@@ -15,7 +15,9 @@ const sortTeams = require('./public/js/sorter')
 const insertEvents = require('./public/js/seedingEvents');
 const { events, findOne } = require('./models/teams');
 const cookieParser = require('cookie-parser')
-const sessions = require('express-session')
+const sessions = require('express-session');
+const e = require('express');
+const { count } = require('console');
 
 
 async function forceSchedule() {
@@ -182,9 +184,77 @@ app.post('/event/', async (req, res) => {
 
 app.get('/events', async (req, res) => {
     if (session.userid) {
-        const events = await Event.find({})
-        // const allEvents = await allevents.find({})
-        res.render('event', { events })
+        let filtered = false;
+
+        var pastInc;
+        var reg;
+        var countr;
+        var lvl;
+
+        pastInc = req.query.pastIncluded;
+        reg = req.query.region;
+        countr = req.query.country;
+        lvl = req.query.level;
+
+        if ((pastInc !== undefined) || (reg !== undefined) || (countr !== undefined) || (lvl !== undefined)) {
+            if (pastInc) {
+                const events = await allevents.find({});
+                filtered = true;
+                res.render('event', { events, filtered })
+            }
+
+            if (reg) {
+                const arr = [];
+                const events = await Event.find({})
+                filtered = true;
+                for (event1 of events) {
+                    const location = event1.location.region;
+                    if (location) {
+                        const lower = location.toLowerCase()
+                        if (lower === reg) {
+                            arr.push(event1)
+                        }
+                    }
+                }
+                res.render('event', { events: arr, filtered })
+            }
+
+            if (countr) {
+                const arr = [];
+                const events = await Event.find({})
+                filtered = true;
+                for (event1 of events) {
+                    const location = event1.location.country;
+                    if (location) {
+                        const lower = location.toLowerCase()
+                        if (lower === countr) {
+                            arr.push(event1)
+                        }
+                    }
+                }
+                res.render('event', { events: arr, filtered })
+            }
+
+            if (lvl) {
+                console.log('here')
+                const arr = [];
+                const events = await Event.find({})
+                filtered = true;
+                for (event1 of events) {
+                    const level = event1.level;
+                    console.log(level)
+                    const lower = level.toLowerCase()
+                    if (lower === lvl) {
+                        arr.push(event1)
+                    }
+                }
+                res.render('event', { events: arr, filtered })
+
+            }
+        } else {
+            const events = await Event.find({})
+            res.render('event', { events, filtered })
+        }
     } else {
         res.redirect('/')
     }
@@ -192,8 +262,9 @@ app.get('/events', async (req, res) => {
 
 app.get('/events/pastIncluded', async (req, res) => {
     if (session.userid) {
-        const events = await allevents.find({});
-        res.render('pastIncluded', { events })
+        // const events = await allevents.find({});
+        // res.render('pastIncluded', { events })
+        res.redirect('/events?pastIncluded=true')
     } else {
         res.redirect('/')
     }
@@ -202,7 +273,7 @@ app.get('/events/pastIncluded', async (req, res) => {
 
 app.post('/events/pastIncluded', async (req, res) => {
     if (session.userid) {
-        res.redirect('pastIncluded')
+        res.redirect('/events?pastIncluded=true')
     } else {
         res.redirect('/')
     }
@@ -211,21 +282,20 @@ app.post('/events/pastIncluded', async (req, res) => {
 app.get('/events/region/:region', async (req, res) => {
     if (session.userid) {
         const { region: place } = req.params;
-        const list = await Event.find({});
         const placelower = place.toLowerCase()
 
-        const events = []
-        for (lists of list) {
-            const region2 = lists.location.region;
-            if (region2 !== null) {
-                const lower = region2.toLowerCase()
-                if (lower === placelower) {
-                    events.push(lists);
-                }
-            }
-        }
+        // const events = []
+        // for (lists of list) {
+        //     const region2 = lists.location.region;
+        //     if (region2 !== null) {
+        //         const lower = region2.toLowerCase()
+        //         if (lower === placelower) {
+        //             events.push(lists);
+        //         }
+        //     }
+        // }
 
-        res.render('specificplace', { events, place })
+        res.redirect(`/events?region=${placelower}`)
     } else {
         res.redirect('/')
     }
@@ -234,21 +304,20 @@ app.get('/events/region/:region', async (req, res) => {
 app.get('/events/country/:country', async (req, res) => {
     if (session.userid) {
         const { country: place } = req.params;
-        const list = await Event.find({});
         const placelower = place.toLowerCase()
 
-        const events = []
-        for (lists of list) {
-            const region2 = lists.location.country;
-            if (region2 !== null) {
-                const lower = region2.toLowerCase()
-                if (lower === placelower) {
-                    events.push(lists);
-                }
-            }
-        }
+        // const events = []
+        // for (lists of list) {
+        //     const region2 = lists.location.country;
+        //     if (region2 !== null) {
+        //         const lower = region2.toLowerCase()
+        //         if (lower === placelower) {
+        //             events.push(lists);
+        //         }
+        //     }
+        // }
 
-        res.render('specificplace', { events, place })
+        res.redirect(`/events?country=${placelower}`)
     } else {
         res.redirect('/')
     }
@@ -275,21 +344,20 @@ app.post('/events/country/', async (req, res) => {
 app.get('/events/level/:level', async (req, res) => {
     if (session.userid) {
         const { level } = req.params;
-        const list = await Event.find({});
         const lvllower = level.toLowerCase()
 
-        const events = []
-        for (lists of list) {
-            const leveled = lists.level;
-            if (leveled !== null) {
-                const lower = leveled.toLowerCase()
-                if (lower === lvllower) {
-                    events.push(lists);
-                }
-            }
-        }
+        // const events = []
+        // for (lists of list) {
+        //     const leveled = lists.level;
+        //     if (leveled !== null) {
+        //         const lower = leveled.toLowerCase()
+        //         if (lower === lvllower) {
+        //             events.push(lists);
+        //         }
+        //     }
+        // }
 
-        res.render('level', { events, level })
+        res.redirect(`/events?level=${lvllower}`)
     } else {
         res.redirect('/')
     }
