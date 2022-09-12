@@ -1,0 +1,54 @@
+body {
+    vertical-align: middle;
+    background-color: lightgray;
+    justify-content: center;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+/* form {
+    display: flex;
+    flex-direction: column;
+} */
+
+.input-field {
+    /* position: relative;  */
+    margin-top: 1rem;
+}
+
+.input-field input {
+    width: 25%;
+    padding: 0.8rem;
+}
+
+form input[type="submit"] {
+    width: 30%;
+    background: linear-gradient(to left, #4776E6, #8e54e9);
+    color: white;
+    border-radius: 4px;
+    margin-top: 2rem;
+    padding: 0.4rem;
+}
+
+#submit {
+    text-align: center;
+}
+
+.input-field {
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+}
+
+h2 {
+    text-align: center;
+    font-weight: 500;
+}
+
+h4 {
+    font-size: 1.2rem;
+    text-align: center;
+    color: darkred;
+    font-weight: 600;
+}
