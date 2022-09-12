@@ -147,8 +147,17 @@ app.get('/team/:teamNumber', async (req, res) => {
         const usable = teamNumber.toUpperCase()
         const foundTeam = await Team.find({ number: usable })
         const teamObject = foundTeam[0];
+        let eventT = false;
 
-        res.render('team', { team: teamObject })
+        const event = req.query.event;
+        if (event) {
+            eventT = true;
+            const foundEvent = await allevents.findOne({ id: event })
+
+            res.render('team', { team: teamObject, eventT, foundEvent })
+        } else {
+            res.render('team', { team: teamObject, eventT })
+        }
     } else {
         res.redirect('/')
     }
@@ -236,13 +245,11 @@ app.get('/events', async (req, res) => {
             }
 
             if (lvl) {
-                console.log('here')
                 const arr = [];
                 const events = await Event.find({})
                 filtered = true;
                 for (event1 of events) {
                     const level = event1.level;
-                    console.log(level)
                     const lower = level.toLowerCase()
                     if (lower === lvl) {
                         arr.push(event1)
@@ -374,9 +381,75 @@ app.post('/events/level', async (req, res) => {
 
 app.get('/matchpicker', async (req, res) => {
     if (session.userid) {
-        const events = await Event.find({})
-        // const allEvents = await allevents.find({})
-        res.render('picker', { events })
+        let filtered = false;
+
+        var pastInc;
+        var reg;
+        var countr;
+        var lvl;
+
+        pastInc = req.query.pastIncluded;
+        reg = req.query.region;
+        countr = req.query.country;
+        lvl = req.query.level;
+
+        if ((pastInc !== undefined) || (reg !== undefined) || (countr !== undefined) || (lvl !== undefined)) {
+            if (pastInc) {
+                const events = await allevents.find({});
+                filtered = true;
+                res.render('picker', { events, filtered })
+            }
+
+            if (reg) {
+                const arr = [];
+                const events = await Event.find({})
+                filtered = true;
+                for (event1 of events) {
+                    const location = event1.location.region;
+                    if (location) {
+                        const lower = location.toLowerCase()
+                        if (lower === reg) {
+                            arr.push(event1)
+                        }
+                    }
+                }
+                res.render('picker', { events: arr, filtered })
+            }
+
+            if (countr) {
+                const arr = [];
+                const events = await Event.find({})
+                filtered = true;
+                for (event1 of events) {
+                    const location = event1.location.country;
+                    if (location) {
+                        const lower = location.toLowerCase()
+                        if (lower === countr) {
+                            arr.push(event1)
+                        }
+                    }
+                }
+                res.render('picker', { events: arr, filtered })
+            }
+
+            if (lvl) {
+                const arr = [];
+                const events = await Event.find({})
+                filtered = true;
+                for (event1 of events) {
+                    const level = event1.level;
+                    const lower = level.toLowerCase()
+                    if (lower === lvl) {
+                        arr.push(event1)
+                    }
+                }
+                res.render('picker', { events: arr, filtered })
+
+            }
+        } else {
+            const events = await Event.find({})
+            res.render('picker', { events, filtered })
+        }
     } else {
         res.redirect('/')
     }
@@ -385,21 +458,20 @@ app.get('/matchpicker', async (req, res) => {
 app.get('/matchpicker/region/:region', async (req, res) => {
     if (session.userid) {
         const { region: place } = req.params;
-        const list = await Event.find({});
         const placelower = place.toLowerCase()
 
-        const events = []
-        for (lists of list) {
-            const region2 = lists.location.region;
-            if (region2 !== null) {
-                const lower = region2.toLowerCase()
-                if (lower === placelower) {
-                    events.push(lists);
-                }
-            }
-        }
+        // const events = []
+        // for (lists of list) {
+        //     const region2 = lists.location.region;
+        //     if (region2 !== null) {
+        //         const lower = region2.toLowerCase()
+        //         if (lower === placelower) {
+        //             events.push(lists);
+        //         }
+        //     }
+        // }
 
-        res.render('specificplacepick', { events, place })
+        res.redirect(`/matchpicker?region=${placelower}`)
     } else {
         res.redirect('/')
     }
@@ -408,21 +480,20 @@ app.get('/matchpicker/region/:region', async (req, res) => {
 app.get('/matchpicker/country/:country', async (req, res) => {
     if (session.userid) {
         const { country: place } = req.params;
-        const list = await Event.find({});
         const placelower = place.toLowerCase()
 
-        const events = []
-        for (lists of list) {
-            const region2 = lists.location.country;
-            if (region2 !== null) {
-                const lower = region2.toLowerCase()
-                if (lower === placelower) {
-                    events.push(lists);
-                }
-            }
-        }
+        // const events = []
+        // for (lists of list) {
+        //     const region2 = lists.location.country;
+        //     if (region2 !== null) {
+        //         const lower = region2.toLowerCase()
+        //         if (lower === placelower) {
+        //             events.push(lists);
+        //         }
+        //     }
+        // }
 
-        res.render('specificplacepick', { events, place })
+        res.redirect(`/matchpicker?country=${placelower}`)
     } else {
         res.redirect('/')
     }
@@ -449,21 +520,9 @@ app.post('/matchpicker/country/', async (req, res) => {
 app.get('/matchpicker/level/:level', async (req, res) => {
     if (session.userid) {
         const { level } = req.params;
-        const list = await Event.find({});
         const lvllower = level.toLowerCase()
 
-        const events = []
-        for (lists of list) {
-            const leveled = lists.level;
-            if (leveled !== null) {
-                const lower = leveled.toLowerCase()
-                if (lower === lvllower) {
-                    events.push(lists);
-                }
-            }
-        }
-
-        res.render('levelteampicker', { events, level })
+        res.redirect(`/matchpicker?level=${lvllower}`)
     } else {
         res.redirect('/')
     }
@@ -528,7 +587,6 @@ app.post('/picker/', async (req, res) => {
         if (searcher > 0) {
             const newEvent = await allevents.findOne({ id: searcher })
             if (newEvent) {
-                console.log(newEvent)
                 if (newEvent !== null) {
                     res.redirect(`/picker/${newEvent.id}`)
                 } else {
@@ -614,10 +672,12 @@ app.post('/boxes/:id', async (req, res) => {
 app.get('/display/:event/:number', async (req, res) => {
     if (session.userid) {
         const { number, event } = req.params;
-        const team = await Team.findOne({ number: number })
-        const foundEvent = await allevents.findOne({ id: event })
+        // const team = await Team.findOne({ number: number })
+        // const foundEvent = await allevents.findOne({ id: event })
 
-        res.render('displayPicker', { team, foundEvent })
+        // res.render('displayPicker', { team, foundEvent })
+
+        res.redirect(`/team/${number}?event=${event}`)
     } else {
         res.redirect('/')
     }
@@ -748,20 +808,19 @@ app.get('/info', (req, res) => {
     }
 })
 
-app.get('/picker/:id/filtered', async (req, res) => {
-    if (session.userid) {
-        const type = 'event';
-        const searcher = req.params.id;
-        res.render('default', { type, searcher })
-    } else {
-        res.redirect('/')
-    }
-})
+// app.get('/picker/:id/filtered', async (req, res) => {
+//     if (session.userid) {
+//         const type = 'event';
+//         const searcher = req.params.id;
+//         res.render('default', { type, searcher })
+//     } else {
+//         res.redirect('/')
+//     }
+// })
 
 app.get('/picker/filtered/pastIncluded', async (req, res) => {
     if (session.userid) {
-        const events = await allevents.find({});
-        res.render('pickerPast', { events })
+        res.redirect('/matchpicker?pastIncluded=true')
     } else {
         res.redirect('/')
     }
@@ -771,6 +830,14 @@ app.get('/picker/filtered/pastIncluded', async (req, res) => {
 app.post('/picker/filtered/', async (req, res) => {
     if (session.userid) {
         res.redirect('pastIncluded')
+    } else {
+        res.redirect('/')
+    }
+})
+
+app.get('*', async (req, res) => {
+    if (session.userid) {
+        res.render('unkown')
     } else {
         res.redirect('/')
     }

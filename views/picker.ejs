@@ -52,6 +52,12 @@
             </select>
             <button class="remove">Submit</button>
         </form>
+
+        <% if(filtered===true) { %>
+            <form action="/matchpicker">
+                <button>Clear Filters</button>
+            </form>
+            <% } %>
     </div>
 
     <div id="table">
