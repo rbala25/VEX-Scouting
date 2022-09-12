@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+
+<body>
+    <h1>VRC Scouting and Analysis</h1>
+
+    <h2>Please Log In</h2>
+
+    <form action="/user" method="post">
+        <h3>Login</h3>
+        <div class="input-field">
+            <input type="text" name="username" id="username" placeholder="Enter Username">
+        </div>
+        <div class="input-field">
+            <input type="password" name="password" id="password" placeholder="Enter Password">
+        </div>
+        <input type="submit" value="LogIn">
+    </form>
+
+    <% if(incorrect) { %>
+        <h4>Account not found. Please try again.</h4>
+        <% } %>
+</body>
+
+</html>
