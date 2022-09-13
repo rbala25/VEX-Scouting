@@ -87,7 +87,6 @@ async function algorithm() {
 
 
 
-        console.log(skills)
         if (skillsTrue) {
             trueSkill += skillsTrue;
         }

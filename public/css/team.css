@@ -1,0 +1,47 @@
+body {
+    background-color: lightgray;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+h1 {
+    font-size: 2rem;
+    display: inline-block;
+    /* text-align: center; */
+    margin-bottom: 0;
+}
+
+#wraph1 {
+    text-align: center;
+}
+
+.but {
+    /* display: inline-block; */
+    margin-top: 0.75em;
+    margin-right: 1.2em;
+    float: right;
+}
+
+.butt {
+    width: 20em;
+    height: 2.5em;
+    /* display: inline-block; */
+    padding: 0.35em 1.2em;
+    border: 0.1em solid #FFFFFF;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 0.12em;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: black;
+    text-align: center;
+    transition: all 0.2s;
+    font: Georgia;
+    font-weight: 500;
+    margin-bottom: 2%;
+}
+
+.butt:hover {
+    color: #FFFFFF;
+    background-color: black;
+}

@@ -8,17 +8,25 @@
     <title>
         <%=team.number%> Information
     </title>
+
+    <link rel="stylesheet" href="../public/css/team.css">
 </head>
 
 <body>
-    <h1>
-        Specific Team Information
-    </h1>
+    <div id="wraph1">
+        <h1>
+            Specific Team Information
+        </h1>
+    </div>
 
     <% if(eventT===true) { %>
-        <a href="/picker/<%=foundEvent.id%>"><button>Back to Event Data</button></a>
+        <div class="but">
+            <a href="/picker/<%=foundEvent.id%>"><button class="butt">Back to Event Data</button></a>
+        </div>
         <% } else { %>
-            <a href="/teams/worlds"><button>Back to Worlds Data</button></a>
+            <div class="but">
+                <a href="/teams/worlds"><button class="butt">Back to Worlds Data</button></a>
+            </div>
             <% } %>
 
                 <h2>Basic Info</h2>
