@@ -7,7 +7,7 @@ h1 {
     font-size: 2rem;
     display: inline-block;
     /* text-align: center; */
-    margin-bottom: 0;
+    margin-bottom: 0.5em;
 }
 
 #wraph1 {
@@ -44,4 +44,135 @@ h1 {
 .butt:hover {
     color: #FFFFFF;
     background-color: black;
+}
+
+#basicInf {
+    margin-left: 0.2em;
+    padding-left: 2%;
+    margin-top: 0.6em;
+    border: 1mm solid #500a78;
+    border-radius: 7px;
+    width: 60%;
+    margin-bottom: 1.5em;
+}
+
+#basicInfH {
+    font-size: 1.8em;
+    margin-left: 0em;
+    margin-bottom: 0em;
+}
+
+#bol {
+    font-weight: 600;
+    font-size: 1.2em;
+}
+
+#specificInf {
+    margin-left: 0.2em;
+    padding-left: 2%;
+    margin-top: 0.6em;
+    border: 1mm solid #500a78;
+    border-radius: 7px;
+    width: 60%;
+    margin-bottom: 0.7em;
+    text-align: left;
+    margin-left: auto;
+    margin-right: 0.2em;
+}
+
+#specificInfH {
+    font-size: 1.8em;
+    margin-left: 0em;
+    margin-bottom: 0em;
+}
+
+#specificInf li {
+    margin-left: 1.4em;
+}
+
+#award {
+    margin-left: 0.2em;
+    padding-left: 2%;
+    margin-top: 0.6em;
+    border: 1mm solid #500a78;
+    border-radius: 7px;
+    width: 60%;
+    margin-bottom: 1.5em;
+    padding-bottom: 1em;
+}
+
+#awardH {
+    font-size: 1.8em;
+    margin-left: 0em;
+    margin-bottom: 0em;
+}
+
+.label {
+    margin-left: 1em;
+
+}
+
+#award li {
+    margin-left: 1.4em;
+}
+
+#scoutingBox {
+    margin-left: 0.2em;
+    padding-left: 2%;
+    margin-top: 0.6em;
+    border: 1mm solid #500a78;
+    border-radius: 7px;
+    width: 60%;
+    margin-bottom: 0.7em;
+    text-align: left;
+    margin-left: auto;
+    margin-right: 0.2em;
+}
+
+#scoutingH {
+    font-size: 1.8em;
+    margin-left: 0em;
+    margin-bottom: 0em;
+}
+
+.check {
+    width: 45px;
+    height: 15px;
+    background: #555;
+    position: relative;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.labelc {
+    transition: all .5s ease;
+    border-bottom: 1px solid black;
+}
+
+#save {
+    border-radius: 10px;
+    /* Curve of border corners */
+
+    text-transform: uppercase;
+    /* Make letters uppercase */
+
+    color: white;
+    /* Text color */
+
+    background: #00536f;
+    /* For browsers that do not support gradients */
+
+    background: -webkit-linear-gradient(#e5f4f9, #b2e0ef, #7fcce5, #0089b7, #0099CC, #b2e0ef);
+    /* For Safari 5.1 to 6.0 */
+
+    background: -o-linear-gradient(#e5f4f9, #b2e0ef, #7fcce5, #0089b7, #0099CC, #b2e0ef);
+    /* For Opera 11.1 to 12.0 */
+
+    background: -moz-linear-gradient(#e5f4f9, #b2e0ef, #7fcce5, #0089b7, #0099CC, #b2e0ef);
+    /* For Firefox 3.6 to 15 */
+
+    background: linear-gradient(#e5f4f9, #b2e0ef, #7fcce5, #0089b7, #0099CC, #b2e0ef);
+    /* Standard syntax */
+
 }
