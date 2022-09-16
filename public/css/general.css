@@ -129,3 +129,86 @@ form {
 .remove {
     display: none;
 }
+
+#filters h4 {
+    font-size: 1.2em;
+    margin-bottom: 0.2em;
+}
+
+#filters {
+    margin-left: 0.5em;
+}
+
+#filters #complet {
+    width: 19%;
+    height: 2.2em;
+    display: inline-block;
+    padding: 0.35em 1.2em;
+    border: 0.1em solid #FFFFFF;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 0.12em;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: black;
+    text-align: center;
+    transition: all 0.2s;
+    font: Georgia;
+    font-weight: 500;
+    margin-right: 0.5em;
+}
+
+#filters #complet:hover {
+    color: #FFFFFF;
+    background-color: black;
+}
+
+#filters input {
+    height: 1.8em;
+    border-radius: 3px;
+    border: 0.5mm solid #FFFFFF;
+    margin-left: 0.1em;
+    margin-right: 0.1em;
+}
+
+#filters select {
+    height: 2.2em;
+    width: 12%;
+    margin-left: 0.5em;
+    border-radius: 3px;
+    border: 0.5mm solid #FFFFFF;
+}
+
+#complete {
+    width: 15%;
+    height: 2.2em;
+    display: inline-block;
+    padding: 0.35em 1.2em;
+    border: 0.1em solid #FFFFFF;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 0.12em;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: black;
+    text-align: center;
+    transition: all 0.2s;
+    font: Georgia;
+    font-weight: 500;
+    margin-left: 0.5em;
+}
+
+#filters #complete:hover {
+    color: #FFFFFF;
+    background-color: black;
+}
+
+#dropdown {
+    height: 1.8em;
+    border-radius: 3px;
+    border: 0.5mm solid #FFFFFF;
+    /* margin-left: 0.1em;
+    margin-right: 0.1em; */
+}

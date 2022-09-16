@@ -30,10 +30,10 @@
         </nav>
     </div>
 
-    <h4>Filters</h4>
     <div id="filters">
+        <h4>Filters</h4>
         <form action="/events/pastIncluded" method: "POST">
-            <button class="filteredButton">See Completed Events</button>
+            <button class="filteredButton" id="complet">See Completed Events</button>
         </form>
         <form action="/events/region/" method="post">
             <input type="text" name="search" placeholder="Search by Region" id="filteredInp1">
@@ -55,7 +55,7 @@
 
         <% if(filtered===true) { %>
             <form action="/events">
-                <button>Clear Filters</button>
+                <button id="complete">Clear Filters</button>
             </form>
             <% }%>
 
