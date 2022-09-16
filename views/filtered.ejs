@@ -8,6 +8,7 @@
     <title>
         Selected Event: Alliance Picker
     </title>
+    <link rel="stylesheet" href="../public/css/event.css">
 </head>
 
 <body>
@@ -15,10 +16,10 @@
         Specific Event Information (FILTERED)
     </h1>
 
-    <a href="/picker/<%=event.id%>"><button>Back to Alliance Selector Home Page</button></a>
+    <a href=" /picker/<%=event.id%>"><button>Clear Filters</button></a>
 
-    <h2>Basic Info</h2>
     <div id="basicInf">
+        <h2>Basic Info</h2>
         <ul>
             <li>
                 <b>
@@ -42,8 +43,8 @@
         </ul>
     </div>
 
-    <h2>Specific Stats</h2>
     <div id="specificInf">
+        <h2>Specific Stats</h2>
         <ul>
             <li>Event ID: <%=event.id%>
             </li>
@@ -82,21 +83,50 @@
     <button id="aut">Match Auton</button>
     <button id="autwp">Auton Win Point</button> -->
 
-    <% for(i=0; i < sorted.length; i++) { %>
-        <% const sort=sorted[i]%>
-            <div>
-                <h3>#<%=i+1%> Choice: </h3>
-                <p><b><a href="/display/<%=event.id%>/<%=sort.number%>">Team Number: <%=sort.number%></a></b></p>
-                <p>TrueSkill Ranking: <%=sort.trueSkill%>
-                </p>
-                <p>Skills:
-                    <br>
-                    Driver: <%=sort.skills.driving%>
-                        <br>
-                        Auton: <%=sort.skills.auton%>
-                            <br>
-                            Total: <%=sort.skills.total%>
-                </p>
+    <% if(sorted.length> 0) { %>
+
+        <div id="award">
+            <form action="/picker/<%=event.id%>/filtered" method="POST">
+                <h2>Higher Valuation</h2>
+                <select name="selectBox" id="selectBox" multiple>
+                    <option value="choose" selected disabled hidden>Choose an option</option>
+                    <option value="fourmd">4 Motor Drive</option>
+                    <option value="twomd">2 Motor Drive</option>
+                    <option value="sixmd">6 Motor Drive</option>
+                    <option value="twomf">2 Motor Flywheel</option>
+                    <option value="onemf">1 Motor Flywheel</option>
+                    <option value="cata">Catapult</option>
+                    <option value="aut">Match Auton</option>
+                    <option value="autwp">Auton Win Point</option>
+                </select>
+                <button id="save12">Save</button>
+            </form>
+        </div>
+        <div id="classchoice">
+            <h2>Top Choices:</h2>
+            <% for(i=0; i < sorted.length; i++) { %>
+                <% const sort=sorted[i]%>
+                    <div class="choice">
+                        <h3 class="h3choice">#<%=i+1%> Choice: </h3>
+                        <p><b><a href="/display/<%=event.id%>/<%=sort.number%>">Team Number: <%=sort.number%></a></b>
+                        </p>
+                        <p class="trueskill">TrueSkill Ranking: <%=sort.trueSkill%>
+                        </p>
+                        <p class="skills">Skills: </p>
+                        <section>
+                            <p> Driver: <%=sort.skills.driving%>
+                            </p>
+                            <p> Auton: <%=sort.skills.auton%>
+                            </p>
+                            <p> Total: <%=sort.skills.total%>
+                            </p>
+                        </section>
+                    </div>
+                    <% } %>
+        </div>
+        <% } else {%>
+            <div id="noteams">
+                <h3>No Teams Found</h3>
             </div>
             <% } %>
 

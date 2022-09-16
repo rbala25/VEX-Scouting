@@ -540,10 +540,13 @@ app.post('/matchpicker/level', async (req, res) => {
 app.get('/picker/:id', async (req, res) => {
     if (session.userid) {
         const { id } = req.params;
+        const query = req.query;
         const foundEvent = await allevents.find({ id: id });
         const foundEventObj = foundEvent[0];
         const teams = foundEventObj.teamID;
         const usedArr = [];
+
+        let filtered = false;
 
         function compare(a, b) {
             if (a.trueSkill > b.trueSkill) {
@@ -571,10 +574,72 @@ app.get('/picker/:id', async (req, res) => {
             finalArr.push(usable)
         }
 
+        if (query.options) {
+            const finalCopy = finalArr;
+            const keys = Object.keys(query);
+            for (key of keys) {
+                // console.log(key)
+                // console.log(query)
+                if (key == 'fourmd') {
+                    for (finalCop of finalCopy) {
+                        if (finalCop.fourmdrive) {
+                            finalCop.trueSkill += 3;
+                        }
+                    }
+                } if (key == 'twomd') {
+                    for (finalCop of finalCopy) {
+                        if (finalCop.twomdrive) {
+                            finalCop.trueSkill += 3;
+                        }
+                    }
+                } if (key == 'sixmd') {
+                    for (finalCop of finalCopy) {
+                        if (finalCop.sixmdrive) {
+                            finalCop.trueSkill += 3;
+                        }
+                    }
+                } if (key == 'onemf') {
+                    for (finalCop of finalCopy) {
+                        if (finalCop.snflywheel) {
+                            finalCop.trueSkill += 3;
+                        }
+                    }
+                } if (key == 'twomf') {
+                    for (finalCop of finalCopy) {
+                        if (finalCop.dbflywheel) {
+                            finalCop.trueSkill += 3;
+                        }
+                    }
+                } if (key == 'aut') {
+                    for (finalCop of finalCopy) {
+                        if (finalCop.auton) {
+                            finalCop.trueSkill += 3;
+                        }
+                    }
+                } if (key == 'cata') {
+                    for (finalCop of finalCopy) {
+                        if (finalCop.cata) {
+                            finalCop.trueSkill += 3;
+                        }
+                    }
+                } if (key == 'autwp') {
+                    for (finalCop of finalCopy) {
+                        if (finalCop.wpauton) {
+                            finalCop.trueSkill += 3;
+                        }
+                    }
+                }
+            }
+
+            filtered = true;
+            res.render('pickerOne', { event: foundEventObj, sorted: finalCopy, filtered, id })
+        } else {
+            res.render('pickerOne', { event: foundEventObj, sorted: finalArr, filtered, id })
+        }
+
         // for (finalAr of finalArr) {
         //     console.log(finalAr)
         // }
-        res.render('pickerOne', { event: foundEventObj, sorted: finalArr })
     } else {
         res.redirect('/')
     }
@@ -688,112 +753,160 @@ app.post('/picker/:id/filtered', async (req, res) => {
         const select = req.body.selectBox;
         const { id } = req.params;
 
-        const foundEvent = await allevents.find({ id: id });
-        const foundEventObj = foundEvent[0];
-        const teams = foundEventObj.teamID;
-        const usedArr = [];
+        // const foundEvent = await allevents.find({ id: id });
+        // const foundEventObj = foundEvent[0];
+        // const teams = foundEventObj.teamID;
+        // const usedArr = [];
 
-        function compare(a, b) {
-            if (a.trueSkill > b.trueSkill) {
-                return -1;
-            }
-            if (a.trueSkill < b.trueSkill) {
-                return 1;
-            }
-            return 0;
-        }
+        // function compare(a, b) {
+        //     if (a.trueSkill > b.trueSkill) {
+        //         return -1;
+        //     }
+        //     if (a.trueSkill < b.trueSkill) {
+        //         return 1;
+        //     }
+        //     return 0;
+        // }
 
-        for (team of teams) {
-            const usableTeam = await Team.find({ id: team })
-            const canUse = usableTeam[0]
-            if (canUse) {
-                usedArr.push(canUse);
-            }
-        }
+        // for (team of teams) {
+        //     const usableTeam = await Team.find({ id: team })
+        //     const canUse = usableTeam[0]
+        //     if (canUse) {
+        //         usedArr.push(canUse);
+        //     }
+        // }
 
-        const sorted = usedArr.sort(compare)
+        // const sorted = usedArr.sort(compare)
 
-        const finalArr = []
-        for (sort of sorted) {
-            const usable = sort;
-            finalArr.push(usable)
-        }
+        // const finalArr = []
+        // for (sort of sorted) {
+        //     const usable = sort;
+        //     finalArr.push(usable)
+        // }
+
+
+        const options = [];
+        // if (select) {
+        //     for (option of select) {
+        //         if (option == 'fourmd') {
+        //             for (finalAr of finalArr) {
+        //                 if (finalAr.fourmdrive) {
+        //                     finalAr.trueSkill += 3;
+        //                 }
+        //             }
+        //         } if (option == 'twomd') {
+        //             for (finalAr of finalArr) {
+        //                 if (finalAr.twomdrive) {
+        //                     finalAr.trueSkill += 3;
+        //                 }
+        //             }
+        //         } if (option == 'sixmd') {
+        //             for (finalAr of finalArr) {
+        //                 if (finalAr.sixmdrive) {
+        //                     finalAr.trueSkill += 3;
+        //                 }
+        //             }
+        //         } if (option == 'onemf') {
+        //             for (finalAr of finalArr) {
+        //                 if (finalAr.snflywheel) {
+        //                     finalAr.trueSkill += 3;
+        //                 }
+        //             }
+        //         } if (option == 'twomf') {
+        //             for (finalAr of finalArr) {
+        //                 if (finalAr.dbflywheel) {
+        //                     finalAr.trueSkill += 3;
+        //                 }
+        //             }
+        //         } if (option == 'aut') {
+        //             for (finalAr of finalArr) {
+        //                 if (finalAr.auton) {
+        //                     finalAr.trueSkill += 3;
+        //                 }
+        //             }
+        //         } if (option == 'cata') {
+        //             for (finalAr of finalArr) {
+        //                 if (finalAr.cata) {
+        //                     finalAr.trueSkill += 3;
+        //                 }
+        //             }
+        //         } if (option == 'autwp') {
+        //             for (finalAr of finalArr) {
+        //                 if (finalAr.wpauton) {
+        //                     finalAr.trueSkill += 3;
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         if (select) {
             for (option of select) {
-                if (option == 'fourmd') {
-                    for (finalAr of finalArr) {
-                        if (finalAr.fourmdrive) {
-                            finalAr.trueSkill += 3;
-                        }
+                if (option.length === 1) {
+                    if (select == 'fourmd') {
+                        options.push('fourmd')
                     }
-                } if (option == 'twomd') {
-                    for (finalAr of finalArr) {
-                        if (finalAr.twomdrive) {
-                            finalAr.trueSkill += 3;
-                        }
+                    if (select == 'twomd') {
+                        options.push('twomd')
                     }
-                } if (option == 'sixmd') {
-                    for (finalAr of finalArr) {
-                        if (finalAr.sixmdrive) {
-                            finalAr.trueSkill += 3;
-                        }
+                    if (select == 'sixmd') {
+                        options.push('sixmd')
                     }
-                } if (option == 'onemf') {
-                    for (finalAr of finalArr) {
-                        if (finalAr.snflywheel) {
-                            finalAr.trueSkill += 3;
-                        }
+                    if (select == 'onemf') {
+                        options.push('onemf')
                     }
-                } if (option == 'twomf') {
-                    for (finalAr of finalArr) {
-                        if (finalAr.dbflywheel) {
-                            finalAr.trueSkill += 3;
-                        }
+                    if (select == 'twomf') {
+                        options.push('twomf')
                     }
-                } if (option == 'aut') {
-                    for (finalAr of finalArr) {
-                        if (finalAr.auton) {
-                            finalAr.trueSkill += 3;
-                        }
+                    if (select == 'aut') {
+                        options.push('aut')
                     }
-                } if (option == 'cata') {
-                    for (finalAr of finalArr) {
-                        if (finalAr.cata) {
-                            finalAr.trueSkill += 3;
-                        }
+                    if (select == 'cata') {
+                        options.push('cata')
                     }
-                } if (option == 'autwp') {
-                    for (finalAr of finalArr) {
-                        if (finalAr.wpauton) {
-                            finalAr.trueSkill += 3;
-                        }
+                    if (select == 'autwp') {
+                        options.push('autwp')
+                    }
+                    break;
+                } else {
+                    if (option == 'fourmd') {
+                        options.push('fourmd')
+                    }
+                    if (option == 'twomd') {
+                        options.push('twomd')
+                    }
+                    if (option == 'sixmd') {
+                        options.push('sixmd')
+                    }
+                    if (option == 'onemf') {
+                        options.push('onemf')
+                    }
+                    if (option == 'twomf') {
+                        options.push('twomf')
+                    }
+                    if (option == 'aut') {
+                        options.push('aut')
+                    }
+                    if (option == 'cata') {
+                        options.push('cata')
+                    }
+                    if (option == 'autwp') {
+                        options.push('autwp')
+
                     }
                 }
             }
+
+            let string = `/picker/${id}?options=true`;
+            // console.log('options', options)
+            for (option of options) {
+                string += `&${option}=true`
+            }
+            res.redirect(string)
+        } else {
+            res.redirect(`/picker/${id}`)
         }
 
-
-        res.render('filtered', { sorted: finalArr, event: foundEventObj })
-
-        // let { fourmd, twomd, sixmd, twomf, onemf, cata, aut, autwp } = req.body;
-        // if (fourmd === 'on') {
-
-        // } if (twomd === 'on') {
-
-        // } if (cata === 'on') {
-
-        // } if (autwp === 'on') {
-
-        // } if (aut === 'on') {
-
-        // } if (sixmd === 'on') {
-
-        // } if (twomf === 'on') {
-
-        // } if (onemf === 'on') {
-
-        // }
 
     } else {
         res.redirect('/')
@@ -836,6 +949,14 @@ app.post('/picker/filtered/', async (req, res) => {
 })
 
 app.get('*', async (req, res) => {
+    if (session.userid) {
+        res.render('unkown')
+    } else {
+        res.redirect('/')
+    }
+})
+
+app.post('*', async (req, res) => {
     if (session.userid) {
         res.render('unkown')
     } else {

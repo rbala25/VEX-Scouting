@@ -8,6 +8,7 @@
     <title>
         Selected Event: Alliance Picker
     </title>
+    <link rel="stylesheet" href="../public/css/event.css">
 </head>
 
 <body>
@@ -15,64 +16,67 @@
         Specific Event Information (Alliance Picker)
     </h1>
 
-    <a href="/matchpicker"><button>Back to Alliance Selector Home Page</button></a>
+    <div id="buttdiv"><a href="/matchpicker"><button class="butt">Back to Alliance Selector Home Page</button></a></div>
+    <% if(filtered) { %>
+        <div id="buttdiv"><a href='/picker/<%=id%>'><button class="butt">Clear Filters</button></a></div>
+        <% }%>
 
-    <h2>Basic Info</h2>
-    <div id="basicInf">
-        <ul>
-            <li>
-                <b>
-                    <%=event.name%>
-                </b>
-            </li>
-            <li>
-                Venue: <%=event.location.venue%>
-            </li>
-            <li>
-                <%=event.location.city%>, <%=event.location.region%>, <%=event.location.country%>
-            </li>
-            <li>
-                Start Date: <%=event.unformatStart%>
-            </li>
-            <li>
-                End Date: <%=event.unformatEnd%>
-            </li>
-            <li>Level: <%=event.level%>
-            </li>
-        </ul>
-    </div>
+            <div id="basicInf">
+                <h2>Basic Info</h2>
+                <ul>
+                    <li>
+                        <b>
+                            <%=event.name%>
+                        </b>
+                    </li>
+                    <li>
+                        Venue: <%=event.location.venue%>
+                    </li>
+                    <li>
+                        <%=event.location.city%>, <%=event.location.region%>, <%=event.location.country%>
+                    </li>
+                    <li>
+                        Start Date: <%=event.unformatStart%>
+                    </li>
+                    <li>
+                        End Date: <%=event.unformatEnd%>
+                    </li>
+                    <li>Level: <%=event.level%>
+                    </li>
+                </ul>
+            </div>
 
-    <h2>Specific Stats</h2>
-    <div id="specificInf">
-        <ul>
-            <li>Event ID: <%=event.id%>
-            </li>
-            <li>Event SKU: <%=event.sku%>
-            </li>
-            <li>Season ID: <%=event.season.id%>
-            </li>
-            <li>Season Name: <%=event.season.name%>
-            </li>
-            <% if(event.season.awards_finalized===true) { %>
-                <li>Awards Finalized: True </li>
-                <% } else { %>
-                    <li>Awards Finalized: False </li>
-                    <% } %>
-
-                        <h4>Divisions:</h4>
-                        <% for(event.division of event.divisions) { %>
-                            <li>Division ID: <%=event.division.id%>
-                            </li>
-                            <li>Division Name: <%=event.division.name%>
-                            </li>
-                            <li>Division Order: <%=event.division.order%>
-                            </li>
-
+            <div id="specificInf">
+                <h2>Specific Stats</h2>
+                <ul>
+                    <li>Event ID: <%=event.id%>
+                    </li>
+                    <li>Event SKU: <%=event.sku%>
+                    </li>
+                    <li>Season ID: <%=event.season.id%>
+                    </li>
+                    <li>Season Name: <%=event.season.name%>
+                    </li>
+                    <% if(event.season.awards_finalized===true) { %>
+                        <li>Awards Finalized: True </li>
+                        <% } else { %>
+                            <li>Awards Finalized: False </li>
                             <% } %>
-        </ul>
-    </div>
 
-    <!-- <h3>What do you want to value?</h3>
+                                <h4>Divisions:</h4>
+                                <% for(event.division of event.divisions) { %>
+                                    <li>Division ID: <%=event.division.id%>
+                                    </li>
+                                    <li>Division Name: <%=event.division.name%>
+                                    </li>
+                                    <li>Division Order: <%=event.division.order%>
+                                    </li>
+
+                                    <% } %>
+                </ul>
+            </div>
+
+            <!-- <h3>What do you want to value?</h3>
     <button id="4md">4 Motor Drive</button>
     <button id="6md">6 Motor Drive</button>
     <button id="2md">2 Motor Drive</button>
@@ -82,44 +86,54 @@
     <button id="aut">Match Auton</button>
     <button id="autwp">Auton Win Point</button> -->
 
-    <% if(sorted.length> 0) { %>
+            <% if(sorted.length> 0) { %>
 
-        <form action="/picker/<%=event.id%>/filtered" method="POST">
-            <h3>Higher Valuation</h3>
-            <select name="selectBox" id="selectBox" multiple>
-                <option value="choose" selected disabled hidden>Choose an option</option>
-                <option value="fourmd">4 Motor Drive</option>
-                <option value="twomd">2 Motor Drive</option>
-                <option value="sixmd">6 Motor Drive</option>
-                <option value="twomf">2 Motor Flywheel</option>
-                <option value="onemf">1 Motor Flywheel</option>
-                <option value="cata">Catapult</option>
-                <option value="aut">Match Auton</option>
-                <option value="autwp">Auton Win Point</option>
-            </select>
-            <button>Save</button>
-        </form>
-
-        <% for(i=0; i < sorted.length; i++) { %>
-            <% const sort=sorted[i]%>
-                <div>
-                    <h3>#<%=i+1%> Choice: </h3>
-                    <p><b><a href="/display/<%=event.id%>/<%=sort.number%>">Team Number: <%=sort.number%></a></b></p>
-                    <p>TrueSkill Ranking: <%=sort.trueSkill%>
-                    </p>
-                    <p>Skills:
-                        <br>
-                        Driver: <%=sort.skills.driving%>
-                            <br>
-                            Auton: <%=sort.skills.auton%>
-                                <br>
-                                Total: <%=sort.skills.total%>
-                    </p>
+                <div id="award">
+                    <form action="/picker/<%=event.id%>/filtered" method="post">
+                        <!-- <form action="/teams/worlds" method="get"> -->
+                        <h2>Higher Valuation</h2>
+                        <select name="selectBox" id="selectBox" multiple>
+                            <option value="choose" selected disabled hidden>Choose an option</option>
+                            <option value="fourmd">4 Motor Drive</option>
+                            <option value="twomd">2 Motor Drive</option>
+                            <option value="sixmd">6 Motor Drive</option>
+                            <option value="twomf">2 Motor Flywheel</option>
+                            <option value="onemf">1 Motor Flywheel</option>
+                            <option value="cata">Catapult</option>
+                            <option value="aut">Match Auton</option>
+                            <option value="autwp">Auton Win Point</option>
+                        </select>
+                        <button id="save12">Save</button>
+                    </form>
                 </div>
-                <% } %>
-                    <% } else {%>
+                <div id="classchoice">
+                    <h2>Top Choices:</h2>
+                    <% for(i=0; i < sorted.length; i++) { %>
+                        <% const sort=sorted[i]%>
+                            <div class="choice">
+                                <h3 class="h3choice">#<%=i+1%> Choice: </h3>
+                                <p><b><a href="/display/<%=event.id%>/<%=sort.number%>">Team Number: <%=sort.number%>
+                                        </a></b>
+                                </p>
+                                <p class="trueskill">TrueSkill Ranking: <%=sort.trueSkill%>
+                                </p>
+                                <p class="skills">Skills: </p>
+                                <section>
+                                    <p> Driver: <%=sort.skills.driving%>
+                                    </p>
+                                    <p> Auton: <%=sort.skills.auton%>
+                                    </p>
+                                    <p> Total: <%=sort.skills.total%>
+                                    </p>
+                                </section>
+                            </div>
+                            <% } %>
+                </div>
+                <% } else {%>
+                    <div id="noteams">
                         <h3>No Teams Found</h3>
-                        <% } %>
+                    </div>
+                    <% } %>
 
 </body>
 

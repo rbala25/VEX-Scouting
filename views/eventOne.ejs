@@ -8,6 +8,7 @@
     <title>
         Specific Event Information
     </title>
+    <link rel="stylesheet" href="../public/css/event.css">
 </head>
 
 <body>
@@ -15,10 +16,10 @@
         Specific Event Information
     </h1>
 
-    <a href="/events"><button>Back to Events Data</button></a>
+    <div id="buttdiv"> <a href="/events"><button class="butt">Back to Events Data</button></a></div>
 
-    <h2>Basic Info</h2>
     <div id="basicInf">
+        <h2>Basic Info</h2>
         <ul>
             <li>
                 <b>
@@ -42,8 +43,8 @@
         </ul>
     </div>
 
-    <h2>Specific Stats</h2>
     <div id="specificInf">
+        <h2>Specific Stats</h2>
         <ul>
             <li>Event ID: <%=event.id%>
             </li>

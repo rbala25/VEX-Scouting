@@ -91,6 +91,8 @@
                         </li>
                         <li>Average Strength of Schedule (per match): <%=team.rankings.avgSoS%>
                         </li>
+                        <li>Tipping Point Worlds: <%=team.worlds%>
+                        </li>
 
                         <h3>Algorithm Specific</h3>
                         <li>True Skill Calculation: <%=team.trueSkill.toFixed(3)%>
@@ -154,8 +156,8 @@
                                                         <% if((l.excellence==false ) && (l.champion==false ) &&
                                                             (l.think==false) && (l.skills==false) && (l.finalist==false)
                                                             && (l.skills2==false) && (l.skills3==false)) { %>
-                                                            <li>
-                                                                <h5>No Spin Up Awards</h5>
+                                                            <li class="noawards">
+                                                                No Spin Up Awards
                                                             </li>
                                                             <% } %>
 
@@ -232,12 +234,13 @@
                                                                                                         &&
                                                                                                         (t.skills3==false))
                                                                                                         { %>
-                                                                                                        <li>
-                                                                                                            <h5>No
-                                                                                                                Tipping
-                                                                                                                Point
-                                                                                                                Awards
-                                                                                                            </h5>
+                                                                                                        <li
+                                                                                                            class="noawards">
+                                                                                                            No
+                                                                                                            Tipping
+                                                                                                            Point
+                                                                                                            Awards
+
                                                                                                         </li>
                                                                                                         <% } %>
                 </div>
