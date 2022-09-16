@@ -35,7 +35,7 @@ h2 {
     font-weight: 300;
     color: black;
     text-align: center;
-    transition: all 0.2s;
+    transition: all 0.4s;
     font: Georgia;
     font-weight: 500;
     margin-bottom: 2%;
@@ -92,6 +92,7 @@ tbody tr.active-row {
     text-decoration: none;
     text-transform: uppercase;
     font-weight: 600;
+    transition: 0.2s;
 }
 
 .link:hover {
