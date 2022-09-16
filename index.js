@@ -41,7 +41,7 @@ cron.schedule('0 * * * *', async () => {
     await insertEvents()
 })
 
-const MONGODB_URI = process.env.MONGODB_URL || "mongodb://localhost:27017/vexScouting";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/vexScouting";
 mongoose.connect(MONGODB_URI)
     .then(() => {
         console.log('mongo connection open: index')
