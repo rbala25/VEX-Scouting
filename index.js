@@ -964,9 +964,9 @@ app.post('*', async (req, res) => {
     }
 })
 
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 3000;
 // app.listen(PORT, () => console.log(`Server is listening on port ${PORT}...`));
 
 app.listen(PORT, () => {
-    console.log("Listening on Port")
+    console.log(`Listening on Port ${PORT}`)
 })
