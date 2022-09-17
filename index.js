@@ -42,7 +42,10 @@ cron.schedule('0 * * * *', async () => {
 })
 
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://0.0.0.0:27017/vexScouting";
-mongoose.connect(MONGODB_URI)
+mongoose.connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
     .then(() => {
         console.log('mongo connection open: index')
     })
