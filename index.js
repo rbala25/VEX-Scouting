@@ -41,7 +41,7 @@ cron.schedule('0 * * * *', async () => {
     await insertEvents()
 })
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/vexScouting";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://0.0.0.0:27017/vexScouting";
 mongoose.connect(MONGODB_URI)
     .then(() => {
         console.log('mongo connection open: index')
@@ -968,5 +968,6 @@ const PORT = process.env.PORT || 3000;
 // app.listen(PORT, () => console.log(`Server is listening on port ${PORT}...`));
 
 app.listen(PORT, () => {
-    console.log(`Listening on Port ${PORT}`)
+    // console.log(`Listening on Port ${PORT}`)
+    console.log("Listening")
 })
