@@ -21,28 +21,33 @@ const { count } = require('console');
 
 
 async function forceSchedule() {
-    // await insertTeams()
-    // await algorithm()
-    // await sortTeams()
-    // await insertEvents()
-}
-
-// forceSchedule()
-
-cron.schedule('0 */12 * * *', async () => {
-    console.log('scheduled')
     await insertTeams()
     await algorithm()
-    sortTeams()
-})
-
-cron.schedule('0 * * * *', async () => {
-    console.log('Seeding Events')
+    await sortTeams()
     await insertEvents()
-})
+}
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://0.0.0.0:27017/vexScouting";
-mongoose.connect(MONGODB_URI, {
+forceSchedule()
+
+// let running = false;
+// cron.schedule('0 */12 * * *', async () => {
+//     running = true;
+//     console.log('scheduled')
+//     await insertTeams()
+//     await algorithm()
+//     await sortTeams()
+//     running = false;
+// })
+
+// cron.schedule('0 * * * *', async () => {
+//     if (running === false) {
+//         console.log('Seeding Events')
+//         await insertEvents()
+//     }
+// })
+
+// const MONGODB_URI = process.env.MONGODB_URL || "mongodb://0.0.0.0:27017/vexScouting";
+mongoose.connect('mongodb://localhost:27017/vexScouting', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })

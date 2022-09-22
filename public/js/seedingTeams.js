@@ -52,6 +52,7 @@ async function getTeamsGeneral() {
 
 async function getAllElse() {
     const arrs = await getTeamsGeneral();
+
     let counter = 0;
 
     for (arr of arrs) {
@@ -417,7 +418,9 @@ async function getAllElse() {
 
     counter = 0;
     for (arr of arrs) {
-        // for (j = 0; j < 50; j++) {
+        // for (j = 0; j < 150; j++) {
+        //     let arr = arrs[j]
+        // console.log(arr.number)
         console.log("Rankings for team ", counter)
         counter++;
 
@@ -476,15 +479,16 @@ async function getAllElse() {
                 } catch (e) {
                     console.log(e)
                 }
-            }
 
-            // console.log(avgSoS, weightedWins)
+            }
 
             const totalMatches = wins + losses;
             if (totalMatches > 0) {
                 weightedRate = weightedWins / totalMatches;
+                // console.log(avgSoS, weightedWins, weightedRate)
             } else {
                 weightedRate = unweightedRate;
+                // console.log(avgSoS, weightedWins)
             }
 
             const i1 = usables.length;
@@ -494,6 +498,31 @@ async function getAllElse() {
                 avgSoS = 0;
             }
 
+            if (weightedRate == NaN) {
+                console.log('Got Here - Weighted Rate');
+                weightedRate = 0;
+            }
+            if (unweightedRate == NaN) {
+                console.log('Got Here - Unwieghted Rate');
+                unweightedRate = 0;
+            }
+            if (avgSoS == NaN) {
+                console.log('Got Here - avgSoS')
+                avgSoS = 0;
+            }
+            if (wins == NaN) {
+                console.log('Got Here - Wins');
+                wins = 0;
+            }
+            if (losses == NaN) {
+                console.log('Got Here - Losses');
+                losses = 0;
+            }
+
+            // console.log(`wins: ${wins}, losses: ${losses}, weighted: ${weightedRate}, unweighted: ${unweightedRate}, avgSoS: ${avgSoS}`)
+            if (weightedRate == undefined || unweightedRate == undefined || avgSoS == undefined) {
+                console.log('here :(', arr.number)
+            }
             const Obj = {
                 wins: wins,
                 losses: losses,
@@ -502,20 +531,55 @@ async function getAllElse() {
                 avgSoS: avgSoS
             }
 
+            // Object.assign({ rankings: Obj })
             arr.rankings = Obj;
 
         } catch (e) {
             console.log(e)
         }
-    }
 
+    }
     return arrs;
+
 }
 
 async function insertTeams() {
     const arr = await getAllElse()
+    for (ar of arr) {
+        if (ar.rankings.avgSoS !== undefined) {
+            continue
+        } else {
+            console.log(ar.number, 'avgSoS');
+            ar.rankings.avgSoS = 0;
+        }
+        if (ar.rankings.weightedRate !== undefined) {
+            continue
+        } else {
+            console.log(ar.number, 'avgSoS');
+            ar.rankings.avgSoS = 0;
+        }
+        if (ar.rankings.unweightedRate !== undefined) {
+            continue
+        } else {
+            console.log(ar.number, 'avgSoS');
+            ar.rankings.avgSoS = 0;
+        }
+        if (ar.rankings.wins !== undefined) {
+            continue
+        } else {
+            console.log(ar.number, 'wins');
+            ar.rankings.wins = 0;
+        }
+        if (ar.rankings.losses !== undefined) {
+            continue
+        } else {
+            console.log(ar.number, 'losses');
+            ar.rankings.losses = 0;
+        }
+    }
     console.log('inserting teams')
     await Team.deleteMany({})
+    console.log('deleted')
     await Team.insertMany(arr)
         .then(() => {
             console.log('inserted')
