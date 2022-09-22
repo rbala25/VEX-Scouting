@@ -108,7 +108,7 @@ async function getAllElse() {
         }
     }
 
-    //SKILLS IS COMMENTED OFF SECTION ABOVE
+    //SKILLS IS ABOVE
     //BELOW IS OLD MATCHES
 
     // counter = 0;
@@ -413,8 +413,8 @@ async function getAllElse() {
 
     }
 
-    //SECTIOn ABOVE IS AWARDS
-    //BELOW IS RANKINGS
+    // //SECTIOn ABOVE IS AWARDS
+    // //BELOW IS RANKINGS
 
     counter = 0;
     for (arr of arrs) {
@@ -546,35 +546,45 @@ async function getAllElse() {
 async function insertTeams() {
     const arr = await getAllElse()
     for (ar of arr) {
-        if (ar.rankings.avgSoS !== undefined) {
-            continue
+        if ('rankings' in ar) {
+            if (ar.rankings.avgSoS !== undefined) {
+                continue
+            } else {
+                console.log(ar.number, 'avgSoS');
+                ar.rankings.avgSoS = 0;
+            }
+            if (ar.rankings.weightedRate !== undefined) {
+                continue
+            } else {
+                console.log(ar.number, 'avgSoS');
+                ar.rankings.avgSoS = 0;
+            }
+            if (ar.rankings.unweightedRate !== undefined) {
+                continue
+            } else {
+                console.log(ar.number, 'avgSoS');
+                ar.rankings.avgSoS = 0;
+            }
+            if (ar.rankings.wins !== undefined) {
+                continue
+            } else {
+                console.log(ar.number, 'wins');
+                ar.rankings.wins = 0;
+            }
+            if (ar.rankings.losses !== undefined) {
+                continue
+            } else {
+                console.log(ar.number, 'losses');
+                ar.rankings.losses = 0;
+            }
         } else {
-            console.log(ar.number, 'avgSoS');
-            ar.rankings.avgSoS = 0;
-        }
-        if (ar.rankings.weightedRate !== undefined) {
-            continue
-        } else {
-            console.log(ar.number, 'avgSoS');
-            ar.rankings.avgSoS = 0;
-        }
-        if (ar.rankings.unweightedRate !== undefined) {
-            continue
-        } else {
-            console.log(ar.number, 'avgSoS');
-            ar.rankings.avgSoS = 0;
-        }
-        if (ar.rankings.wins !== undefined) {
-            continue
-        } else {
-            console.log(ar.number, 'wins');
-            ar.rankings.wins = 0;
-        }
-        if (ar.rankings.losses !== undefined) {
-            continue
-        } else {
-            console.log(ar.number, 'losses');
-            ar.rankings.losses = 0;
+            ar.rankings = {
+                wins: 0,
+                losses: 0,
+                weightedRate: 0,
+                avgSoS: 0,
+                unweightedRate: 0
+            }
         }
     }
     console.log('inserting teams')
