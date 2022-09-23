@@ -418,8 +418,8 @@ async function getAllElse() {
 
     counter = 0;
     for (arr of arrs) {
-        // for (j = 0; j < 150; j++) {
-        //     let arr = arrs[j]
+        // for (j = 0; j < 2100; j++) {
+        // let arr = arrs[j]
         // console.log(arr.number)
         console.log("Rankings for team ", counter)
         counter++;
@@ -536,6 +536,14 @@ async function getAllElse() {
 
         } catch (e) {
             console.log(e)
+            const Obj = {
+                wins: 0,
+                losses: 0,
+                weightedRate: 0,
+                unweightedRate: 0,
+                avgSoS: 0
+            }
+            arr.rankings = Obj;
         }
 
     }
@@ -547,37 +555,38 @@ async function insertTeams() {
     const arr = await getAllElse()
     for (ar of arr) {
         if ('rankings' in ar) {
-            if (ar.rankings.avgSoS !== undefined) {
+            if (ar.rankings.avgSoS !== undefined && ar.rankings.avgSoS !== NaN) {
                 continue
             } else {
                 console.log(ar.number, 'avgSoS');
                 ar.rankings.avgSoS = 0;
             }
-            if (ar.rankings.weightedRate !== undefined) {
+            if (ar.rankings.weightedRate !== undefined && ar.rankings.weightedRate !== NaN) {
                 continue
             } else {
                 console.log(ar.number, 'avgSoS');
                 ar.rankings.avgSoS = 0;
             }
-            if (ar.rankings.unweightedRate !== undefined) {
+            if (ar.rankings.unweightedRate !== undefined && ar.rankings.unweightedRate !== NaN) {
                 continue
             } else {
                 console.log(ar.number, 'avgSoS');
                 ar.rankings.avgSoS = 0;
             }
-            if (ar.rankings.wins !== undefined) {
+            if (ar.rankings.wins !== undefined && ar.rankings.wins !== NaN) {
                 continue
             } else {
                 console.log(ar.number, 'wins');
                 ar.rankings.wins = 0;
             }
-            if (ar.rankings.losses !== undefined) {
+            if (ar.rankings.losses !== undefined && ar.rankings.losses !== NaN) {
                 continue
             } else {
                 console.log(ar.number, 'losses');
                 ar.rankings.losses = 0;
             }
         } else {
+            console.log('here', ar.number)
             ar.rankings = {
                 wins: 0,
                 losses: 0,
@@ -590,13 +599,22 @@ async function insertTeams() {
     console.log('inserting teams')
     await Team.deleteMany({})
     console.log('deleted')
-    await Team.insertMany(arr)
-        .then(() => {
-            console.log('inserted')
-        })
-        .catch(err => {
-            console.log(err)
-        })
+    for (ar of arr) {
+        await Team.insertMany(ar)
+            .then(() => {
+
+            })
+            .catch((e) => {
+                console.log(ar.number, e)
+            })
+    }
+    // await Team.insertMany(arr)
+    //     .then(() => {
+    //         console.log('inserted')
+    //     })
+    //     .catch(err => {
+    //         console.log(err)
+    //     })
     const count2 = await Team.count()
     console.log(count2)
 }

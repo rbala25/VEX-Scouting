@@ -27,24 +27,24 @@ async function forceSchedule() {
     await insertEvents()
 }
 
-forceSchedule()
+// forceSchedule()
 
-// let running = false;
-// cron.schedule('0 */12 * * *', async () => {
-//     running = true;
-//     console.log('scheduled')
-//     await insertTeams()
-//     await algorithm()
-//     await sortTeams()
-//     running = false;
-// })
+let running = false;
+cron.schedule('0 */12 * * *', async () => {
+    running = true;
+    console.log('scheduled')
+    await insertTeams()
+    await algorithm()
+    await sortTeams()
+    running = false;
+})
 
-// cron.schedule('0 * * * *', async () => {
-//     if (running === false) {
-//         console.log('Seeding Events')
-//         await insertEvents()
-//     }
-// })
+cron.schedule('0 * * * *', async () => {
+    if (running === false) {
+        console.log('Seeding Events')
+        await insertEvents()
+    }
+})
 
 // const MONGODB_URI = process.env.MONGODB_URL || "mongodb://0.0.0.0:27017/vexScouting";
 mongoose.connect('mongodb://localhost:27017/vexScouting', {
