@@ -47,12 +47,23 @@ async function sortTeams() {
         }
 
         const sorted = arrs.sort(compare);
+        for (i = 0; i < sorted.length; i++) {
+            const sort = sorted[i]
+            if (sort.organization.length > 35) {
+                let trimmed = sort.organization.substring(0, 35);
+                trimmed += '...';
+                sort.showableOrg = trimmed;
+            } else {
+                sort.showableOrg = sort.organization;
+            }
+            sort.algorithmNumber = i + 1;
+        }
 
         // console.log(sorted)
         await Team.deleteMany({})
-        console.log('deleted all')
+        console.log('deleted all (sorter)')
         await Team.insertMany(sorted)
-        console.log('inserted all')
+        console.log('inserted all (sorter)')
     } catch (e) {
         console.log(e)
     }

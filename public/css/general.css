@@ -213,3 +213,7 @@ form {
     /* margin-left: 0.1em;
     margin-right: 0.1em; */
 }
+
+.organization {
+    max-width: 150px;
+}

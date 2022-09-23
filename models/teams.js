@@ -6,6 +6,7 @@ const teamSchema = new mongoose.Schema({
     team_name: String,
     robot_name: String,
     organization: String,
+    showableOrg: String,
     location: {
         venue: String,
         address_1: String,
@@ -68,6 +69,7 @@ const teamSchema = new mongoose.Schema({
     cata: Boolean,
     auton: Boolean,
     wpauton: Boolean,
+    algorithmNumber: Number
 })
 
 const Team = mongoose.model('Team', teamSchema);

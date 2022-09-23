@@ -45,11 +45,13 @@
         <table>
             <thead>
                 <tr>
+                    <th>No.</th>
                     <th>Team</th>
                     <th>Team Name</th>
                     <th>Region</th>
                     <th>Country</th>
                     <th>Organization</th>
+                    <th>Program Type</th>
                     <th>Algorithm Score</th>
                     <th>Driver Skills</th>
                     <th>Auton Skills</th>
@@ -60,6 +62,11 @@
             <tbody id="tbody">
                 <% for(i=0; i<teams.length; i++) { %>
                     <tr>
+                        <td>
+                            <b>
+                                <%=teams[i].algorithmNumber%>.
+                            </b>
+                        </td>
                         <td>
                             <a class="link" href="/team/<%=teams[i].number%>">
                                 <%=teams[i].number%>
@@ -74,19 +81,29 @@
                                 <%=teams[i].location.region%>
                             </td>
                             <% } else { %>
-                                <td>UNKNOWN</td>
+                                <td><b>UNKNOWN</b></td>
                                 <% } %>
 
                                     <td>
                                         <%=teams[i].location.country%>
                                     </td>
 
-                                    <td>
+                                    <td class="organization">
                                         <% if (teams[i].organization) { %>
-                                            <%=teams[i].organization%>
+                                            <%=teams[i].showableOrg%>
                                                 <%} else { %>
                                                     <b>No Organization Found</b>
                                                     <% } %>
+                                    </td>
+                                    <td>
+                                        <%if(teams[i].grade==='Middle School' ) {%>
+                                            MS
+                                            <%} else if(teams[i].grade==='High School' ) {%>
+                                                HS
+                                                <%} else { %>
+                                                    <%=teams[i].grade %>
+                                                        <% }%>
+
                                     </td>
                                     <td>
                                         <%=teams[i].showableTrueSkill%>

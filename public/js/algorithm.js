@@ -13,11 +13,8 @@ mongoose.connect('mongodb://localhost:27017/vexScouting')
 async function algorithm() {
     const arrs = await Team.find({});
     console.log('found')
-    let counter = 0;
 
     for (arr of arrs) {
-        console.log(arr.number, counter);
-        counter++;
 
         const skills = arr.skills;
         const rankings = arr.rankings;
@@ -113,6 +110,7 @@ async function algorithm() {
         // console.log(trueSkill)
         const id = arr.id;
         // console.log(id, trueSkill)
+
         await Team.findOneAndUpdate({ id: id }, { trueSkill: trueSkill });
     }
 }

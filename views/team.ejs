@@ -87,17 +87,19 @@
                         <h3>Match Play</h3>
                         <li>Total Win-Loss Record (this season): <%=team.rankings.wins%>-<%=team.rankings.losses%>
                         </li>
-                        <li>W-L Ratio: <%=team.rankings.unweightedRate%>
+                        <li>W-L Ratio: <%=team.rankings.unweightedRate.toFixed(3)%>
                         </li>
-                        <li>Average Strength of Schedule (per match): <%=team.rankings.avgSoS%>
+                        <li>Average Strength of Schedule (per match): <%=team.rankings.avgSoS.toFixed(3)%>
                         </li>
                         <li>Tipping Point Worlds: <%=team.worlds%>
                         </li>
 
                         <h3>Algorithm Specific</h3>
+                        <li><b>Algorithm Rank: <%=team.algorithmNumber%></b>
+                        </li>
                         <li>True Skill Calculation: <%=team.trueSkill.toFixed(3)%>
                         </li>
-                        <li>Weighted W-L Ratio: <%=team.rankings.weightedRate%>
+                        <li>Weighted W-L Ratio: <%=team.rankings.weightedRate.toFixed(3)%>
                         </li>
 
                     </ul>

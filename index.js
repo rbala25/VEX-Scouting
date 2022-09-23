@@ -21,13 +21,13 @@ const { count } = require('console');
 
 
 async function forceSchedule() {
-    await insertTeams()
-    await algorithm()
-    await sortTeams()
+    // await insertTeams()
+    // await algorithm()
+    // await sortTeams()
     await insertEvents()
 }
 
-// forceSchedule()
+forceSchedule()
 
 let running = false;
 cron.schedule('0 */12 * * *', async () => {
