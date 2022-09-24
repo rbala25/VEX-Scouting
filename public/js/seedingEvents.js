@@ -4,7 +4,7 @@ const Event = require('../../models/upcomingEvents');
 const allevents = require('../../models/allEvents');
 const axios = require('axios').default;
 
-mongoose.connect('mongodb://0.0.0.0:27017/vexScouting')
+mongoose.connect('mongodb://127.0.0.1:27017/vexScouting')
     .then(() => {
         console.log('mongo connection open: seedingEvents')
     })
