@@ -1,7 +1,7 @@
 const Team = require('../../models/teams');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/vexScouting')
+mongoose.connect('mongodb://0.0.0.0:27017/vexScouting')
     .then(() => {
         console.log('mongo connection open: sorter')
     })
