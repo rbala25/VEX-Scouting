@@ -11,7 +11,7 @@ const Event = require('./models/upcomingEvents');
 const allevents = require('./models/allEvents');
 const insertTeams = require('./public/js/seedingTeams')
 const algorithm = require('./public/js/algorithm');
-const sortTeams = require('./public/js/sorter')
+const sortTeams = require('./public/js/sorter');
 const insertEvents = require('./public/js/seedingEvents');
 const { events, findOne } = require('./models/teams');
 const cookieParser = require('cookie-parser')
@@ -24,10 +24,11 @@ async function forceSchedule() {
     // await insertTeams()
     // await algorithm()
     // await sortTeams()
-    await insertEvents()
+    // await insertEvents()
+    // await addElements()
 }
 
-forceSchedule()
+// forceSchedule()
 
 let running = false;
 cron.schedule('0 */12 * * *', async () => {
@@ -39,7 +40,7 @@ cron.schedule('0 */12 * * *', async () => {
     running = false;
 })
 
-cron.schedule('0 * * * *', async () => {
+cron.schedule('1 * * * *', async () => {
     if (running === false) {
         console.log('Seeding Events')
         await insertEvents()
