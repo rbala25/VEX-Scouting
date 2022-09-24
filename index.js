@@ -50,7 +50,7 @@ cron.schedule('1 * * * *', async () => {
 // const MONGODB_URI = process.env.MONGODB_URL || "mongodb://0.0.0.0:27017/vexScouting";
 mongoose.connect('mongodb://0.0.0.0:27017/vexScouting', {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
+    // useUnifiedTopology: true,
 })
     .then(() => {
         console.log('mongo connection open: index')
@@ -973,7 +973,7 @@ app.post('*', async (req, res) => {
     }
 })
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 // app.listen(PORT, () => console.log(`Server is listening on port ${PORT}...`));
 
 app.listen(PORT, () => {
