@@ -43,7 +43,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/vexScouting', {
     })
 
 let running = false;
-cron.schedule('0 */12 * * *', async () => {
+cron.schedule('21 */12 * * *', async () => {
     running = true;
     console.log('scheduled')
     await insertTeams()
