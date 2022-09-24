@@ -3,7 +3,7 @@
 <b>Email:</b> rishibala2007@gmail.com  
 <b>Repository:</b> https://github.com/rbala25/VEX-Scouting  
 <br>
-<b>Languages:</b> JavaScript, HTML5, CSS3
+<b>Languages:</b> JavaScript, HTML5, CSS3  
         <b>Technology:</b> Express.js, Node.js, EJS, MongoDB, Mongoose, AWS EC2  
            <b>Other Dependencies:</b> Axios, Cookie-Parser, Node-Cron, Express-Sesssion  
            <b>Robot Events API:</b> <a href="https://www.robotevents.com/api/v2">API v2</a>
