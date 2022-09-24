@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const { count } = require('../../models/teams');
 const Team = require('../../models/teams');
 const axios = require('axios').default;
+const config = require('../../config')
 
 mongoose.connect('mongodb://127.0.0.1:27017/vexScouting')
     .then(() => {
@@ -14,9 +15,10 @@ mongoose.connect('mongodb://127.0.0.1:27017/vexScouting')
         console.log(err)
     })
 
+const auth = config.auth;
 async function getTeamsGeneral() {
     async function getFirst() {
-        const config = { headers: { 'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZjNiMzA2NDJlNGUyNmVjYzc0MGNiNzU4M2E3N2MwYjZhZmNjZjNkZDNkZjJiNDIwYTY5ODhjNjU0OWE1NTJmY2Q5MTExM2NmODc5MmY5YmMiLCJpYXQiOjE2NjE2MzIxMjAuOTQ5OTE5LCJuYmYiOjE2NjE2MzIxMjAuOTQ5OTIyMSwiZXhwIjoyNjA4NDA2OTIwLjkzOTM4NjgsInN1YiI6IjEwMDk0OCIsInNjb3BlcyI6W119.OCxtefDO9asOhFySsZP8vOlAEACl3zUTBgZRx8pFxssOkOYsaPXHoOA2LT6L_wH6wjEH_ilRrM0fXyXreb6ofF_SzbXLE2QXJGnCJMa3gcAS3QjHyib-bcB6QrLmcyJ-vk8JTgog_k9BgEwxSbjtHB1kjSvo--AkB8jghp6V7noGQzr2cGhLdJEK2FH8VKi7ni5DTXPl0e5fdDGlbKW-ylRhFOO8sdBgRPAFiV040H33EJ50HfbWAatapcfvYpBjaVC5O7wE67RiUB2ufNV7n7W4as8SyEGGVwyEKi5KnTt28hsRFKqCQg-0JB-0CapisBBXpr4wPsojsiCAR8YiZqHDGxQYRmdlJHsmeJcBzOvvjokVrsJmBRB1iMZeVBOYzcl1J7_PiBKfekrjPsCnWTOkZIiyGLVOYP9xqw_qmvYh3xd0XQAaIuKxzGbVlaalQzOHDENnqY7QhDjLp2wPEvyj0MStyD5H8Uhx7TKKeI55b2zcZqinCc8ye5Alt12ltpoBJNkXn8c5asCxUVGC8lNhUlb7e-kveXCWXpihEt1XCftDCrALAvZl-NZikMvhx7gezL51vVlKd_pbCFiNny_1KYVp_GMFSIIVydX7bgrUnyMjH_931DOb6PwVFEjy3zQ6p6Tur_KiaW1aMVQYoYMyP9lUn1I2peqp_XgKIbE' } }
+        const config = { headers: { 'Authorization': 'Bearer ' + auth } }
         const res = await axios.get(`https://www.robotevents.com/api/v2/teams?registered=true&program=1=&myTeams=false&page=1&per_page=250`, config)
         // .then(msg => {
         //     console.log(msg)
@@ -32,7 +34,7 @@ async function getTeamsGeneral() {
         const iterator = res.data.meta.last_page;
         const arr = []
         for (i = 1; i <= iterator; i++) {
-            const config = { headers: { 'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZjNiMzA2NDJlNGUyNmVjYzc0MGNiNzU4M2E3N2MwYjZhZmNjZjNkZDNkZjJiNDIwYTY5ODhjNjU0OWE1NTJmY2Q5MTExM2NmODc5MmY5YmMiLCJpYXQiOjE2NjE2MzIxMjAuOTQ5OTE5LCJuYmYiOjE2NjE2MzIxMjAuOTQ5OTIyMSwiZXhwIjoyNjA4NDA2OTIwLjkzOTM4NjgsInN1YiI6IjEwMDk0OCIsInNjb3BlcyI6W119.OCxtefDO9asOhFySsZP8vOlAEACl3zUTBgZRx8pFxssOkOYsaPXHoOA2LT6L_wH6wjEH_ilRrM0fXyXreb6ofF_SzbXLE2QXJGnCJMa3gcAS3QjHyib-bcB6QrLmcyJ-vk8JTgog_k9BgEwxSbjtHB1kjSvo--AkB8jghp6V7noGQzr2cGhLdJEK2FH8VKi7ni5DTXPl0e5fdDGlbKW-ylRhFOO8sdBgRPAFiV040H33EJ50HfbWAatapcfvYpBjaVC5O7wE67RiUB2ufNV7n7W4as8SyEGGVwyEKi5KnTt28hsRFKqCQg-0JB-0CapisBBXpr4wPsojsiCAR8YiZqHDGxQYRmdlJHsmeJcBzOvvjokVrsJmBRB1iMZeVBOYzcl1J7_PiBKfekrjPsCnWTOkZIiyGLVOYP9xqw_qmvYh3xd0XQAaIuKxzGbVlaalQzOHDENnqY7QhDjLp2wPEvyj0MStyD5H8Uhx7TKKeI55b2zcZqinCc8ye5Alt12ltpoBJNkXn8c5asCxUVGC8lNhUlb7e-kveXCWXpihEt1XCftDCrALAvZl-NZikMvhx7gezL51vVlKd_pbCFiNny_1KYVp_GMFSIIVydX7bgrUnyMjH_931DOb6PwVFEjy3zQ6p6Tur_KiaW1aMVQYoYMyP9lUn1I2peqp_XgKIbE' } }
+            const config = { headers: { 'Authorization': 'Bearer ' + auth } }
             const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams?registered=true&program=1=&myTeams=false&page=${i}&per_page=250`, config)
             console.log('on page ', i)
             const usables = res2.data.data;
@@ -62,7 +64,7 @@ async function getAllElse() {
         console.log("Skills Request ", counter)
         counter++;
         try {
-            const config2 = { headers: { 'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZjNiMzA2NDJlNGUyNmVjYzc0MGNiNzU4M2E3N2MwYjZhZmNjZjNkZDNkZjJiNDIwYTY5ODhjNjU0OWE1NTJmY2Q5MTExM2NmODc5MmY5YmMiLCJpYXQiOjE2NjE2MzIxMjAuOTQ5OTE5LCJuYmYiOjE2NjE2MzIxMjAuOTQ5OTIyMSwiZXhwIjoyNjA4NDA2OTIwLjkzOTM4NjgsInN1YiI6IjEwMDk0OCIsInNjb3BlcyI6W119.OCxtefDO9asOhFySsZP8vOlAEACl3zUTBgZRx8pFxssOkOYsaPXHoOA2LT6L_wH6wjEH_ilRrM0fXyXreb6ofF_SzbXLE2QXJGnCJMa3gcAS3QjHyib-bcB6QrLmcyJ-vk8JTgog_k9BgEwxSbjtHB1kjSvo--AkB8jghp6V7noGQzr2cGhLdJEK2FH8VKi7ni5DTXPl0e5fdDGlbKW-ylRhFOO8sdBgRPAFiV040H33EJ50HfbWAatapcfvYpBjaVC5O7wE67RiUB2ufNV7n7W4as8SyEGGVwyEKi5KnTt28hsRFKqCQg-0JB-0CapisBBXpr4wPsojsiCAR8YiZqHDGxQYRmdlJHsmeJcBzOvvjokVrsJmBRB1iMZeVBOYzcl1J7_PiBKfekrjPsCnWTOkZIiyGLVOYP9xqw_qmvYh3xd0XQAaIuKxzGbVlaalQzOHDENnqY7QhDjLp2wPEvyj0MStyD5H8Uhx7TKKeI55b2zcZqinCc8ye5Alt12ltpoBJNkXn8c5asCxUVGC8lNhUlb7e-kveXCWXpihEt1XCftDCrALAvZl-NZikMvhx7gezL51vVlKd_pbCFiNny_1KYVp_GMFSIIVydX7bgrUnyMjH_931DOb6PwVFEjy3zQ6p6Tur_KiaW1aMVQYoYMyP9lUn1I2peqp_XgKIbE' } }
+            const config2 = { headers: { 'Authorization': 'Bearer ' + auth } }
             const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${teamId}/skills?season%5B%5D=173&per_page=250`, config2)
 
             if (res2.data.data.length > 0) {
@@ -124,7 +126,7 @@ async function getAllElse() {
     //     const id = arr.id;
     //     console.log("Match Request ", counter)
     //     counter++
-    //     const config2 = { headers: { 'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZjNiMzA2NDJlNGUyNmVjYzc0MGNiNzU4M2E3N2MwYjZhZmNjZjNkZDNkZjJiNDIwYTY5ODhjNjU0OWE1NTJmY2Q5MTExM2NmODc5MmY5YmMiLCJpYXQiOjE2NjE2MzIxMjAuOTQ5OTE5LCJuYmYiOjE2NjE2MzIxMjAuOTQ5OTIyMSwiZXhwIjoyNjA4NDA2OTIwLjkzOTM4NjgsInN1YiI6IjEwMDk0OCIsInNjb3BlcyI6W119.OCxtefDO9asOhFySsZP8vOlAEACl3zUTBgZRx8pFxssOkOYsaPXHoOA2LT6L_wH6wjEH_ilRrM0fXyXreb6ofF_SzbXLE2QXJGnCJMa3gcAS3QjHyib-bcB6QrLmcyJ-vk8JTgog_k9BgEwxSbjtHB1kjSvo--AkB8jghp6V7noGQzr2cGhLdJEK2FH8VKi7ni5DTXPl0e5fdDGlbKW-ylRhFOO8sdBgRPAFiV040H33EJ50HfbWAatapcfvYpBjaVC5O7wE67RiUB2ufNV7n7W4as8SyEGGVwyEKi5KnTt28hsRFKqCQg-0JB-0CapisBBXpr4wPsojsiCAR8YiZqHDGxQYRmdlJHsmeJcBzOvvjokVrsJmBRB1iMZeVBOYzcl1J7_PiBKfekrjPsCnWTOkZIiyGLVOYP9xqw_qmvYh3xd0XQAaIuKxzGbVlaalQzOHDENnqY7QhDjLp2wPEvyj0MStyD5H8Uhx7TKKeI55b2zcZqinCc8ye5Alt12ltpoBJNkXn8c5asCxUVGC8lNhUlb7e-kveXCWXpihEt1XCftDCrALAvZl-NZikMvhx7gezL51vVlKd_pbCFiNny_1KYVp_GMFSIIVydX7bgrUnyMjH_931DOb6PwVFEjy3zQ6p6Tur_KiaW1aMVQYoYMyP9lUn1I2peqp_XgKIbE' } }
+    //     const config2 = { headers: { 'Authorization': 'Bearer ' + auth } }
     //     const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/matches?season%5B%5D=173&per_page=250`, config2)
 
     //     if (res2.data.data !== undefined) {
@@ -258,13 +260,13 @@ async function getAllElse() {
     for (k = 0; k < 1; k++) {
         const teamsWorlds = []
 
-        const config2 = { headers: { 'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZjNiMzA2NDJlNGUyNmVjYzc0MGNiNzU4M2E3N2MwYjZhZmNjZjNkZDNkZjJiNDIwYTY5ODhjNjU0OWE1NTJmY2Q5MTExM2NmODc5MmY5YmMiLCJpYXQiOjE2NjE2MzIxMjAuOTQ5OTE5LCJuYmYiOjE2NjE2MzIxMjAuOTQ5OTIyMSwiZXhwIjoyNjA4NDA2OTIwLjkzOTM4NjgsInN1YiI6IjEwMDk0OCIsInNjb3BlcyI6W119.OCxtefDO9asOhFySsZP8vOlAEACl3zUTBgZRx8pFxssOkOYsaPXHoOA2LT6L_wH6wjEH_ilRrM0fXyXreb6ofF_SzbXLE2QXJGnCJMa3gcAS3QjHyib-bcB6QrLmcyJ-vk8JTgog_k9BgEwxSbjtHB1kjSvo--AkB8jghp6V7noGQzr2cGhLdJEK2FH8VKi7ni5DTXPl0e5fdDGlbKW-ylRhFOO8sdBgRPAFiV040H33EJ50HfbWAatapcfvYpBjaVC5O7wE67RiUB2ufNV7n7W4as8SyEGGVwyEKi5KnTt28hsRFKqCQg-0JB-0CapisBBXpr4wPsojsiCAR8YiZqHDGxQYRmdlJHsmeJcBzOvvjokVrsJmBRB1iMZeVBOYzcl1J7_PiBKfekrjPsCnWTOkZIiyGLVOYP9xqw_qmvYh3xd0XQAaIuKxzGbVlaalQzOHDENnqY7QhDjLp2wPEvyj0MStyD5H8Uhx7TKKeI55b2zcZqinCc8ye5Alt12ltpoBJNkXn8c5asCxUVGC8lNhUlb7e-kveXCWXpihEt1XCftDCrALAvZl-NZikMvhx7gezL51vVlKd_pbCFiNny_1KYVp_GMFSIIVydX7bgrUnyMjH_931DOb6PwVFEjy3zQ6p6Tur_KiaW1aMVQYoYMyP9lUn1I2peqp_XgKIbE' } }
+        const config2 = { headers: { 'Authorization': 'Bearer ' + auth } }
         const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/45434/teams?registered=true&myTeams=false&per_page=250&page=1`, config2)
 
         const iterator = res2.data.meta.last_page;
 
         for (i = 1; i <= iterator; i++) {
-            const config2 = { headers: { 'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZjNiMzA2NDJlNGUyNmVjYzc0MGNiNzU4M2E3N2MwYjZhZmNjZjNkZDNkZjJiNDIwYTY5ODhjNjU0OWE1NTJmY2Q5MTExM2NmODc5MmY5YmMiLCJpYXQiOjE2NjE2MzIxMjAuOTQ5OTE5LCJuYmYiOjE2NjE2MzIxMjAuOTQ5OTIyMSwiZXhwIjoyNjA4NDA2OTIwLjkzOTM4NjgsInN1YiI6IjEwMDk0OCIsInNjb3BlcyI6W119.OCxtefDO9asOhFySsZP8vOlAEACl3zUTBgZRx8pFxssOkOYsaPXHoOA2LT6L_wH6wjEH_ilRrM0fXyXreb6ofF_SzbXLE2QXJGnCJMa3gcAS3QjHyib-bcB6QrLmcyJ-vk8JTgog_k9BgEwxSbjtHB1kjSvo--AkB8jghp6V7noGQzr2cGhLdJEK2FH8VKi7ni5DTXPl0e5fdDGlbKW-ylRhFOO8sdBgRPAFiV040H33EJ50HfbWAatapcfvYpBjaVC5O7wE67RiUB2ufNV7n7W4as8SyEGGVwyEKi5KnTt28hsRFKqCQg-0JB-0CapisBBXpr4wPsojsiCAR8YiZqHDGxQYRmdlJHsmeJcBzOvvjokVrsJmBRB1iMZeVBOYzcl1J7_PiBKfekrjPsCnWTOkZIiyGLVOYP9xqw_qmvYh3xd0XQAaIuKxzGbVlaalQzOHDENnqY7QhDjLp2wPEvyj0MStyD5H8Uhx7TKKeI55b2zcZqinCc8ye5Alt12ltpoBJNkXn8c5asCxUVGC8lNhUlb7e-kveXCWXpihEt1XCftDCrALAvZl-NZikMvhx7gezL51vVlKd_pbCFiNny_1KYVp_GMFSIIVydX7bgrUnyMjH_931DOb6PwVFEjy3zQ6p6Tur_KiaW1aMVQYoYMyP9lUn1I2peqp_XgKIbE' } }
+            const config2 = { headers: { 'Authorization': 'Bearer ' + auth } }
             const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/45434/teams?registered=true&myTeams=false&per_page=250&page=${i}`, config2)
 
             const usables = res2.data.data
@@ -274,12 +276,12 @@ async function getAllElse() {
         }
         console.log("Done Middle School")
 
-        const config3 = { headers: { 'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZjNiMzA2NDJlNGUyNmVjYzc0MGNiNzU4M2E3N2MwYjZhZmNjZjNkZDNkZjJiNDIwYTY5ODhjNjU0OWE1NTJmY2Q5MTExM2NmODc5MmY5YmMiLCJpYXQiOjE2NjE2MzIxMjAuOTQ5OTE5LCJuYmYiOjE2NjE2MzIxMjAuOTQ5OTIyMSwiZXhwIjoyNjA4NDA2OTIwLjkzOTM4NjgsInN1YiI6IjEwMDk0OCIsInNjb3BlcyI6W119.OCxtefDO9asOhFySsZP8vOlAEACl3zUTBgZRx8pFxssOkOYsaPXHoOA2LT6L_wH6wjEH_ilRrM0fXyXreb6ofF_SzbXLE2QXJGnCJMa3gcAS3QjHyib-bcB6QrLmcyJ-vk8JTgog_k9BgEwxSbjtHB1kjSvo--AkB8jghp6V7noGQzr2cGhLdJEK2FH8VKi7ni5DTXPl0e5fdDGlbKW-ylRhFOO8sdBgRPAFiV040H33EJ50HfbWAatapcfvYpBjaVC5O7wE67RiUB2ufNV7n7W4as8SyEGGVwyEKi5KnTt28hsRFKqCQg-0JB-0CapisBBXpr4wPsojsiCAR8YiZqHDGxQYRmdlJHsmeJcBzOvvjokVrsJmBRB1iMZeVBOYzcl1J7_PiBKfekrjPsCnWTOkZIiyGLVOYP9xqw_qmvYh3xd0XQAaIuKxzGbVlaalQzOHDENnqY7QhDjLp2wPEvyj0MStyD5H8Uhx7TKKeI55b2zcZqinCc8ye5Alt12ltpoBJNkXn8c5asCxUVGC8lNhUlb7e-kveXCWXpihEt1XCftDCrALAvZl-NZikMvhx7gezL51vVlKd_pbCFiNny_1KYVp_GMFSIIVydX7bgrUnyMjH_931DOb6PwVFEjy3zQ6p6Tur_KiaW1aMVQYoYMyP9lUn1I2peqp_XgKIbE' } }
+        const config3 = { headers: { 'Authorization': 'Bearer ' + auth } }
         const res3 = await axios.get(`https://www.robotevents.com/api/v2/events/45258/teams?registered=true&myTeams=false&per_page=250&page=1`, config3)
         const iterator3 = res3.data.meta.last_page;
 
         for (i = 1; i <= iterator3; i++) {
-            const config3 = { headers: { 'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZjNiMzA2NDJlNGUyNmVjYzc0MGNiNzU4M2E3N2MwYjZhZmNjZjNkZDNkZjJiNDIwYTY5ODhjNjU0OWE1NTJmY2Q5MTExM2NmODc5MmY5YmMiLCJpYXQiOjE2NjE2MzIxMjAuOTQ5OTE5LCJuYmYiOjE2NjE2MzIxMjAuOTQ5OTIyMSwiZXhwIjoyNjA4NDA2OTIwLjkzOTM4NjgsInN1YiI6IjEwMDk0OCIsInNjb3BlcyI6W119.OCxtefDO9asOhFySsZP8vOlAEACl3zUTBgZRx8pFxssOkOYsaPXHoOA2LT6L_wH6wjEH_ilRrM0fXyXreb6ofF_SzbXLE2QXJGnCJMa3gcAS3QjHyib-bcB6QrLmcyJ-vk8JTgog_k9BgEwxSbjtHB1kjSvo--AkB8jghp6V7noGQzr2cGhLdJEK2FH8VKi7ni5DTXPl0e5fdDGlbKW-ylRhFOO8sdBgRPAFiV040H33EJ50HfbWAatapcfvYpBjaVC5O7wE67RiUB2ufNV7n7W4as8SyEGGVwyEKi5KnTt28hsRFKqCQg-0JB-0CapisBBXpr4wPsojsiCAR8YiZqHDGxQYRmdlJHsmeJcBzOvvjokVrsJmBRB1iMZeVBOYzcl1J7_PiBKfekrjPsCnWTOkZIiyGLVOYP9xqw_qmvYh3xd0XQAaIuKxzGbVlaalQzOHDENnqY7QhDjLp2wPEvyj0MStyD5H8Uhx7TKKeI55b2zcZqinCc8ye5Alt12ltpoBJNkXn8c5asCxUVGC8lNhUlb7e-kveXCWXpihEt1XCftDCrALAvZl-NZikMvhx7gezL51vVlKd_pbCFiNny_1KYVp_GMFSIIVydX7bgrUnyMjH_931DOb6PwVFEjy3zQ6p6Tur_KiaW1aMVQYoYMyP9lUn1I2peqp_XgKIbE' } }
+            const config3 = { headers: { 'Authorization': 'Bearer ' + auth } }
             const res3 = await axios.get(`https://www.robotevents.com/api/v2/events/45258/teams?registered=true&myTeams=false&per_page=250&page=${i}`, config3)
 
             const usables = res3.data.data
@@ -339,7 +341,7 @@ async function getAllElse() {
         const id = arr.id;
 
         try {
-            const config = { headers: { 'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZjNiMzA2NDJlNGUyNmVjYzc0MGNiNzU4M2E3N2MwYjZhZmNjZjNkZDNkZjJiNDIwYTY5ODhjNjU0OWE1NTJmY2Q5MTExM2NmODc5MmY5YmMiLCJpYXQiOjE2NjE2MzIxMjAuOTQ5OTE5LCJuYmYiOjE2NjE2MzIxMjAuOTQ5OTIyMSwiZXhwIjoyNjA4NDA2OTIwLjkzOTM4NjgsInN1YiI6IjEwMDk0OCIsInNjb3BlcyI6W119.OCxtefDO9asOhFySsZP8vOlAEACl3zUTBgZRx8pFxssOkOYsaPXHoOA2LT6L_wH6wjEH_ilRrM0fXyXreb6ofF_SzbXLE2QXJGnCJMa3gcAS3QjHyib-bcB6QrLmcyJ-vk8JTgog_k9BgEwxSbjtHB1kjSvo--AkB8jghp6V7noGQzr2cGhLdJEK2FH8VKi7ni5DTXPl0e5fdDGlbKW-ylRhFOO8sdBgRPAFiV040H33EJ50HfbWAatapcfvYpBjaVC5O7wE67RiUB2ufNV7n7W4as8SyEGGVwyEKi5KnTt28hsRFKqCQg-0JB-0CapisBBXpr4wPsojsiCAR8YiZqHDGxQYRmdlJHsmeJcBzOvvjokVrsJmBRB1iMZeVBOYzcl1J7_PiBKfekrjPsCnWTOkZIiyGLVOYP9xqw_qmvYh3xd0XQAaIuKxzGbVlaalQzOHDENnqY7QhDjLp2wPEvyj0MStyD5H8Uhx7TKKeI55b2zcZqinCc8ye5Alt12ltpoBJNkXn8c5asCxUVGC8lNhUlb7e-kveXCWXpihEt1XCftDCrALAvZl-NZikMvhx7gezL51vVlKd_pbCFiNny_1KYVp_GMFSIIVydX7bgrUnyMjH_931DOb6PwVFEjy3zQ6p6Tur_KiaW1aMVQYoYMyP9lUn1I2peqp_XgKIbE' } }
+            const config = { headers: { 'Authorization': 'Bearer ' + auth } }
             const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, config)
             const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=154&per_page=250&page=1`, config)
 
@@ -434,7 +436,7 @@ async function getAllElse() {
             let weightedWins = 0;
             let SosCalc = 0;
 
-            const config = { headers: { 'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZjNiMzA2NDJlNGUyNmVjYzc0MGNiNzU4M2E3N2MwYjZhZmNjZjNkZDNkZjJiNDIwYTY5ODhjNjU0OWE1NTJmY2Q5MTExM2NmODc5MmY5YmMiLCJpYXQiOjE2NjE2MzIxMjAuOTQ5OTE5LCJuYmYiOjE2NjE2MzIxMjAuOTQ5OTIyMSwiZXhwIjoyNjA4NDA2OTIwLjkzOTM4NjgsInN1YiI6IjEwMDk0OCIsInNjb3BlcyI6W119.OCxtefDO9asOhFySsZP8vOlAEACl3zUTBgZRx8pFxssOkOYsaPXHoOA2LT6L_wH6wjEH_ilRrM0fXyXreb6ofF_SzbXLE2QXJGnCJMa3gcAS3QjHyib-bcB6QrLmcyJ-vk8JTgog_k9BgEwxSbjtHB1kjSvo--AkB8jghp6V7noGQzr2cGhLdJEK2FH8VKi7ni5DTXPl0e5fdDGlbKW-ylRhFOO8sdBgRPAFiV040H33EJ50HfbWAatapcfvYpBjaVC5O7wE67RiUB2ufNV7n7W4as8SyEGGVwyEKi5KnTt28hsRFKqCQg-0JB-0CapisBBXpr4wPsojsiCAR8YiZqHDGxQYRmdlJHsmeJcBzOvvjokVrsJmBRB1iMZeVBOYzcl1J7_PiBKfekrjPsCnWTOkZIiyGLVOYP9xqw_qmvYh3xd0XQAaIuKxzGbVlaalQzOHDENnqY7QhDjLp2wPEvyj0MStyD5H8Uhx7TKKeI55b2zcZqinCc8ye5Alt12ltpoBJNkXn8c5asCxUVGC8lNhUlb7e-kveXCWXpihEt1XCftDCrALAvZl-NZikMvhx7gezL51vVlKd_pbCFiNny_1KYVp_GMFSIIVydX7bgrUnyMjH_931DOb6PwVFEjy3zQ6p6Tur_KiaW1aMVQYoYMyP9lUn1I2peqp_XgKIbE' } }
+            const config = { headers: { 'Authorization': 'Bearer ' + auth } }
             const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=173&per_page=250&page=1`, config)
 
             const usables = res.data.data;
@@ -457,7 +459,7 @@ async function getAllElse() {
                 try {
                     const eventId = usable.event.id;
 
-                    const config = { headers: { 'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZjNiMzA2NDJlNGUyNmVjYzc0MGNiNzU4M2E3N2MwYjZhZmNjZjNkZDNkZjJiNDIwYTY5ODhjNjU0OWE1NTJmY2Q5MTExM2NmODc5MmY5YmMiLCJpYXQiOjE2NjE2MzIxMjAuOTQ5OTE5LCJuYmYiOjE2NjE2MzIxMjAuOTQ5OTIyMSwiZXhwIjoyNjA4NDA2OTIwLjkzOTM4NjgsInN1YiI6IjEwMDk0OCIsInNjb3BlcyI6W119.OCxtefDO9asOhFySsZP8vOlAEACl3zUTBgZRx8pFxssOkOYsaPXHoOA2LT6L_wH6wjEH_ilRrM0fXyXreb6ofF_SzbXLE2QXJGnCJMa3gcAS3QjHyib-bcB6QrLmcyJ-vk8JTgog_k9BgEwxSbjtHB1kjSvo--AkB8jghp6V7noGQzr2cGhLdJEK2FH8VKi7ni5DTXPl0e5fdDGlbKW-ylRhFOO8sdBgRPAFiV040H33EJ50HfbWAatapcfvYpBjaVC5O7wE67RiUB2ufNV7n7W4as8SyEGGVwyEKi5KnTt28hsRFKqCQg-0JB-0CapisBBXpr4wPsojsiCAR8YiZqHDGxQYRmdlJHsmeJcBzOvvjokVrsJmBRB1iMZeVBOYzcl1J7_PiBKfekrjPsCnWTOkZIiyGLVOYP9xqw_qmvYh3xd0XQAaIuKxzGbVlaalQzOHDENnqY7QhDjLp2wPEvyj0MStyD5H8Uhx7TKKeI55b2zcZqinCc8ye5Alt12ltpoBJNkXn8c5asCxUVGC8lNhUlb7e-kveXCWXpihEt1XCftDCrALAvZl-NZikMvhx7gezL51vVlKd_pbCFiNny_1KYVp_GMFSIIVydX7bgrUnyMjH_931DOb6PwVFEjy3zQ6p6Tur_KiaW1aMVQYoYMyP9lUn1I2peqp_XgKIbE' } }
+                    const config = { headers: { 'Authorization': 'Bearer ' + auth } }
                     const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/${eventId}`, config)
 
                     const level = res2.data.level;

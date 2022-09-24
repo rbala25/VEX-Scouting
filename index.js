@@ -18,17 +18,18 @@ const cookieParser = require('cookie-parser')
 const sessions = require('express-session');
 const e = require('express');
 const { count } = require('console');
+const config = require('./config')
 
 
 async function forceSchedule() {
-    // await insertTeams()
+    await insertTeams()
     // await algorithm()
     // await sortTeams()
     // await insertEvents()
     // await addElements()
 }
 
-// forceSchedule()
+forceSchedule()
 
 mongoose.connect('mongodb://127.0.0.1:27017/vexScouting', {
     useNewUrlParser: true,
@@ -44,7 +45,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/vexScouting', {
 
 let running = false;
 
-cron.schedule('0 * * * *', async function () {
+cron.schedule('0 4,16 * * *', async function () {
     if (running === false) {
         running = true;
         console.log('scheduled')
@@ -81,8 +82,8 @@ app.use('/public', express.static('public'));
 app.use(express.static('public'));
 
 
-const myusername = 'rbala25'
-const mypassword = '4610JPassword'
+const myusername = config.username;
+const mypassword = config.password;
 let session = false;
 
 app.get('/', (req, res) => {
