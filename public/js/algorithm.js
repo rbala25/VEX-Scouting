@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://127.0.0.1:27017/vexScouting')
     .then(() => {
-        console.log('mongo connection open: sorter')
+        console.log('mongo connection open: algorithm')
     })
     .catch((err) => {
         console.log('mongo error')
