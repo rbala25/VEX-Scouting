@@ -452,7 +452,12 @@ async function getAllElse() {
                 const totalMatches = wins + losses;
                 unweightedRate = wins / totalMatches;
 
-                const eSos = usable.sp / totalMatches;
+                let eSos = 0;
+                if (totalMatches > 0) {
+                    eSos = usable.sp / totalMatches;
+                } else {
+                    eSos = 0;
+                }
                 SosCalc += eSos;
 
                 // console.log(eventId)
@@ -521,10 +526,6 @@ async function getAllElse() {
                 losses = 0;
             }
 
-            // console.log(`wins: ${wins}, losses: ${losses}, weighted: ${weightedRate}, unweighted: ${unweightedRate}, avgSoS: ${avgSoS}`)
-            if (weightedRate == undefined || unweightedRate == undefined || avgSoS == undefined) {
-                console.log('here :(', arr.number)
-            }
             const Obj = {
                 wins: wins,
                 losses: losses,
@@ -534,6 +535,7 @@ async function getAllElse() {
             }
 
             // Object.assign({ rankings: Obj })
+
             arr.rankings = Obj;
 
         } catch (e) {
@@ -556,46 +558,35 @@ async function getAllElse() {
 async function insertTeams() {
     const arr = await getAllElse()
     for (ar of arr) {
-        if ('rankings' in ar) {
-            if (ar.rankings.avgSoS !== undefined && ar.rankings.avgSoS !== NaN) {
-                continue
-            } else {
-                console.log(ar.number, 'avgSoS');
-                ar.rankings.avgSoS = 0;
-            }
-            if (ar.rankings.weightedRate !== undefined && ar.rankings.weightedRate !== NaN) {
-                continue
-            } else {
-                console.log(ar.number, 'avgSoS');
-                ar.rankings.avgSoS = 0;
-            }
-            if (ar.rankings.unweightedRate !== undefined && ar.rankings.unweightedRate !== NaN) {
-                continue
-            } else {
-                console.log(ar.number, 'avgSoS');
-                ar.rankings.avgSoS = 0;
-            }
-            if (ar.rankings.wins !== undefined && ar.rankings.wins !== NaN) {
-                continue
-            } else {
-                console.log(ar.number, 'wins');
-                ar.rankings.wins = 0;
-            }
-            if (ar.rankings.losses !== undefined && ar.rankings.losses !== NaN) {
-                continue
-            } else {
-                console.log(ar.number, 'losses');
-                ar.rankings.losses = 0;
-            }
+        if (ar.rankings.avgSoS !== undefined && ar.rankings.avgSoS !== NaN) {
+            continue
         } else {
-            console.log('here', ar.number)
-            ar.rankings = {
-                wins: 0,
-                losses: 0,
-                weightedRate: 0,
-                avgSoS: 0,
-                unweightedRate: 0
-            }
+            console.log(ar.number, 'avgSoS');
+            ar.rankings.avgSoS = 0;
+        }
+        if (ar.rankings.weightedRate !== undefined && ar.rankings.weightedRate !== NaN) {
+            continue
+        } else {
+            console.log(ar.number, 'avgSoS');
+            ar.rankings.avgSoS = 0;
+        }
+        if (ar.rankings.unweightedRate !== undefined && ar.rankings.unweightedRate !== NaN) {
+            continue
+        } else {
+            console.log(ar.number, 'avgSoS');
+            ar.rankings.avgSoS = 0;
+        }
+        if (ar.rankings.wins !== undefined && ar.rankings.wins !== NaN) {
+            continue
+        } else {
+            console.log(ar.number, 'wins');
+            ar.rankings.wins = 0;
+        }
+        if (ar.rankings.losses !== undefined && ar.rankings.losses !== NaN) {
+            continue
+        } else {
+            console.log(ar.number, 'losses');
+            ar.rankings.losses = 0;
         }
     }
     console.log('inserting teams')

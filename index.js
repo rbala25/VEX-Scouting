@@ -29,7 +29,7 @@ async function forceSchedule() {
     // await addElements()
 }
 
-forceSchedule()
+// forceSchedule()
 
 mongoose.connect('mongodb://127.0.0.1:27017/vexScouting', {
     useNewUrlParser: true,
@@ -64,11 +64,11 @@ cron.schedule('1 * * * *', async function () {
 })
 
 // const MONGODB_URI = process.env.MONGODB_URL || "mongodb://0.0.0.0:27017/vexScouting";
-const sixh = 1000 * 60 * 60 * 6;
+const twoh = 1000 * 60 * 60 * 2;
 app.use(sessions({
-    secret: "verynicecoolsecretkey123123123123",
+    secret: "verynicecoolsecretkey1231231231231234567890",
     saveUninitialized: true,
-    cookie: { maxAge: sixh },
+    cookie: { maxAge: twoh },
     resave: false
 }));
 app.use(cookieParser());
