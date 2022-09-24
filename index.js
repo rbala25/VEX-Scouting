@@ -30,6 +30,18 @@ async function forceSchedule() {
 
 // forceSchedule()
 
+mongoose.connect('mongodb://127.0.0.1:27017/vexScouting', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+    .then(() => {
+        console.log('mongo connection open: index')
+    })
+    .catch((err) => {
+        console.log('mongo error')
+        console.log(err)
+    })
+
 let running = false;
 cron.schedule('0 */12 * * *', async () => {
     running = true;
@@ -48,19 +60,6 @@ cron.schedule('1 * * * *', async () => {
 })
 
 // const MONGODB_URI = process.env.MONGODB_URL || "mongodb://0.0.0.0:27017/vexScouting";
-mongoose.connect('mongodb://127.0.0.1:27017/vexScouting', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-    .then(() => {
-        console.log('mongo connection open: index')
-    })
-    .catch((err) => {
-        console.log('mongo error')
-        console.log(err)
-    })
-
-
 const sixh = 1000 * 60 * 60 * 6;
 app.use(sessions({
     secret: "verynicecoolsecretkey123123123123",
