@@ -46,7 +46,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/vexScouting', {
 console.log('running')
 let running = false;
 
-cron.schedule('35 */12 * * *', async () => {
+cron.schedule('35 */12 * * *', async function () {
     running = true;
     console.log('scheduled')
     await insertTeams()
@@ -55,7 +55,7 @@ cron.schedule('35 */12 * * *', async () => {
     running = false;
 })
 
-cron.schedule('1 * * * *', async () => {
+cron.schedule('1 * * * *', async function () {
     if (running === false) {
         console.log('Seeding Events')
         await insertEvents()
