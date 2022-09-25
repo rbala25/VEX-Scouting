@@ -718,6 +718,8 @@ app.post('/boxes/:id', async (req, res) => {
     if (session.userid) {
         const { id } = req.params;
         const checker = await Team.findOne({ id: id })
+        const event = req.query.event;
+        console.log(event)
         if (!checker) {
             const type = 'team';
             const searcher = id
@@ -780,7 +782,16 @@ app.post('/boxes/:id', async (req, res) => {
                 await Team.findOneAndUpdate({ id: id }, { goodEndg: false })
             }
 
-            res.redirect('/teams/worlds')
+            if (event) {
+                const foundEvent = await allevents.findOne({ id: event });
+                if (foundEvent) {
+                    res.redirect(`/picker/${foundEvent.id}`)
+                } else {
+                    res.redirect('/teams/worlds')
+                }
+            } else {
+                res.redirect('/teams/worlds')
+            }
         }
     } else {
         res.redirect('/')

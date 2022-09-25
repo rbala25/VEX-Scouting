@@ -250,52 +250,56 @@
 
                 <div id="scoutingBox">
                     <h2 id="scoutingH">Robot Features</h2>
-                    <form method="post" action='/boxes/<%=team.id%>'>
-                        <ul>
-                            <li><label class="labelc" for="4md">4 Motor Drive</label>
-                                <input class="check" type="checkbox" name="fourmd" id="4md" <%=team.fourmdrive
-                                    ? "checked" : "" %>>
-                            </li>
-                            <li><label class="labelc" for="2md">2 Motor Drive</label>
-                                <input class="check" type="checkbox" name="twomd" id="2md" <%=team.twomdrive ? "checked"
-                                    : "" %>>
-                            </li>
-                            <li> <label class="labelc" for="6md">6 Motor Drive</label>
-                                <input class="check" type="checkbox" name="sixmd" id="6md" <%=team.sixmdrive ? "checked"
-                                    : "" %>>
-                            </li>
-                            <li> <label class="labelc" for="2mf">Double Flywheel</label>
-                                <input class="check" type="checkbox" name="twomf" id="2mf" <%=team.dbflywheel
-                                    ? "checked" : "" %>>
-                            </li>
-                            <li> <label class="labelc" for="1mf">Single Flywheel</label>
-                                <input class="check" type="checkbox" name="onemf" id="1mf" <%=team.snflywheel
-                                    ? "checked" : "" %>>
-                            </li>
-                            <li> <label class="labelc" for="cata">Catapult</label>
-                                <input class="check" type="checkbox" name="cata" id="cata" <%=team.cata ? "checked" : ""
-                                    %>>
-                            </li>
-                            <li> <label class="labelc" for="aut">Match Auton</label>
-                                <input class="check" type="checkbox" name="aut" id="aut" <%=team.auton ? "checked" : ""
-                                    %>>
-                            </li>
-                            <li> <label class="labelc" for="autwp">Match Auton Win Point</label>
-                                <input class="check" type="checkbox" name="autwp" id="autwp" <%=team.wpauton ? "checked"
-                                    : "" %>>
-                            </li>
-                            <li> <label class="labelc" for="endgame">Endgame Mech</label>
-                                <input class="check" type="checkbox" name="endgame" id="endgame" <%=team.endgame
-                                    ? "checked" : "" %>>
-                            </li>
-                            <li> <label class="labelc" for="goodEndg">Good Endgame Mech</label>
-                                <input class="check" type="checkbox" name="goodEndg" id="goodEndg" <%=team.goodEndg
-                                    ? "checked" : "" %>>
-                            </li>
+                    <% if(eventT===true) {%>
+                        <form method="post" action='/boxes/<%=team.id%>?event=<%=foundEvent.id%>'>
+                            <%} else {%>
+                                <form method="post" action='/boxes/<%=team.id%>'>
+                                    <% } %>
+                                        <ul>
+                                            <li><label class="labelc" for="4md">4 Motor Drive</label>
+                                                <input class="check" type="checkbox" name="fourmd" id="4md"
+                                                    <%=team.fourmdrive ? "checked" : "" %>>
+                                            </li>
+                                            <li><label class="labelc" for="2md">2 Motor Drive</label>
+                                                <input class="check" type="checkbox" name="twomd" id="2md"
+                                                    <%=team.twomdrive ? "checked" : "" %>>
+                                            </li>
+                                            <li> <label class="labelc" for="6md">6 Motor Drive</label>
+                                                <input class="check" type="checkbox" name="sixmd" id="6md"
+                                                    <%=team.sixmdrive ? "checked" : "" %>>
+                                            </li>
+                                            <li> <label class="labelc" for="2mf">Double Flywheel</label>
+                                                <input class="check" type="checkbox" name="twomf" id="2mf"
+                                                    <%=team.dbflywheel ? "checked" : "" %>>
+                                            </li>
+                                            <li> <label class="labelc" for="1mf">Single Flywheel</label>
+                                                <input class="check" type="checkbox" name="onemf" id="1mf"
+                                                    <%=team.snflywheel ? "checked" : "" %>>
+                                            </li>
+                                            <li> <label class="labelc" for="cata">Catapult</label>
+                                                <input class="check" type="checkbox" name="cata" id="cata" <%=team.cata
+                                                    ? "checked" : "" %>>
+                                            </li>
+                                            <li> <label class="labelc" for="aut">Match Auton</label>
+                                                <input class="check" type="checkbox" name="aut" id="aut" <%=team.auton
+                                                    ? "checked" : "" %>>
+                                            </li>
+                                            <li> <label class="labelc" for="autwp">Match Auton Win Point</label>
+                                                <input class="check" type="checkbox" name="autwp" id="autwp"
+                                                    <%=team.wpauton ? "checked" : "" %>>
+                                            </li>
+                                            <li> <label class="labelc" for="endgame">Endgame Mech</label>
+                                                <input class="check" type="checkbox" name="endgame" id="endgame"
+                                                    <%=team.endgame ? "checked" : "" %>>
+                                            </li>
+                                            <li> <label class="labelc" for="goodEndg">Good Endgame Mech</label>
+                                                <input class="check" type="checkbox" name="goodEndg" id="goodEndg"
+                                                    <%=team.goodEndg ? "checked" : "" %>>
+                                            </li>
 
-                        </ul>
-                        <button id="save">Save</button>
-                    </form>
+                                        </ul>
+                                        <button id="save">Save</button>
+                                </form>
                 </div>
 
 </body>
