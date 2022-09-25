@@ -128,6 +128,19 @@
         </table>
     </div>
     <!-- <script src="../public/js/test.js"></script> -->
+
 </body>
+
+<footer>
+    <div>
+        <% for(i=1; i <=amount; i++ ) { %>
+            <span>
+                <a href='/teams/worlds?page=<%=i%>'>
+                    <%=i%>
+                </a>
+            </span>
+            <% }%>
+    </div>
+</footer>
 
 </html>

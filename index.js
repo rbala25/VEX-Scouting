@@ -131,8 +131,27 @@ app.post('/team/', async (req, res) => {
 
 app.get('/teams/worlds', async (req, res) => {
     if (session.userid) {
+        const page = req.query.page;
         const teams = await Team.find({})
-        res.render('worlds', { teams })
+        const count = await Team.count();
+        const amount = Math.ceil(count / 1000)
+        if (page) {
+            if ((((page - 1) * 1000) + 1000) < count) {
+                if (page === '1') {
+                    const usableTeams = teams.slice(0, 999);
+                    res.render('worlds', { teams: usableTeams, amount });
+                } else {
+                    const usableTeams = teams.slice(((page - 1) * 1000) - 1, (((page - 1) * 1000) + 1000) - 1);
+                    res.render('worlds', { teams: usableTeams, amount });
+                }
+            } else {
+                const usableTeams = teams.slice(((page - 1) * 1000), count)
+                res.render('worlds', { teams: usableTeams, amount });
+            }
+        } else {
+            const usableTeams = teams.slice(0, 999);
+            res.render('worlds', { teams: usableTeams, amount });
+        }
     } else {
         res.redirect('/')
     }
