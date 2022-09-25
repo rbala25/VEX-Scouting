@@ -589,6 +589,28 @@ async function insertTeams() {
             ar.rankings.losses = 0;
         }
     }
+
+    async function getScouted() {
+        const arrs = await Team.find({});
+        const newArrs = [];
+        for (arr of arrs) {
+            if ((arr.fourmdrive) || (arr.twomdrive) || (arr.sixmdrive) || (arr.dbflywheel) || (arr.snflywheel) || (arr.cata) || (arr.auton) || (arr.wpauton) || (arr.endgame) || (arr.goodEndg)) {
+                newArrs.push(arr);
+            }
+        }
+
+        return newArrs;
+    }
+
+    let scoutedTeams = [];
+    try {
+        const temporaryTeams = getScouted();
+        scoutedTeams = temporaryTeams;
+        console.log('Got Scouted Teams')
+    } catch {
+        console.log("Failed to get scouted teams")
+    }
+
     console.log('inserting teams')
     await Team.deleteMany({})
     console.log('deleted')
@@ -600,6 +622,31 @@ async function insertTeams() {
             .catch((e) => {
                 console.log(ar.number, e)
             })
+
+        async function putScoutings(scoutedTeams) {
+            for (scoutedTeam of scoutedTeams) {
+                const foundTeam = await Team.find({ id: scoutedTeam.id });
+                if (foundTeam) {
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { fourmdrive: scoutedTeam.fourmdrive })
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { twomdrive: scoutedTeam.twomdrive })
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { sixmdrive: scoutedTeam.sixmdrive })
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { cata: scoutedTeam.cata })
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { auton: scoutedTeam.auton })
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { dbflywheel: scoutedTeam.dbflywheel })
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { snflywheel: scoutedTeam.snflywheel })
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { autonwp: scoutedTeam.autonwp })
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { endgame: scoutedTeam.endgame })
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { goodEndg: scoutedTeam.goodEndg })
+                }
+            }
+        }
+
+        try {
+            putScoutings(scoutedTeams);
+        } catch {
+            console.log("could not put scoutings")
+        }
+
     }
     // await Team.insertMany(arr)
     //     .then(() => {
