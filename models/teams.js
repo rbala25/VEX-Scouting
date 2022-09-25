@@ -69,6 +69,8 @@ const teamSchema = new mongoose.Schema({
     cata: Boolean,
     auton: Boolean,
     wpauton: Boolean,
+    endgame: Boolean,
+    goodEndg: Boolean,
     algorithmNumber: Number
 })
 

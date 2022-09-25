@@ -659,6 +659,18 @@ app.get('/picker/:id', async (req, res) => {
                             finalCop.trueSkill += 3;
                         }
                     }
+                } if (key == 'endgame') {
+                    for (finalCop of finalCopy) {
+                        if (finalCop.endgame) {
+                            finalCop.trueSkill += 1.5;
+                        }
+                    }
+                } if (key == 'goodEndg') {
+                    for (finalCop of finalCopy) {
+                        if (finalCop.goodEndg) {
+                            finalCop.trueSkill += 3;
+                        }
+                    }
                 }
             }
 
@@ -711,7 +723,7 @@ app.post('/boxes/:id', async (req, res) => {
             const searcher = id
             res.render('default', { type, searcher })
         } else {
-            let { fourmd, twomd, sixmd, twomf, onemf, cata, aut, autwp } = req.body;
+            let { fourmd, twomd, sixmd, twomf, onemf, cata, aut, autwp, endgame, goodEndg } = req.body;
 
             if (fourmd === 'on') {
                 await Team.findOneAndUpdate({ id: id }, { fourmdrive: true })
@@ -756,6 +768,16 @@ app.post('/boxes/:id', async (req, res) => {
                 await Team.findOneAndUpdate({ id: id }, { wpauton: true })
             } else {
                 await Team.findOneAndUpdate({ id: id }, { wpauton: false })
+            }
+            if (endgame === 'on') {
+                await Team.findOneAndUpdate({ id: id }, { endgame: true })
+            } else {
+                await Team.findOneAndUpdate({ id: id }, { endgame: false })
+            }
+            if (goodEndg === 'on') {
+                await Team.findOneAndUpdate({ id: id }, { goodEndg: true })
+            } else {
+                await Team.findOneAndUpdate({ id: id }, { goodEndg: false })
             }
 
             res.redirect('/teams/worlds')
@@ -898,6 +920,12 @@ app.post('/picker/:id/filtered', async (req, res) => {
                     if (select == 'autwp') {
                         options.push('autwp')
                     }
+                    if (select == 'endgame') {
+                        options.push('endgame')
+                    }
+                    if (select == 'goodEndg') {
+                        options.push('goodEndg')
+                    }
                     break;
                 } else {
                     if (option == 'fourmd') {
@@ -923,13 +951,17 @@ app.post('/picker/:id/filtered', async (req, res) => {
                     }
                     if (option == 'autwp') {
                         options.push('autwp')
-
+                    }
+                    if (option == 'endgame') {
+                        options.push('endgame')
+                    }
+                    if (option == 'goodEndg') {
+                        options.push('goodEndg')
                     }
                 }
             }
 
             let string = `/picker/${id}?options=true`;
-            // console.log('options', options)
             for (option of options) {
                 string += `&${option}=true`
             }
