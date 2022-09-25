@@ -100,7 +100,7 @@ async function getElse() {
     }
 
     for (sortedArr of sortedArrs) {
-        const date = new Date(sortedArr.end);
+        const date = new Date(sortedArr.start);
         const formation = date.toUTCString();
         sortedArr.unformatEnd = formation;
     }
