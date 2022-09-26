@@ -56,7 +56,7 @@ cron.schedule('0 4,16 * * *', async function () {
     }
 })
 
-cron.schedule('1 */6 * * *', async function () {
+cron.schedule('1 4,10,16,22 * * *', async function () {
     if (running === false) {
         running = true;
         console.log('Seeding Events')
