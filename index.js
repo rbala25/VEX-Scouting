@@ -22,7 +22,7 @@ const config = require('./config')
 
 
 async function forceSchedule() {
-    await insertTeams()
+    // await insertTeams()
     // await algorithm()
     // await sortTeams()
     // await insertEvents()
@@ -56,10 +56,12 @@ cron.schedule('0 4,16 * * *', async function () {
     }
 })
 
-cron.schedule('1 * * * *', async function () {
+cron.schedule('1 */6 * * *', async function () {
     if (running === false) {
+        running = true;
         console.log('Seeding Events')
         await insertEvents()
+        running = false;
     }
 })
 
