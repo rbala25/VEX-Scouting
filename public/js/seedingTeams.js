@@ -558,43 +558,46 @@ async function getAllElse() {
 async function insertTeams() {
     const arr = await getAllElse()
     for (ar of arr) {
-        if (ar.rankings.avgSoS !== undefined && ar.rankings.avgSoS !== NaN) {
-            continue
-        } else {
-            console.log(ar.number, 'avgSoS');
-            ar.rankings.avgSoS = 0;
-        }
-        if (ar.rankings.weightedRate !== undefined && ar.rankings.weightedRate !== NaN) {
-            continue
-        } else {
-            console.log(ar.number, 'avgSoS');
-            ar.rankings.avgSoS = 0;
-        }
-        if (ar.rankings.unweightedRate !== undefined && ar.rankings.unweightedRate !== NaN) {
-            continue
-        } else {
-            console.log(ar.number, 'avgSoS');
-            ar.rankings.avgSoS = 0;
-        }
-        if (ar.rankings.wins !== undefined && ar.rankings.wins !== NaN) {
-            continue
-        } else {
-            console.log(ar.number, 'wins');
-            ar.rankings.wins = 0;
-        }
-        if (ar.rankings.losses !== undefined && ar.rankings.losses !== NaN) {
-            continue
-        } else {
-            console.log(ar.number, 'losses');
-            ar.rankings.losses = 0;
+        try {
+            if (ar.rankings.avgSoS !== undefined && ar.rankings.avgSoS !== NaN) {
+                continue
+            } else {
+                console.log(ar.number, 'avgSoS');
+                ar.rankings.avgSoS = 0;
+            }
+            if (ar.rankings.weightedRate !== undefined && ar.rankings.weightedRate !== NaN) {
+                continue
+            } else {
+                console.log(ar.number, 'avgSoS');
+                ar.rankings.avgSoS = 0;
+            }
+            if (ar.rankings.unweightedRate !== undefined && ar.rankings.unweightedRate !== NaN) {
+                continue
+            } else {
+                console.log(ar.number, 'avgSoS');
+                ar.rankings.avgSoS = 0;
+            }
+            if (ar.rankings.wins !== undefined && ar.rankings.wins !== NaN) {
+                continue
+            } else {
+                console.log(ar.number, 'wins');
+                ar.rankings.wins = 0;
+            }
+            if (ar.rankings.losses !== undefined && ar.rankings.losses !== NaN) {
+                continue
+            } else {
+                console.log(ar.number, 'losses');
+                ar.rankings.losses = 0;
+            }
+        } catch {
         }
     }
 
     async function getScouted() {
         const arrs = await Team.find({});
         const newArrs = [];
-        for (arr of arrs) {
-            if ((arr.fourmdrive === true) || (arr.twomdrive === true) || (arr.sixmdrive === true) || (arr.dbflywheel === true) || (arr.snflywheel === true) || (arr.cata === true) || (arr.auton === true) || (arr.wpauton === true) || (arr.endgame === true) || (arr.goodEndg === true)) {
+        for (arr1 of arrs) {
+            if ((arr1.fourmdrive === true) || (arr1.twomdrive === true) || (arr1.sixmdrive === true) || (arr1.dbflywheel === true) || (arr1.snflywheel === true) || (arr1.cata === true) || (arr1.auton === true) || (arr.wpauton === true) || (arr1.endgame === true) || (arr1.goodEndg === true)) {
                 newArrs.push(arr);
             }
         }
@@ -607,6 +610,7 @@ async function insertTeams() {
 
     console.log('inserting teams')
     await Team.deleteMany({})
+    // console.log(arr.length)
     console.log('deleted')
     for (ar of arr) {
         try {
@@ -623,19 +627,21 @@ async function insertTeams() {
         }
     }
     async function putScoutings(scoutedTeams) {
-        for (scoutedTeam of scoutedTeams) {
-            const foundTeam = await Team.find({ id: scoutedTeam.id });
-            if (foundTeam) {
-                await Team.findOneAndUpdate({ id: foundTeam.id }, { fourmdrive: scoutedTeam.fourmdrive })
-                await Team.findOneAndUpdate({ id: foundTeam.id }, { twomdrive: scoutedTeam.twomdrive })
-                await Team.findOneAndUpdate({ id: foundTeam.id }, { sixmdrive: scoutedTeam.sixmdrive })
-                await Team.findOneAndUpdate({ id: foundTeam.id }, { cata: scoutedTeam.cata })
-                await Team.findOneAndUpdate({ id: foundTeam.id }, { auton: scoutedTeam.auton })
-                await Team.findOneAndUpdate({ id: foundTeam.id }, { dbflywheel: scoutedTeam.dbflywheel })
-                await Team.findOneAndUpdate({ id: foundTeam.id }, { snflywheel: scoutedTeam.snflywheel })
-                await Team.findOneAndUpdate({ id: foundTeam.id }, { autonwp: scoutedTeam.autonwp })
-                await Team.findOneAndUpdate({ id: foundTeam.id }, { endgame: scoutedTeam.endgame })
-                await Team.findOneAndUpdate({ id: foundTeam.id }, { goodEndg: scoutedTeam.goodEndg })
+        if (scoutedTeams.length > 0) {
+            for (scoutedTeam of scoutedTeams) {
+                const foundTeam = await Team.find({ id: scoutedTeam.id });
+                if (foundTeam) {
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { fourmdrive: scoutedTeam.fourmdrive })
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { twomdrive: scoutedTeam.twomdrive })
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { sixmdrive: scoutedTeam.sixmdrive })
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { cata: scoutedTeam.cata })
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { auton: scoutedTeam.auton })
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { dbflywheel: scoutedTeam.dbflywheel })
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { snflywheel: scoutedTeam.snflywheel })
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { autonwp: scoutedTeam.autonwp })
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { endgame: scoutedTeam.endgame })
+                    await Team.findOneAndUpdate({ id: foundTeam.id }, { goodEndg: scoutedTeam.goodEndg })
+                }
             }
         }
     }
