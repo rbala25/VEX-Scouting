@@ -627,7 +627,7 @@ async function insertTeams() {
         }
     }
     async function putScoutings(scoutedTeams) {
-        if (scoutedTeams.length > 0) {
+        if (typeof scoutedTeams === Array && scoutedTeams.length > 0) {
             for (scoutedTeam of scoutedTeams) {
                 const foundTeam = await Team.find({ id: scoutedTeam.id });
                 if (foundTeam) {
