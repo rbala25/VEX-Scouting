@@ -2,8 +2,11 @@ const e = require('express');
 const mongoose = require('mongoose');
 const Event = require('../../models/upcomingEvents');
 const allevents = require('../../models/allEvents');
-const axios = require('axios').default;
+const axios1 = require('axios').default;
 const config = require('../../config')
+const rateLimit = require('axios-rate-limit');
+
+const axios = rateLimit(axios1.create(), { maxRequests: 1, perMilliseconds: 500 })
 
 mongoose.connect('mongodb://127.0.0.1:27017/vexScouting')
     .then(() => {
@@ -29,6 +32,22 @@ async function getEvents() {
         for (i = 1; i <= iterator; i++) {
             const config = { headers: { 'Authorization': 'Bearer ' + auth } }
             const res2 = await axios.get(`https://www.robotevents.com/api/v2/events?season%5B%5D=173&myEvents=false&eventTypes%5B%5D=tournament&eventTypes%5B%5D=league&page=${i}&per_page=250`, config)
+                .catch(async (e) => {
+                    console.log(i)
+                    let time = e.response.headers['retry-after']
+                    console.log(time)
+                    if (time === 0) {
+                        time += 15;
+                    }
+                    await new Promise(r => setTimeout(r, time * 1000));
+                    try {
+                        const res2 = await axios.get(`https://www.robotevents.com/api/v2/events?season%5B%5D=173&myEvents=false&eventTypes%5B%5D=tournament&eventTypes%5B%5D=league&page=${i}&per_page=250`, config)
+                        return res2;
+                    } catch (e) {
+
+                    }
+                })
+
             console.log('on page ', i)
             const usables = res2.data.data;
 
@@ -58,6 +77,21 @@ async function getSecond() {
         const id = usable.id;
         const config = { headers: { 'Authorization': 'Bearer ' + auth } }
         const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/${id}/teams?registered=true&myTeams=false&page=1&per_page=250`, config)
+            .catch(async (e) => {
+                console.log(id)
+                let time = e.response.headers['retry-after']
+                console.log(time)
+                if (time === 0) {
+                    time += 15;
+                }
+                await new Promise(r => setTimeout(r, time * 1000));
+                try {
+                    const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/${id}/teams?registered=true&myTeams=false&page=1&per_page=250`, config)
+                    return res2;
+                } catch (e) {
+
+                }
+            })
         const reusables = res2.data.data;
         const iterator = res2.data.meta.last_page;
         if (iterator > 1) {
@@ -65,6 +99,21 @@ async function getSecond() {
             for (i = 0; i < reusables.length; i++) {
                 const config = { headers: { 'Authorization': 'Bearer ' + auth } }
                 const res3 = await axios.get(`https://www.robotevents.com/api/v2/events/${id}/teams?registered=true&myTeams=false&page=${i}&per_page=250`, config)
+                    .catch(async (e) => {
+                        console.log(id)
+                        let time = e.response.headers['retry-after']
+                        console.log(time)
+                        if (time === 0) {
+                            time += 15;
+                        }
+                        await new Promise(r => setTimeout(r, time * 1000));
+                        try {
+                            const res3 = await axios.get(`https://www.robotevents.com/api/v2/events/${id}/teams?registered=true&myTeams=false&page=${i}&per_page=250`, config)
+                            return res3;
+                        } catch (e) {
+
+                        }
+                    })
                 const rereusables = res3.data.data;
                 for (rereusable of rereusables) {
                     console.log(rereusable.id)

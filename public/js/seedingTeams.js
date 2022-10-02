@@ -1,10 +1,13 @@
 const { Template } = require('ejs');
 const e = require('express');
 const mongoose = require('mongoose');
-const { count } = require('../../models/teams');
+const { count, off } = require('../../models/teams');
 const Team = require('../../models/teams');
-const axios = require('axios').default;
-const config = require('../../config')
+const axios1 = require('axios').default;
+const config = require('../../config');
+const rateLimit = require('axios-rate-limit');
+
+const axios = rateLimit(axios1.create(), { maxRequests: 1, perMilliseconds: 750 })
 
 mongoose.connect('mongodb://127.0.0.1:27017/vexScouting')
     .then(() => {
@@ -15,11 +18,31 @@ mongoose.connect('mongodb://127.0.0.1:27017/vexScouting')
         console.log(err)
     })
 
-const auth = config.auth;
+
+let tester = 0;
+async function getAuth() {
+    tester++;
+    if (tester === 1) {
+        const auth = config.auth;
+        return auth;
+    } else if (tester === 2) {
+        const auth = config.auth2;
+        return auth;
+    } else if (tester === 3) {
+        const auth = config.auth3;
+        tester = 0;
+        return auth;
+    } else {
+        const auth = config.auth;
+        return auth;
+    }
+}
+
 async function getTeamsGeneral() {
     async function getFirst() {
-        const config = { headers: { 'Authorization': 'Bearer ' + auth } }
-        const res = await axios.get(`https://www.robotevents.com/api/v2/teams?registered=true&program=1=&myTeams=false&page=1&per_page=250`, config)
+        const auth1 = await getAuth()
+        const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
+        const res = await axios.get(`https://www.robotevents.com/api/v2/teams?registered=true&program=1=&myTeams=false&page=1&per_page=250`, config, { retry: 3, retryDelay: 3000 })
         // .then(msg => {
         //     console.log(msg)
         // })
@@ -34,8 +57,21 @@ async function getTeamsGeneral() {
         const iterator = res.data.meta.last_page;
         const arr = []
         for (i = 1; i <= iterator; i++) {
-            const config = { headers: { 'Authorization': 'Bearer ' + auth } }
-            const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams?registered=true&program=1=&myTeams=false&page=${i}&per_page=250`, config)
+            const auth1 = await getAuth();
+            const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
+            const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams?registered=true&program=1=&myTeams=false&page=${i}&per_page=250`, config, { retry: 3, retryDelay: 3000 })
+                .catch(async (e) => {
+                    console.log(i);
+                    let time = e.response.headers['retry-after']
+                    console.log(time)
+                    if (time === 0) {
+                        time += 15;
+                    }
+                    await new Promise(r => setTimeout(r, time * 1000));
+                    const res = await axios.get(`https://www.robotevents.com/api/v2/teams?registered=true&program=1=&myTeams=false&page=${i}&per_page=250`, config, { retry: 3, retryDelay: 3000 })
+                    return res;
+                })
+
             console.log('on page ', i)
             const usables = res2.data.data;
 
@@ -63,51 +99,76 @@ async function getAllElse() {
         const teamId = arr.id;
         console.log("Skills Request ", counter)
         counter++;
-        try {
-            const config2 = { headers: { 'Authorization': 'Bearer ' + auth } }
-            const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${teamId}/skills?season%5B%5D=173&per_page=250`, config2)
+        // try {
+        const auth1 = await getAuth();
+        const config2 = { headers: { 'Authorization': 'Bearer ' + auth1 } }
+        const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${teamId}/skills?season%5B%5D=173&per_page=250`, config2, { retry: 3, retryDelay: 3000 })
+            .catch(async (e) => {
+                console.log(teamId)
+                let time = e.response.headers['retry-after']
+                console.log(time)
+                if (time === 0) {
+                    time += 15;
+                }
+                await new Promise(r => setTimeout(r, time * 1000));
+                try {
+                    const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${teamId}/skills?season%5B%5D=173&per_page=250`, config2, { retry: 3, retryDelay: 3000 })
+                    return res;
+                } catch (e) {
 
-            if (res2.data.data.length > 0) {
-                const usables = res2.data.data;
-                let driversk = 0;
-                let auton = 0;
-                for (usable of usables) {
-                    if (usable.type === 'driver') {
-                        if (usable.score > driversk) {
-                            driversk = usable.score;
-                        }
-                    } else {
-                        if (usable.score > auton) {
-                            auton = usable.score
-                        }
+                }
+            })
+
+
+        if (res2.data.data.length > 0) {
+            const usables = res2.data.data;
+            let driversk = 0;
+            let auton = 0;
+            for (usable of usables) {
+                if (usable.type === 'driver') {
+                    if (usable.score > driversk) {
+                        driversk = usable.score;
+                    }
+                } else {
+                    if (usable.score > auton) {
+                        auton = usable.score
                     }
                 }
-
-                const Obj = {
-                    driving: driversk,
-                    auton: auton,
-                    total: driversk + auton
-                }
-
-                arr.skills = Obj;
-
-                // await Team.findOneAndUpdate({ id: teamId }, { skills: Obj }, { upsert: true, new: true })
-            } else {
-                const Obj = {
-                    driving: 0,
-                    auton: 0,
-                    total: 0
-                }
-
-                arr.skills = Obj;
-                // await team.save()
-                // const team = await Team.findByIdAndUpdate(mongoId, { skills: Obj }, { new: true })
-                // const Foundteam = await Team.findOne({ id: teamId });
-                // console.log(Foundteam)
             }
-        } catch (e) {
-            console.log(e)
+
+            const Obj = {
+                driving: driversk,
+                auton: auton,
+                total: driversk + auton
+            }
+
+            arr.skills = Obj;
+
+            // await Team.findOneAndUpdate({ id: teamId }, { skills: Obj }, { upsert: true, new: true })
+        } else {
+            const Obj = {
+                driving: 0,
+                auton: 0,
+                total: 0
+            }
+
+            arr.skills = Obj;
+            // await team.save()
+            // const team = await Team.findByIdAndUpdate(mongoId, { skills: Obj }, { new: true })
+            // const Foundteam = await Team.findOne({ id: teamId });
+            // console.log(Foundteam)
         }
+        // } catch (e) {
+        //     console.log(e)
+
+        //     const Obj = {
+        //         driving: 0,
+        //         auton: 0,
+        //         total: 0
+        //     }
+
+        //     arr.skills = Obj;
+        // }
     }
 
     //SKILLS IS ABOVE
@@ -260,14 +321,16 @@ async function getAllElse() {
     for (k = 0; k < 1; k++) {
         const teamsWorlds = []
 
-        const config2 = { headers: { 'Authorization': 'Bearer ' + auth } }
-        const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/45434/teams?registered=true&myTeams=false&per_page=250&page=1`, config2)
+        const auth1 = await getAuth();
+        const config2 = { headers: { 'Authorization': 'Bearer ' + auth1 } }
+        const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/45434/teams?registered=true&myTeams=false&per_page=250&page=1`, config2, { retry: 3, retryDelay: 3000 })
 
         const iterator = res2.data.meta.last_page;
 
         for (i = 1; i <= iterator; i++) {
-            const config2 = { headers: { 'Authorization': 'Bearer ' + auth } }
-            const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/45434/teams?registered=true&myTeams=false&per_page=250&page=${i}`, config2)
+            const auth1 = await getAuth();
+            const config2 = { headers: { 'Authorization': 'Bearer ' + auth1 } }
+            const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/45434/teams?registered=true&myTeams=false&per_page=250&page=${i}`, config2, { retry: 3, retryDelay: 3000 })
 
             const usables = res2.data.data
             for (usable of usables) {
@@ -276,13 +339,15 @@ async function getAllElse() {
         }
         console.log("Done Middle School")
 
-        const config3 = { headers: { 'Authorization': 'Bearer ' + auth } }
-        const res3 = await axios.get(`https://www.robotevents.com/api/v2/events/45258/teams?registered=true&myTeams=false&per_page=250&page=1`, config3)
+        const auth2 = await getAuth();
+        const config3 = { headers: { 'Authorization': 'Bearer ' + auth2 } }
+        const res3 = await axios.get(`https://www.robotevents.com/api/v2/events/45258/teams?registered=true&myTeams=false&per_page=250&page=1`, config3, { retry: 3, retryDelay: 3000 })
         const iterator3 = res3.data.meta.last_page;
 
         for (i = 1; i <= iterator3; i++) {
-            const config3 = { headers: { 'Authorization': 'Bearer ' + auth } }
-            const res3 = await axios.get(`https://www.robotevents.com/api/v2/events/45258/teams?registered=true&myTeams=false&per_page=250&page=${i}`, config3)
+            const auth1 = await getAuth();
+            const config3 = { headers: { 'Authorization': 'Bearer ' + auth1 } }
+            const res3 = await axios.get(`https://www.robotevents.com/api/v2/events/45258/teams?registered=true&myTeams=false&per_page=250&page=${i}`, config3, { retry: 3, retryDelay: 3000 })
 
             const usables = res3.data.data
             for (usable of usables) {
@@ -314,7 +379,6 @@ async function getAllElse() {
     //ABOVE IS AWARDS
     // SECTION BELOW = AWARDS
 
-
     counter = 0;
     // for (i = 0; i < 50; i++) {
     for (arr of arrs) {
@@ -340,78 +404,125 @@ async function getAllElse() {
 
         const id = arr.id;
 
-        try {
-            const config = { headers: { 'Authorization': 'Bearer ' + auth } }
-            const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, config)
-            const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=154&per_page=250&page=1`, config)
+        // try {
+        const auth1 = await getAuth();
+        const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
 
-            const usables = res.data.data;
-            for (usable of usables) {
-                // console.log(arr.number)
-                // console.log('Usable arr', usable)
-                if (usable.title === "Excellence Award (VRC/VEXU/VAIC)") {
-                    excellence++;
-                } else if (usable.title === "Tournament Champions (VRC/VEXU/VAIC)") {
-                    champion++;
-                } else if (usable.title === "Robot Skills Champion (VRC/VEXU)") {
-                    skills++;
-                } else if (usable.title === "Tournament Finalists (VRC/VEXU/VAIC)") {
-                    finalist++;
-                } else if (usable.title === "Robot Skills 2nd Place (VRC/VEXU/VAIC)") {
-                    skills2++;
-                } else if (usable.title === "Robot Skills 3rd Place (VRC/VEXU/VAIC)") {
-                    skills3++;
-                } else if (usable.title === "Think Award (VRC/VEXU/VAIC)") {
-                    think++;
+        const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+            .catch(async (e) => {
+                console.log(id)
+                let time = e.response.headers['retry-after']
+                console.log(time)
+                if (time === 0) {
+                    time += 15;
                 }
-            }
-
-            const moreusables = res2.data.data;
-            for (moreusable of moreusables) {
-                // console.log(arr.number)
-                if (moreusable.title === "Excellence Award (VRC/VEXU/VAIC)") {
-                    excellence2++;
-                } else if (moreusable.title === "Tournament Champions (VRC/VEXU/VAIC)") {
-                    champion2++;
-                } else if (moreusable.title === "Robot Skills Champion (VRC/VEXU)") {
-                    skills_2++;
-                } else if (moreusable.title === "Tournament Finalists (VRC/VEXU/VAIC)") {
-                    finalist2++;
-                } else if (moreusable.title === "Robot Skills 2nd Place (VRC/VEXU/VAIC)") {
-                    skills22++;
-                } else if (moreusable.title === "Robot Skills 3rd Place (VRC/VEXU/VAIC)") {
-                    skills32++;
-                } else if (moreusable.title === "Think Award (VRC/VEXU/VAIC)") {
-                    think2++;
+                await new Promise(r => setTimeout(r, time * 1000));
+                const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+                return res;
+            })
+        const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=154&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+            .catch(async (e) => {
+                console.log(id)
+                let time = e.response.headers['retry-after']
+                console.log(time)
+                if (time === 0) {
+                    time += 15;
                 }
+                await new Promise(r => setTimeout(r, time * 1000));
+                const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=154&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+                return res2;
+            })
+
+        const usables = res.data.data;
+        for (usable of usables) {
+            // console.log(arr.number)
+            // console.log('Usable arr', usable)
+            if (usable.title === "Excellence Award (VRC/VEXU/VAIC)") {
+                excellence++;
+            } else if (usable.title === "Tournament Champions (VRC/VEXU/VAIC)") {
+                champion++;
+            } else if (usable.title === "Robot Skills Champion (VRC/VEXU)") {
+                skills++;
+            } else if (usable.title === "Tournament Finalists (VRC/VEXU/VAIC)") {
+                finalist++;
+            } else if (usable.title === "Robot Skills 2nd Place (VRC/VEXU/VAIC)") {
+                skills2++;
+            } else if (usable.title === "Robot Skills 3rd Place (VRC/VEXU/VAIC)") {
+                skills3++;
+            } else if (usable.title === "Think Award (VRC/VEXU/VAIC)") {
+                think++;
             }
-
-            const obj1 = {
-                excellence: excellence,
-                champion: champion,
-                skills: skills,
-                finalist: finalist,
-                skills2: skills2,
-                skills3: skills3,
-                think: think,
-            }
-
-            const obj2 = {
-                excellence: excellence2,
-                champion: champion2,
-                skills: skills_2,
-                finalist: finalist2,
-                skills2: skills22,
-                skills3: skills32,
-                think: think2,
-            }
-
-            arr.awards = obj1;
-            arr.tpawards = obj2;
-
-        } catch (e) {
-            console.log(e)
         }
+
+        const moreusables = res2.data.data;
+        for (moreusable of moreusables) {
+            // console.log(arr.number)
+            if (moreusable.title === "Excellence Award (VRC/VEXU/VAIC)") {
+                excellence2++;
+            } else if (moreusable.title === "Tournament Champions (VRC/VEXU/VAIC)") {
+                champion2++;
+            } else if (moreusable.title === "Robot Skills Champion (VRC/VEXU)") {
+                skills_2++;
+            } else if (moreusable.title === "Tournament Finalists (VRC/VEXU/VAIC)") {
+                finalist2++;
+            } else if (moreusable.title === "Robot Skills 2nd Place (VRC/VEXU/VAIC)") {
+                skills22++;
+            } else if (moreusable.title === "Robot Skills 3rd Place (VRC/VEXU/VAIC)") {
+                skills32++;
+            } else if (moreusable.title === "Think Award (VRC/VEXU/VAIC)") {
+                think2++;
+            }
+        }
+
+        const obj1 = {
+            excellence: excellence,
+            champion: champion,
+            skills: skills,
+            finalist: finalist,
+            skills2: skills2,
+            skills3: skills3,
+            think: think,
+        }
+
+        const obj2 = {
+            excellence: excellence2,
+            champion: champion2,
+            skills: skills_2,
+            finalist: finalist2,
+            skills2: skills22,
+            skills3: skills32,
+            think: think2,
+        }
+
+        arr.awards = obj1;
+        arr.tpawards = obj2;
+
+        // } catch (e) {
+        //     console.log(e)
+
+        //     const obj1 = {
+        //         excellence: 0,
+        //         champion: 0,
+        //         skills: 0,
+        //         finalist: 0,
+        //         skills2: 0,
+        //         skills3: 0,
+        //         think: 0,
+        //     }
+
+        //     const obj2 = {
+        //         excellence: 0,
+        //         champion: 0,
+        //         skills: 0,
+        //         finalist: 0,
+        //         skills2: 0,
+        //         skills3: 0,
+        //         think: 0,
+        //     }
+
+        //     arr.awards = obj1;
+        //     arr.tpawards = obj2;
+        // }
 
     }
 
@@ -426,129 +537,157 @@ async function getAllElse() {
         console.log("Rankings for team ", counter)
         counter++;
 
-        try {
-            let wins = 0;
-            let losses = 0;
-            let unweightedRate = 0;
-            let avgSoS = 0;
-            const id = arr.id;
+        // try {
+        let wins = 0;
+        let losses = 0;
+        let unweightedRate = 0;
+        let avgSoS = 0;
+        const id = arr.id;
 
-            let weightedWins = 0;
-            let SosCalc = 0;
+        let weightedWins = 0;
+        let SosCalc = 0;
 
-            const config = { headers: { 'Authorization': 'Bearer ' + auth } }
-            const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=173&per_page=250&page=1`, config)
-
-            const usables = res.data.data;
-            // console.log(usables)
-            for (i = 0; i < usables.length; i++) {
-                // console.log(arr.number)
-                const usable = usables[i];
-                const eWins = usable.wins;
-                const eLosses = usable.losses;
-                wins += eWins;
-                losses += eLosses;
-
-                const totalMatches = wins + losses;
-                unweightedRate = wins / totalMatches;
-
-                let eSos = 0;
-                if (totalMatches > 0) {
-                    eSos = usable.sp / totalMatches;
-                } else {
-                    eSos = 0;
+        const auth1 = await getAuth();
+        const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
+        const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+            .catch(async (e) => {
+                console.log(id)
+                let time = e.response.headers['retry-after']
+                console.log(time)
+                if (time === 0) {
+                    time += 15;
                 }
-                SosCalc += eSos;
-
-                // console.log(eventId)
+                await new Promise(r => setTimeout(r, time * 1000));
                 try {
-                    const eventId = usable.event.id;
-
-                    const config = { headers: { 'Authorization': 'Bearer ' + auth } }
-                    const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/${eventId}`, config)
-
-                    const level = res2.data.level;
-                    // console.log(level)
-
-                    if (level == 'Signature') {
-                        const weightedWinsCalc = wins * 1.1;
-                        weightedWins += weightedWinsCalc;
-                    } else if (level == "World") {
-                        const weightedWinsCalc = wins * 1.2;
-                        weightedWins += weightedWinsCalc;
-                    } else {
-                        weightedWins += wins;
-                        // console.log(arr.number)
-                        // console.log(weightedWins)
-                        // console.log('else state')
-                    }
-
+                    const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+                    return res;
                 } catch (e) {
-                    console.log(e)
-                }
 
-            }
+                }
+            })
+
+        const usables = res.data.data;
+        // console.log(usables)
+        for (i = 0; i < usables.length; i++) {
+            // console.log(arr.number)
+            const usable = usables[i];
+            const eWins = usable.wins;
+            const eLosses = usable.losses;
+            wins += eWins;
+            losses += eLosses;
 
             const totalMatches = wins + losses;
+            unweightedRate = wins / totalMatches;
+
+            let eSos = 0;
             if (totalMatches > 0) {
-                weightedRate = weightedWins / totalMatches;
-                // console.log(avgSoS, weightedWins, weightedRate)
+                eSos = usable.sp / totalMatches;
             } else {
-                weightedRate = unweightedRate;
-                // console.log(avgSoS, weightedWins)
+                eSos = 0;
             }
+            SosCalc += eSos;
 
-            const i1 = usables.length;
-            if (i1 > 0) {
-                avgSoS = SosCalc / i1;
+            // console.log(eventId)
+            const eventId = usable.event.id;
+
+            const auth1 = await getAuth();
+            const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
+            const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/${eventId}`, config)
+                .catch(async (e) => {
+                    console.log(eventId)
+                    let time = e.response.headers['retry-after']
+                    console.log(time)
+                    if (time === 0) {
+                        time += 15;
+                    }
+                    await new Promise(r => setTimeout(r, time * 1000));
+                    try {
+                        const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/${eventId}`, config, { retry: 3, retryDelay: 3000 })
+                        return res2;
+                    } catch (e) {
+
+                    }
+
+                })
+
+            const level = res2.data.level;
+            // console.log(level)
+
+            if (level == 'Signature') {
+                const weightedWinsCalc = wins * 1.1;
+                weightedWins += weightedWinsCalc;
+            } else if (level == "World") {
+                const weightedWinsCalc = wins * 1.2;
+                weightedWins += weightedWinsCalc;
             } else {
-                avgSoS = 0;
+                weightedWins += wins;
+                // console.log(arr.number)
+                // console.log(weightedWins)
+                // console.log('else state')
             }
 
-            if (weightedRate == NaN) {
-                console.log('Got Here - Weighted Rate');
-                weightedRate = 0;
-            }
-            if (unweightedRate == NaN) {
-                console.log('Got Here - Unwieghted Rate');
-                unweightedRate = 0;
-            }
-            if (avgSoS == NaN) {
-                console.log('Got Here - avgSoS')
-                avgSoS = 0;
-            }
-            if (wins == NaN) {
-                console.log('Got Here - Wins');
-                wins = 0;
-            }
-            if (losses == NaN) {
-                console.log('Got Here - Losses');
-                losses = 0;
-            }
-
-            const Obj = {
-                wins: wins,
-                losses: losses,
-                weightedRate: weightedRate,
-                unweightedRate: unweightedRate,
-                avgSoS: avgSoS
-            }
-
-            // Object.assign({ rankings: Obj })
-
-            arr.rankings = Obj;
-
-        } catch (e) {
-            console.log(e)
-            const Obj = {
-                wins: 0,
-                losses: 0,
-                weightedRate: 0,
-                unweightedRate: 0,
-                avgSoS: 0
-            }
-            arr.rankings = Obj;
         }
+
+        const totalMatches = wins + losses;
+        if (totalMatches > 0) {
+            weightedRate = weightedWins / totalMatches;
+            // console.log(avgSoS, weightedWins, weightedRate)
+        } else {
+            weightedRate = unweightedRate;
+            // console.log(avgSoS, weightedWins)
+        }
+
+        const i1 = usables.length;
+        if (i1 > 0) {
+            avgSoS = SosCalc / i1;
+        } else {
+            avgSoS = 0;
+        }
+
+        if (weightedRate == NaN) {
+            console.log('Got Here - Weighted Rate');
+            weightedRate = 0;
+        }
+        if (unweightedRate == NaN) {
+            console.log('Got Here - Unwieghted Rate');
+            unweightedRate = 0;
+        }
+        if (avgSoS == NaN) {
+            console.log('Got Here - avgSoS')
+            avgSoS = 0;
+        }
+        if (wins == NaN) {
+            console.log('Got Here - Wins');
+            wins = 0;
+        }
+        if (losses == NaN) {
+            console.log('Got Here - Losses');
+            losses = 0;
+        }
+
+        const Obj = {
+            wins: wins,
+            losses: losses,
+            weightedRate: weightedRate,
+            unweightedRate: unweightedRate,
+            avgSoS: avgSoS
+        }
+
+        // Object.assign({ rankings: Obj })
+
+        arr.rankings = Obj;
+
+        // } catch (e) {
+        //     console.log(e)
+        //     const Obj = {
+        //         wins: 0,
+        //         losses: 0,
+        //         weightedRate: 0,
+        //         unweightedRate: 0,
+        //         avgSoS: 0
+        //     }
+        //     arr.rankings = Obj;
+        // }
 
     }
     return arrs;
@@ -557,41 +696,6 @@ async function getAllElse() {
 
 async function insertTeams() {
     const arr = await getAllElse()
-    for (ar of arr) {
-        try {
-            if (ar.rankings.avgSoS !== undefined && ar.rankings.avgSoS !== NaN) {
-                continue
-            } else {
-                console.log(ar.number, 'avgSoS');
-                ar.rankings.avgSoS = 0;
-            }
-            if (ar.rankings.weightedRate !== undefined && ar.rankings.weightedRate !== NaN) {
-                continue
-            } else {
-                console.log(ar.number, 'avgSoS');
-                ar.rankings.avgSoS = 0;
-            }
-            if (ar.rankings.unweightedRate !== undefined && ar.rankings.unweightedRate !== NaN) {
-                continue
-            } else {
-                console.log(ar.number, 'avgSoS');
-                ar.rankings.avgSoS = 0;
-            }
-            if (ar.rankings.wins !== undefined && ar.rankings.wins !== NaN) {
-                continue
-            } else {
-                console.log(ar.number, 'wins');
-                ar.rankings.wins = 0;
-            }
-            if (ar.rankings.losses !== undefined && ar.rankings.losses !== NaN) {
-                continue
-            } else {
-                console.log(ar.number, 'losses');
-                ar.rankings.losses = 0;
-            }
-        } catch {
-        }
-    }
 
     async function getScouted() {
         const arrs = await Team.find({});
@@ -663,3 +767,4 @@ async function insertTeams() {
 }
 
 module.exports = insertTeams;
+
