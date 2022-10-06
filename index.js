@@ -45,7 +45,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/vexScouting', {
 
 let running = false;
 
-cron.schedule('0 1 * * *', async function () {
+cron.schedule('0 2 * * *', async function () {
     if (running === false) {
         running = true;
         console.log('scheduled')
