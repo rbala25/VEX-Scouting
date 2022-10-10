@@ -493,7 +493,6 @@ async function getAllElse() {
             skills3: skills32,
             think: think2,
         }
-
         arr.awards = obj1;
         arr.tpawards = obj2;
 
@@ -541,6 +540,7 @@ async function getAllElse() {
         let wins = 0;
         let losses = 0;
         let unweightedRate = 0;
+        let weightedRate = 0;
         let avgSoS = 0;
         const id = arr.id;
 
@@ -576,14 +576,14 @@ async function getAllElse() {
             wins += eWins;
             losses += eLosses;
 
-            const totalMatches = wins + losses;
-            unweightedRate = wins / totalMatches;
-
             let eSos = 0;
+            const totalMatches = wins + losses;
             if (totalMatches > 0) {
                 eSos = usable.sp / totalMatches;
+                unweightedRate = wins / totalMatches;
             } else {
                 eSos = 0;
+                unweightedRate = 0;
             }
             SosCalc += eSos;
 
@@ -724,6 +724,7 @@ async function insertTeams() {
                 })
                 .catch((e) => {
                     console.log(ar.number, e)
+                    // console.log('err ', ar.number, ar.rankings)
                 })
         }
         catch {
@@ -764,6 +765,10 @@ async function insertTeams() {
     //     })
     const count2 = await Team.count()
     console.log(count2)
+
+    const date = new Date();
+    const formation = date.toUTCString();
+    console.log(formation)
 }
 
 module.exports = insertTeams;

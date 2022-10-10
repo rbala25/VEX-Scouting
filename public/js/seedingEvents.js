@@ -170,6 +170,10 @@ async function getElse() {
 
     await allevents.insertMany(sortedArrs)
     console.log('inserted upcoming events')
+
+    const lol = new Date();
+    const lol2 = lol.toUTCString();
+    console.log(lol2)
 }
 
 // getElse()
