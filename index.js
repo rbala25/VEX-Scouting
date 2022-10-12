@@ -4,30 +4,23 @@ const path = require('path');
 const mongoose = require('mongoose');
 var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
-const cron = require('node-cron');
 
 const Team = require('./models/teams');
 const Event = require('./models/upcomingEvents');
-const allevents = require('./models/allEvents');
-const insertTeams = require('./public/js/seedingTeams')
-const algorithm = require('./public/js/algorithm');
-const sortTeams = require('./public/js/sorter');
-const insertEvents = require('./public/js/seedingEvents');
+const allevents = require('./models/allEvents');;
 const { events, findOne } = require('./models/teams');
 const cookieParser = require('cookie-parser')
 const sessions = require('express-session');
-const e = require('express');
-const { count } = require('console');
 const config = require('./config')
 
 
-async function forceSchedule() {
-    await insertTeams()
-    await algorithm()
-    await sortTeams()
-    await insertEvents()
-    // await addElements()
-}
+// async function forceSchedule() {
+//     await insertTeams()
+//     await algorithm()
+//     await sortTeams()
+//     await insertEvents()
+//     await addElements()
+// }
 
 // forceSchedule()
 
@@ -43,19 +36,19 @@ mongoose.connect('mongodb://127.0.0.1:27017/vexScouting', {
         console.log(err)
     })
 
-let running = false;
+// let running = false;
 
-cron.schedule('0 2 * * *', async function () {
-    if (running === false) {
-        running = true;
-        console.log('scheduled')
-        await insertTeams()
-        await algorithm()
-        await sortTeams()
-        await insertEvents()
-        running = false;
-    }
-})
+// cron.schedule('0 2 * * *', async function () {
+//     if (running === false) {
+//         running = true;
+//         console.log('scheduled')
+//         await insertTeams()
+//         await algorithm()
+//         await sortTeams()
+//         await insertEvents()
+//         running = false;
+//     }
+// })
 
 // const MONGODB_URI = process.env.MONGODB_URL || "mongodb://0.0.0.0:27017/vexScouting";
 const twoh = 1000 * 60 * 60 * 2;
