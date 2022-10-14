@@ -7,7 +7,7 @@ const axios1 = require('axios').default;
 const config = require('../../config');
 const rateLimit = require('axios-rate-limit');
 
-const axios = rateLimit(axios1.create(), { maxRequests: 1, perMilliseconds: 750 })
+const axios = rateLimit(axios1.create(), { maxRequests: 1, perMilliseconds: 1000 })
 
 mongoose.connect('mongodb://127.0.0.1:27017/vexScouting')
     .then(() => {
@@ -102,23 +102,26 @@ async function getAllElse() {
         // try {
         const auth1 = await getAuth();
         const config2 = { headers: { 'Authorization': 'Bearer ' + auth1 } }
-        const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${teamId}/skills?season%5B%5D=173&per_page=250`, config2, { retry: 3, retryDelay: 3000 })
-            .catch(async (e) => {
-                console.log(teamId)
-                let time = e.response.headers['retry-after']
-                console.log(time)
-                if (time === 0) {
-                    time += 15;
-                }
-                await new Promise(r => setTimeout(r, time * 1000));
-                try {
-                    const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${teamId}/skills?season%5B%5D=173&per_page=250`, config2, { retry: 3, retryDelay: 3000 })
-                    return res;
-                } catch (e) {
+        try {
+            const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${teamId}/skills?season%5B%5D=173&per_page=250`, config2, { retry: 3, retryDelay: 3000 })
+                .catch(async (e) => {
+                    console.log(teamId)
+                    let time = e.response.headers['retry-after']
+                    console.log(time)
+                    if (time === 0) {
+                        time += 15;
+                    }
+                    await new Promise(r => setTimeout(r, time * 1000));
+                    try {
+                        const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${teamId}/skills?season%5B%5D=173&per_page=250`, config2, { retry: 3, retryDelay: 3000 })
+                        return res;
+                    } catch (e) {
 
-                }
-            })
-
+                    }
+                })
+        } catch (e) {
+            console.log('skills error')
+        }
 
         if (res2.data.data.length > 0) {
             const usables = res2.data.data;
@@ -409,7 +412,7 @@ async function getAllElse() {
             const auth1 = await getAuth();
             const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
 
-            const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+            let res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                 .catch(async (e) => {
                     console.log(id)
                     let time = e.response.headers['retry-after']
@@ -537,65 +540,23 @@ async function getAllElse() {
         console.log("Rankings for team ", counter)
         counter++;
 
-        // try {
-        let wins = 0;
-        let losses = 0;
-        let unweightedRate = 0;
-        let weightedRate = 0;
-        let avgSoS = 0;
-        const id = arr.id;
+        try {
+            let wins = 0;
+            let losses = 0;
+            let unweightedRate = 0;
+            let weightedRate = 0;
+            let avgSoS = 0;
+            const id = arr.id;
 
-        let weightedWins = 0;
-        let SosCalc = 0;
-
-        const auth1 = await getAuth();
-        const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
-        const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
-            .catch(async (e) => {
-                console.log(id)
-                let time = e.response.headers['retry-after']
-                console.log(time)
-                if (time === 0) {
-                    time += 15;
-                }
-                await new Promise(r => setTimeout(r, time * 1000));
-                try {
-                    const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
-                    return res;
-                } catch (e) {
-
-                }
-            })
-
-        const usables = res.data.data;
-        // console.log(usables)
-        for (i = 0; i < usables.length; i++) {
-            // console.log(arr.number)
-            const usable = usables[i];
-            const eWins = usable.wins;
-            const eLosses = usable.losses;
-            wins += eWins;
-            losses += eLosses;
-
-            let eSos = 0;
-            const totalMatches = wins + losses;
-            if (totalMatches > 0) {
-                eSos = usable.sp / totalMatches;
-                unweightedRate = wins / totalMatches;
-            } else {
-                eSos = 0;
-                unweightedRate = 0;
-            }
-            SosCalc += eSos;
-
-            // console.log(eventId)
-            const eventId = usable.event.id;
+            let weightedWins = 0;
+            let SosCalc = 0;
 
             const auth1 = await getAuth();
             const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
-            const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/${eventId}`, config)
+
+            let res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                 .catch(async (e) => {
-                    console.log(eventId)
+                    console.log(id)
                     let time = e.response.headers['retry-after']
                     console.log(time)
                     if (time === 0) {
@@ -603,92 +564,141 @@ async function getAllElse() {
                     }
                     await new Promise(r => setTimeout(r, time * 1000));
                     try {
-                        const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/${eventId}`, config, { retry: 3, retryDelay: 3000 })
-                        return res2;
+                        temporary = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+                        temporary.needed = true;
                     } catch (e) {
 
                     }
-
                 })
-
-            const level = res2.data.level;
-            // console.log(level)
-
-            if (level == 'Signature') {
-                const weightedWinsCalc = wins * 1.1;
-                weightedWins += weightedWinsCalc;
-            } else if (level == "World") {
-                const weightedWinsCalc = wins * 1.2;
-                weightedWins += weightedWinsCalc;
-            } else {
-                weightedWins += wins;
-                // console.log(arr.number)
-                // console.log(weightedWins)
-                // console.log('else state')
+            if (temporary.needed) {
+                res = temporary;
             }
 
-        }
+            const usables = res.data.data;
+            // console.log(usables)
+            for (i = 0; i < usables.length; i++) {
+                // console.log(arr.number)
+                const usable = usables[i];
+                const eWins = usable.wins;
+                const eLosses = usable.losses;
+                wins += eWins;
+                losses += eLosses;
 
-        const totalMatches = wins + losses;
-        if (totalMatches > 0) {
-            weightedRate = weightedWins / totalMatches;
-            // console.log(avgSoS, weightedWins, weightedRate)
-        } else {
-            weightedRate = unweightedRate;
-            // console.log(avgSoS, weightedWins)
-        }
+                let eSos = 0;
+                const totalMatches = wins + losses;
+                if (totalMatches > 0) {
+                    eSos = usable.sp / totalMatches;
+                    unweightedRate = wins / totalMatches;
+                } else {
+                    eSos = 0;
+                    unweightedRate = 0;
+                }
+                SosCalc += eSos;
 
-        const i1 = usables.length;
-        if (i1 > 0) {
-            avgSoS = SosCalc / i1;
-        } else {
-            avgSoS = 0;
-        }
+                // console.log(eventId)
+                const eventId = usable.event.id;
 
-        if (weightedRate == NaN) {
-            console.log('Got Here - Weighted Rate');
-            weightedRate = 0;
-        }
-        if (unweightedRate == NaN) {
-            console.log('Got Here - Unwieghted Rate');
-            unweightedRate = 0;
-        }
-        if (avgSoS == NaN) {
-            console.log('Got Here - avgSoS')
-            avgSoS = 0;
-        }
-        if (wins == NaN) {
-            console.log('Got Here - Wins');
-            wins = 0;
-        }
-        if (losses == NaN) {
-            console.log('Got Here - Losses');
-            losses = 0;
-        }
+                const auth1 = await getAuth();
+                const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
+                let temporary = { needed: false };
+                let res2 = await axios.get(`https://www.robotevents.com/api/v2/events/${eventId}`, config)
+                    .catch(async (e) => {
+                        console.log(eventId)
+                        let time = e.response.headers['retry-after']
+                        console.log(time)
+                        if (time === 0) {
+                            time += 15;
+                        }
+                        await new Promise(r => setTimeout(r, time * 1000));
+                        try {
+                            temporary = await axios.get(`https://www.robotevents.com/api/v2/events/${eventId}`, config, { retry: 3, retryDelay: 3000 })
+                            temporary.needed = true;
+                        } catch (e) {
 
-        const Obj = {
-            wins: wins,
-            losses: losses,
-            weightedRate: weightedRate,
-            unweightedRate: unweightedRate,
-            avgSoS: avgSoS
+                        }
+                    })
+                if (temporary.needed) {
+                    res2 = temporary;
+                }
+
+                const level = res2.data.level;
+                // console.log(level)
+
+                if (level == 'Signature') {
+                    const weightedWinsCalc = wins * 1.1;
+                    weightedWins += weightedWinsCalc;
+                } else if (level == "World") {
+                    const weightedWinsCalc = wins * 1.2;
+                    weightedWins += weightedWinsCalc;
+                } else {
+                    weightedWins += wins;
+                    // console.log(arr.number)
+                    // console.log(weightedWins)
+                    // console.log('else state')
+                }
+
+            }
+
+            const totalMatches = wins + losses;
+            if (totalMatches > 0) {
+                weightedRate = weightedWins / totalMatches;
+                // console.log(avgSoS, weightedWins, weightedRate)
+            } else {
+                weightedRate = unweightedRate;
+                // console.log(avgSoS, weightedWins)
+            }
+
+            const i1 = usables.length;
+            if (i1 > 0) {
+                avgSoS = SosCalc / i1;
+            } else {
+                avgSoS = 0;
+            }
+
+            if (weightedRate == NaN) {
+                console.log('Got Here - Weighted Rate');
+                weightedRate = 0;
+            }
+            if (unweightedRate == NaN) {
+                console.log('Got Here - Unwieghted Rate');
+                unweightedRate = 0;
+            }
+            if (avgSoS == NaN) {
+                console.log('Got Here - avgSoS')
+                avgSoS = 0;
+            }
+            if (wins == NaN) {
+                console.log('Got Here - Wins');
+                wins = 0;
+            }
+            if (losses == NaN) {
+                console.log('Got Here - Losses');
+                losses = 0;
+            }
+
+            const Obj = {
+                wins: wins,
+                losses: losses,
+                weightedRate: weightedRate,
+                unweightedRate: unweightedRate,
+                avgSoS: avgSoS
+            }
+
+            // Object.assign({ rankings: Obj })
+
+            arr.rankings = Obj;
+
+        } catch (e) {
+            console.log(e)
+            const Obj = {
+                wins: 0,
+                losses: 0,
+                weightedRate: 0,
+                unweightedRate: 0,
+                avgSoS: 0
+            }
+            arr.rankings = Obj;
         }
-
-        // Object.assign({ rankings: Obj })
-
-        arr.rankings = Obj;
-
-        // } catch (e) {
-        //     console.log(e)
-        //     const Obj = {
-        //         wins: 0,
-        //         losses: 0,
-        //         weightedRate: 0,
-        //         unweightedRate: 0,
-        //         avgSoS: 0
-        //     }
-        //     arr.rankings = Obj;
-        // }
 
     }
     return arrs;
