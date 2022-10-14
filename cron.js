@@ -12,3 +12,5 @@ async function cron() {
 }
 
 cron()
+
+// console.log('')

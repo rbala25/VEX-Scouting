@@ -171,6 +171,7 @@ async function getAllElse() {
         // }
     }
 
+
     //SKILLS IS ABOVE
     //BELOW IS OLD MATCHES
 
@@ -404,124 +405,124 @@ async function getAllElse() {
 
         const id = arr.id;
 
-        // try {
-        const auth1 = await getAuth();
-        const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
+        try {
+            const auth1 = await getAuth();
+            const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
 
-        const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
-            .catch(async (e) => {
-                console.log(id)
-                let time = e.response.headers['retry-after']
-                console.log(time)
-                if (time === 0) {
-                    time += 15;
+            const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+                .catch(async (e) => {
+                    console.log(id)
+                    let time = e.response.headers['retry-after']
+                    console.log(time)
+                    if (time === 0) {
+                        time += 15;
+                    }
+                    await new Promise(r => setTimeout(r, time * 1000));
+                    const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+                    return res;
+                })
+            const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=154&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+                .catch(async (e) => {
+                    console.log(id)
+                    let time = e.response.headers['retry-after']
+                    console.log(time)
+                    if (time === 0) {
+                        time += 15;
+                    }
+                    await new Promise(r => setTimeout(r, time * 1000));
+                    const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=154&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+                    return res2;
+                })
+
+            const usables = res.data.data;
+            for (usable of usables) {
+                // console.log(arr.number)
+                // console.log('Usable arr', usable)
+                if (usable.title === "Excellence Award (VRC/VEXU/VAIC)") {
+                    excellence++;
+                } else if (usable.title === "Tournament Champions (VRC/VEXU/VAIC)") {
+                    champion++;
+                } else if (usable.title === "Robot Skills Champion (VRC/VEXU)") {
+                    skills++;
+                } else if (usable.title === "Tournament Finalists (VRC/VEXU/VAIC)") {
+                    finalist++;
+                } else if (usable.title === "Robot Skills 2nd Place (VRC/VEXU/VAIC)") {
+                    skills2++;
+                } else if (usable.title === "Robot Skills 3rd Place (VRC/VEXU/VAIC)") {
+                    skills3++;
+                } else if (usable.title === "Think Award (VRC/VEXU/VAIC)") {
+                    think++;
                 }
-                await new Promise(r => setTimeout(r, time * 1000));
-                const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
-                return res;
-            })
-        const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=154&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
-            .catch(async (e) => {
-                console.log(id)
-                let time = e.response.headers['retry-after']
-                console.log(time)
-                if (time === 0) {
-                    time += 15;
+            }
+
+            const moreusables = res2.data.data;
+            for (moreusable of moreusables) {
+                // console.log(arr.number)
+                if (moreusable.title === "Excellence Award (VRC/VEXU/VAIC)") {
+                    excellence2++;
+                } else if (moreusable.title === "Tournament Champions (VRC/VEXU/VAIC)") {
+                    champion2++;
+                } else if (moreusable.title === "Robot Skills Champion (VRC/VEXU)") {
+                    skills_2++;
+                } else if (moreusable.title === "Tournament Finalists (VRC/VEXU/VAIC)") {
+                    finalist2++;
+                } else if (moreusable.title === "Robot Skills 2nd Place (VRC/VEXU/VAIC)") {
+                    skills22++;
+                } else if (moreusable.title === "Robot Skills 3rd Place (VRC/VEXU/VAIC)") {
+                    skills32++;
+                } else if (moreusable.title === "Think Award (VRC/VEXU/VAIC)") {
+                    think2++;
                 }
-                await new Promise(r => setTimeout(r, time * 1000));
-                const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=154&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
-                return res2;
-            })
-
-        const usables = res.data.data;
-        for (usable of usables) {
-            // console.log(arr.number)
-            // console.log('Usable arr', usable)
-            if (usable.title === "Excellence Award (VRC/VEXU/VAIC)") {
-                excellence++;
-            } else if (usable.title === "Tournament Champions (VRC/VEXU/VAIC)") {
-                champion++;
-            } else if (usable.title === "Robot Skills Champion (VRC/VEXU)") {
-                skills++;
-            } else if (usable.title === "Tournament Finalists (VRC/VEXU/VAIC)") {
-                finalist++;
-            } else if (usable.title === "Robot Skills 2nd Place (VRC/VEXU/VAIC)") {
-                skills2++;
-            } else if (usable.title === "Robot Skills 3rd Place (VRC/VEXU/VAIC)") {
-                skills3++;
-            } else if (usable.title === "Think Award (VRC/VEXU/VAIC)") {
-                think++;
             }
-        }
 
-        const moreusables = res2.data.data;
-        for (moreusable of moreusables) {
-            // console.log(arr.number)
-            if (moreusable.title === "Excellence Award (VRC/VEXU/VAIC)") {
-                excellence2++;
-            } else if (moreusable.title === "Tournament Champions (VRC/VEXU/VAIC)") {
-                champion2++;
-            } else if (moreusable.title === "Robot Skills Champion (VRC/VEXU)") {
-                skills_2++;
-            } else if (moreusable.title === "Tournament Finalists (VRC/VEXU/VAIC)") {
-                finalist2++;
-            } else if (moreusable.title === "Robot Skills 2nd Place (VRC/VEXU/VAIC)") {
-                skills22++;
-            } else if (moreusable.title === "Robot Skills 3rd Place (VRC/VEXU/VAIC)") {
-                skills32++;
-            } else if (moreusable.title === "Think Award (VRC/VEXU/VAIC)") {
-                think2++;
+            const obj1 = {
+                excellence: excellence,
+                champion: champion,
+                skills: skills,
+                finalist: finalist,
+                skills2: skills2,
+                skills3: skills3,
+                think: think,
             }
+
+            const obj2 = {
+                excellence: excellence2,
+                champion: champion2,
+                skills: skills_2,
+                finalist: finalist2,
+                skills2: skills22,
+                skills3: skills32,
+                think: think2,
+            }
+            arr.awards = obj1;
+            arr.tpawards = obj2;
+
+        } catch (e) {
+            console.log(e)
+
+            const obj1 = {
+                excellence: 0,
+                champion: 0,
+                skills: 0,
+                finalist: 0,
+                skills2: 0,
+                skills3: 0,
+                think: 0,
+            }
+
+            const obj2 = {
+                excellence: 0,
+                champion: 0,
+                skills: 0,
+                finalist: 0,
+                skills2: 0,
+                skills3: 0,
+                think: 0,
+            }
+
+            arr.awards = obj1;
+            arr.tpawards = obj2;
         }
-
-        const obj1 = {
-            excellence: excellence,
-            champion: champion,
-            skills: skills,
-            finalist: finalist,
-            skills2: skills2,
-            skills3: skills3,
-            think: think,
-        }
-
-        const obj2 = {
-            excellence: excellence2,
-            champion: champion2,
-            skills: skills_2,
-            finalist: finalist2,
-            skills2: skills22,
-            skills3: skills32,
-            think: think2,
-        }
-        arr.awards = obj1;
-        arr.tpawards = obj2;
-
-        // } catch (e) {
-        //     console.log(e)
-
-        //     const obj1 = {
-        //         excellence: 0,
-        //         champion: 0,
-        //         skills: 0,
-        //         finalist: 0,
-        //         skills2: 0,
-        //         skills3: 0,
-        //         think: 0,
-        //     }
-
-        //     const obj2 = {
-        //         excellence: 0,
-        //         champion: 0,
-        //         skills: 0,
-        //         finalist: 0,
-        //         skills2: 0,
-        //         skills3: 0,
-        //         think: 0,
-        //     }
-
-        //     arr.awards = obj1;
-        //     arr.tpawards = obj2;
-        // }
 
     }
 
