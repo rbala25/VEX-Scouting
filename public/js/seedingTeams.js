@@ -99,10 +99,9 @@ async function getAllElse() {
         const teamId = arr.id;
         console.log("Skills Request ", counter)
         counter++;
-        // try {
-        const auth1 = await getAuth();
-        const config2 = { headers: { 'Authorization': 'Bearer ' + auth1 } }
         try {
+            const auth1 = await getAuth();
+            const config2 = { headers: { 'Authorization': 'Bearer ' + auth1 } }
             const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${teamId}/skills?season%5B%5D=173&per_page=250`, config2, { retry: 3, retryDelay: 3000 })
                 .catch(async (e) => {
                     console.log(teamId)
@@ -119,36 +118,48 @@ async function getAllElse() {
 
                     }
                 })
-        } catch (e) {
-            console.log('skills error')
-        }
 
-        if (res2.data.data.length > 0) {
-            const usables = res2.data.data;
-            let driversk = 0;
-            let auton = 0;
-            for (usable of usables) {
-                if (usable.type === 'driver') {
-                    if (usable.score > driversk) {
-                        driversk = usable.score;
-                    }
-                } else {
-                    if (usable.score > auton) {
-                        auton = usable.score
+            if (res2.data.data.length > 0) {
+                const usables = res2.data.data;
+                let driversk = 0;
+                let auton = 0;
+                for (usable of usables) {
+                    if (usable.type === 'driver') {
+                        if (usable.score > driversk) {
+                            driversk = usable.score;
+                        }
+                    } else {
+                        if (usable.score > auton) {
+                            auton = usable.score
+                        }
                     }
                 }
+
+                const Obj = {
+                    driving: driversk,
+                    auton: auton,
+                    total: driversk + auton
+                }
+
+                arr.skills = Obj;
+
+                // await Team.findOneAndUpdate({ id: teamId }, { skills: Obj }, { upsert: true, new: true })
+            } else {
+                const Obj = {
+                    driving: 0,
+                    auton: 0,
+                    total: 0
+                }
+
+                arr.skills = Obj;
+                // await team.save()
+                // const team = await Team.findByIdAndUpdate(mongoId, { skills: Obj }, { new: true })
+                // const Foundteam = await Team.findOne({ id: teamId });
+                // console.log(Foundteam)
             }
+        } catch (e) {
+            console.log(e)
 
-            const Obj = {
-                driving: driversk,
-                auton: auton,
-                total: driversk + auton
-            }
-
-            arr.skills = Obj;
-
-            // await Team.findOneAndUpdate({ id: teamId }, { skills: Obj }, { upsert: true, new: true })
-        } else {
             const Obj = {
                 driving: 0,
                 auton: 0,
@@ -156,22 +167,7 @@ async function getAllElse() {
             }
 
             arr.skills = Obj;
-            // await team.save()
-            // const team = await Team.findByIdAndUpdate(mongoId, { skills: Obj }, { new: true })
-            // const Foundteam = await Team.findOne({ id: teamId });
-            // console.log(Foundteam)
         }
-        // } catch (e) {
-        //     console.log(e)
-
-        //     const Obj = {
-        //         driving: 0,
-        //         auton: 0,
-        //         total: 0
-        //     }
-
-        //     arr.skills = Obj;
-        // }
     }
 
 
