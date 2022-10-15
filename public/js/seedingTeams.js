@@ -550,6 +550,7 @@ async function getAllElse() {
             const auth1 = await getAuth();
             const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
 
+            let temporary = { needed: false }
             let res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                 .catch(async (e) => {
                     console.log(id)
