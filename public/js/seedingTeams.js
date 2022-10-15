@@ -6,7 +6,6 @@ const Team = require('../../models/teams');
 const axios1 = require('axios').default;
 const config = require('../../config');
 const rateLimit = require('axios-rate-limit');
-
 const axios = rateLimit(axios1.create(), { maxRequests: 1, perMilliseconds: 1000 })
 
 mongoose.connect('mongodb://127.0.0.1:27017/vexScouting')

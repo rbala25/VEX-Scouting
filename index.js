@@ -36,20 +36,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/vexScouting', {
         console.log(err)
     })
 
-// let running = false;
-
-// cron.schedule('0 2 * * *', async function () {
-//     if (running === false) {
-//         running = true;
-//         console.log('scheduled')
-//         await insertTeams()
-//         await algorithm()
-//         await sortTeams()
-//         await insertEvents()
-//         running = false;
-//     }
-// })
-
 // const MONGODB_URI = process.env.MONGODB_URL || "mongodb://0.0.0.0:27017/vexScouting";
 const twoh = 1000 * 60 * 60 * 2;
 app.use(sessions({

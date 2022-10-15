@@ -2,20 +2,26 @@ const insertTeams = require('./public/js/seedingTeams')
 const algorithm = require('./public/js/algorithm');
 const sortTeams = require('./public/js/sorter');
 const insertEvents = require('./public/js/seedingEvents');
+const cron = require('node-cron')
 
-const date = new Date();
-if (date.getHours !== 15 && date.getMinutes !== 0) {
-    process.exit(0);
-}
-
-async function cron() {
-    console.log('scheduled')
+async function cron1() {
+    // const date = new Date();
+    // if (date.getHours !== 15 && date.getMinutes !== 0) {
+    //     process.exit(0);
+    // }
     await insertTeams()
     await algorithm()
     await sortTeams()
     await insertEvents()
 }
 
-cron()
 
-// console.log('')
+let running = false;
+cron.schedule('0 19 * * *', async () => {
+    if (running === false) {
+        running = true;
+        console.log('scheduled')
+        await cron1()
+        running = false;
+    }
+})
