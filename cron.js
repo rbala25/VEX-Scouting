@@ -5,14 +5,13 @@ const insertEvents = require('./public/js/seedingEvents');
 const cron = require('node-cron')
 
 async function cron1() {
-    // const date = new Date();
-    // if (date.getHours !== 15 && date.getMinutes !== 0) {
-    //     process.exit(0);
-    // }
-    await insertTeams()
-    await algorithm()
-    await sortTeams()
-    await insertEvents()
+    const date = new Date();
+    if (date.getHours === 19 && date.getMinutes === 0) {
+        await insertTeams()
+        await algorithm()
+        await sortTeams()
+        await insertEvents()
+    }
 }
 
 
