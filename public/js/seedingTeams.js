@@ -709,14 +709,14 @@ async function insertTeams() {
         const newArrs = [];
         for (arr1 of arrs) {
             if ((arr1.fourmdrive === true) || (arr1.twomdrive === true) || (arr1.sixmdrive === true) || (arr1.dbflywheel === true) || (arr1.snflywheel === true) || (arr1.cata === true) || (arr1.auton === true) || (arr.wpauton === true) || (arr1.endgame === true) || (arr1.goodEndg === true)) {
-                newArrs.push(arr);
+                newArrs.push(arr1);
             }
         }
 
         return newArrs;
     }
 
-    const scoutedTeams = getScouted();
+    const scoutedTeams = await getScouted();
     console.log('Got Scouted Teams')
 
     console.log('inserting teams')
@@ -739,21 +739,19 @@ async function insertTeams() {
         }
     }
     async function putScoutings(scoutedTeams) {
-        if (typeof scoutedTeams === Array && scoutedTeams.length > 0) {
+        console.log(scoutedTeams.length)
+        if (scoutedTeams.length > 0) {
             for (scoutedTeam of scoutedTeams) {
-                const foundTeam = await Team.find({ id: scoutedTeam.id });
-                if (foundTeam) {
-                    await Team.findOneAndUpdate({ id: foundTeam.id }, { fourmdrive: scoutedTeam.fourmdrive })
-                    await Team.findOneAndUpdate({ id: foundTeam.id }, { twomdrive: scoutedTeam.twomdrive })
-                    await Team.findOneAndUpdate({ id: foundTeam.id }, { sixmdrive: scoutedTeam.sixmdrive })
-                    await Team.findOneAndUpdate({ id: foundTeam.id }, { cata: scoutedTeam.cata })
-                    await Team.findOneAndUpdate({ id: foundTeam.id }, { auton: scoutedTeam.auton })
-                    await Team.findOneAndUpdate({ id: foundTeam.id }, { dbflywheel: scoutedTeam.dbflywheel })
-                    await Team.findOneAndUpdate({ id: foundTeam.id }, { snflywheel: scoutedTeam.snflywheel })
-                    await Team.findOneAndUpdate({ id: foundTeam.id }, { autonwp: scoutedTeam.autonwp })
-                    await Team.findOneAndUpdate({ id: foundTeam.id }, { endgame: scoutedTeam.endgame })
-                    await Team.findOneAndUpdate({ id: foundTeam.id }, { goodEndg: scoutedTeam.goodEndg })
-                }
+                await Team.findOneAndUpdate({ id: scoutedTeam.id }, { fourmdrive: scoutedTeam.fourmdrive })
+                await Team.findOneAndUpdate({ id: scoutedTeam.id }, { twomdrive: scoutedTeam.twomdrive })
+                await Team.findOneAndUpdate({ id: scoutedTeam.id }, { sixmdrive: scoutedTeam.sixmdrive })
+                await Team.findOneAndUpdate({ id: scoutedTeam.id }, { cata: scoutedTeam.cata })
+                await Team.findOneAndUpdate({ id: scoutedTeam.id }, { auton: scoutedTeam.auton })
+                await Team.findOneAndUpdate({ id: scoutedTeam.id }, { dbflywheel: scoutedTeam.dbflywheel })
+                await Team.findOneAndUpdate({ id: scoutedTeam.id }, { snflywheel: scoutedTeam.snflywheel })
+                await Team.findOneAndUpdate({ id: scoutedTeam.id }, { autonwp: scoutedTeam.autonwp })
+                await Team.findOneAndUpdate({ id: scoutedTeam.id }, { endgame: scoutedTeam.endgame })
+                await Team.findOneAndUpdate({ id: scoutedTeam.id }, { goodEndg: scoutedTeam.goodEndg })
             }
         }
     }

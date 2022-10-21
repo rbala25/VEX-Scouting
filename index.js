@@ -13,13 +13,11 @@ const cookieParser = require('cookie-parser')
 const sessions = require('express-session');
 const config = require('./config')
 
-
 // async function forceSchedule() {
 //     await insertTeams()
 //     await algorithm()
 //     await sortTeams()
 //     await insertEvents()
-//     await addElements()
 // }
 
 // forceSchedule()
@@ -692,7 +690,6 @@ app.post('/boxes/:id', async (req, res) => {
         const { id } = req.params;
         const checker = await Team.findOne({ id: id })
         const event = req.query.event;
-        console.log(event)
         if (!checker) {
             const type = 'team';
             const searcher = id
