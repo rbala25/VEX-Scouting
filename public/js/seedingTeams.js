@@ -621,13 +621,13 @@ async function getAllElse() {
                 // console.log(level)
 
                 if (level == 'Signature') {
-                    const weightedWinsCalc = wins * 1.1;
+                    const weightedWinsCalc = eWins * 1.4;
                     weightedWins += weightedWinsCalc;
                 } else if (level == "World") {
-                    const weightedWinsCalc = wins * 1.2;
+                    const weightedWinsCalc = eWins * 2.0;
                     weightedWins += weightedWinsCalc;
                 } else {
-                    weightedWins += wins;
+                    weightedWins += eWins;
                     // console.log(arr.number)
                     // console.log(weightedWins)
                     // console.log('else state')

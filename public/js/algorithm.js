@@ -14,6 +14,36 @@ async function algorithm() {
     const arrs = await Team.find({});
     console.log('found')
 
+    // let drivingTot = 0;
+    // let counter1 = 0;
+    // for (arr of arrs) {
+    //     if (arr.skills.driving > 0) {
+    //         drivingTot += arr.skills.driving;
+    //         counter1++;
+    //     }
+    // }
+    // drivingTot /= counter1;
+
+    // let autonTot = 0;
+    // let counter2 = 0;
+    // for (arr of arrs) {
+    //     if (arr.skills.auton > 0) {
+    //         autonTot += arr.skills.auton;
+    //         counter2++;
+    //     }
+    // }
+    // autonTot /= counter2;
+
+    let sosTot = 0;
+    let counter = 0;
+    for (arr of arrs) {
+        if (arr.rankings.avgSoS > 0) {
+            sosTot += arr.rankings.avgSoS;
+            counter++;
+        }
+    }
+    sosTot /= counter;
+
     for (arr of arrs) {
 
         const skills = arr.skills;
@@ -23,60 +53,61 @@ async function algorithm() {
         const tpawards = arr.tpawards;
         let trueSkill = 0;
 
-        const driverTrue = skills.driving / 20;
-        const autonTrue = skills.auton / 25;
+        const driverTrue = skills.driving / 40;
+        const autonTrue = skills.auton / 50;
         const skillsTrue = driverTrue + autonTrue;
 
-        const weightedRateTrue = rankings.weightedRate * 12;
-        const SoSTrue = rankings.avgSoS / 50;
-        const rankingsTrue = weightedRateTrue + SoSTrue;
+        const weightedRateTrue = rankings.weightedRate;
+        const SoSTrue = rankings.avgSoS / sosTot;
+        const weightedTemp = weightedRateTrue * SoSTrue;
+        const rankingsTrue = weightedTemp * 6;
 
         let worldsTrue = 0;
         if (worlds === true) {
-            worldsTrue += 3;
+            worldsTrue += 2;
         }
 
         let awardsTrue = 0;
         for (i = 0; i < awards.excellence; i++) {
-            awardsTrue += 1.25;
+            awardsTrue += 1.75;
         }
         for (i = 0; i < awards.champion; i++) {
-            awardsTrue += 1.5;
+            awardsTrue += 1.75;
         }
         for (i = 0; i < awards.skills; i++) {
             awardsTrue += 1.25;
         }
         for (i = 0; i < awards.finalist; i++) {
-            awardsTrue += 0.75;
-        }
-        for (i = 0; i < awards.skills2; i++) {
             awardsTrue += 1;
         }
+        for (i = 0; i < awards.skills2; i++) {
+            awardsTrue += 0.75;
+        }
         for (i = 0; i < awards.skills3; i++) {
-            awardsTrue += 0.6;
+            awardsTrue += 0.5;
         }
         for (i = 0; i < awards.think; i++) {
-            awardsTrue += 0.25;
+            awardsTrue += 0.2;
         }
 
         let tpAwardsTrue = 0;
         for (i = 0; i < tpawards.excellence; i++) {
-            awardsTrue += 0.375;
+            awardsTrue += 1;
         }
         for (i = 0; i < tpawards.champion; i++) {
-            awardsTrue += 0.5;
+            awardsTrue += 1;
         }
         for (i = 0; i < tpawards.skills; i++) {
-            awardsTrue += 0.375;
+            awardsTrue += 0.5;
         }
         for (i = 0; i < tpawards.finalist; i++) {
-            awardsTrue += 0.2;
+            awardsTrue += 0.25;
         }
         for (i = 0; i < tpawards.skills2; i++) {
             awardsTrue += 0.2;
         }
         for (i = 0; i < tpawards.skills3; i++) {
-            awardsTrue += 0.125;
+            awardsTrue += 0.1;
         }
         for (i = 0; i < tpawards.think; i++) {
             awardsTrue += 0.05;
