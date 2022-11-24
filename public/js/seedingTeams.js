@@ -708,7 +708,7 @@ async function insertTeams() {
         const arrs = await Team.find({});
         const newArrs = [];
         for (arr1 of arrs) {
-            if ((arr1.fourmdrive === true) || (arr1.twomdrive === true) || (arr1.sixmdrive === true) || (arr1.dbflywheel === true) || (arr1.snflywheel === true) || (arr1.cata === true) || (arr1.auton === true) || (arr.wpauton === true) || (arr1.endgame === true) || (arr1.goodEndg === true)) {
+            if ((arr1.fourmdrive === true) || (arr1.twomdrive === true) || (arr1.sixmdrive === true) || (arr1.dbflywheel === true) || (arr1.snflywheel === true) || (arr1.cata === true) || (arr1.auton === true) || (arr.wpauton === true) || (arr1.endgame === true) || (arr1.goodEndg === true) || (arr1.notes.length)) {
                 newArrs.push(arr1);
             }
         }
@@ -752,6 +752,7 @@ async function insertTeams() {
                 await Team.findOneAndUpdate({ id: scoutedTeam.id }, { autonwp: scoutedTeam.autonwp })
                 await Team.findOneAndUpdate({ id: scoutedTeam.id }, { endgame: scoutedTeam.endgame })
                 await Team.findOneAndUpdate({ id: scoutedTeam.id }, { goodEndg: scoutedTeam.goodEndg })
+                await Team.findOneAndUpdate({ id: scoutedTeam.id }, { notes: scoutedTeam.notes })
             }
         }
     }

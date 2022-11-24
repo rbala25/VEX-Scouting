@@ -71,6 +71,7 @@ const teamSchema = new mongoose.Schema({
     wpauton: Boolean,
     endgame: Boolean,
     goodEndg: Boolean,
+    notes: String,
     algorithmNumber: Number
 })
 

@@ -10,6 +10,10 @@
     </title>
 
     <link rel="stylesheet" href="../public/css/team.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -298,7 +302,19 @@
                                             </li>
 
                                         </ul>
-                                        <button id="save">Save</button>
+                                        <%if(team.notes) { %>
+                                            <%if((team.notes.length> 1)) { %>
+                                                <textarea class="labelc" for="notes" name="notes" id="notes" cols="70"
+                                                    rows="10"><%=team.notes%></textarea>
+                                                <% } else {%>
+                                                    <textarea class="labelc" for="notes" name="notes" id="notes"
+                                                        cols="70" rows="10" placeholder="Notes"></textarea>
+                                                    <%}%>
+                                                        <%} else { %>
+                                                            <textarea class="labelc" for="notes" name="notes" id="notes"
+                                                                cols="70" rows="10" placeholder="Notes"></textarea>
+                                                            <%}%>
+                                                                <button id="save">Save</button>
                                 </form>
                 </div>
 

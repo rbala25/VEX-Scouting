@@ -695,7 +695,7 @@ app.post('/boxes/:id', async (req, res) => {
             const searcher = id
             res.render('default', { type, searcher })
         } else {
-            let { fourmd, twomd, sixmd, twomf, onemf, cata, aut, autwp, endgame, goodEndg } = req.body;
+            let { fourmd, twomd, sixmd, twomf, onemf, cata, aut, autwp, endgame, goodEndg, notes } = req.body;
 
             if (fourmd === 'on') {
                 await Team.findOneAndUpdate({ id: id }, { fourmdrive: true })
@@ -750,6 +750,11 @@ app.post('/boxes/:id', async (req, res) => {
                 await Team.findOneAndUpdate({ id: id }, { goodEndg: true })
             } else {
                 await Team.findOneAndUpdate({ id: id }, { goodEndg: false })
+            }
+            if (notes.length > 0) {
+                await Team.findOneAndUpdate({ id: id }, { notes: notes.trim() })
+            } else {
+                await Team.findOneAndUpdate({ id: id }, { notes: null })
             }
 
             if (event) {
