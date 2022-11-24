@@ -31,7 +31,7 @@
 <h3>How it Works</h3>
 
 <b><u>The Algorithm and Data Requests</u></b>
-        <p>Every 12 hours, the website requests data from the public <a class="classchoose"
+        <p>Every 24 hours, the website requests data from the public <a class="classchoose"
                 href="https://www.robotevents.com/">RobotEvents</a>
             API. The website takes all the information it can find about every single registered team, storing it on a
             database, and then using a series of mathamatical operations to calculate a teams <b>True Skill.</b></p>
