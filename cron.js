@@ -13,7 +13,7 @@ async function cron1() {
 
 
 let running = false;
-cron.schedule('0 20 * * *', async () => {
+cron.schedule('15 15 * * *', async () => {
     if (running === false) {
         running = true;
         console.log('scheduled')

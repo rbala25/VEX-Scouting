@@ -42,9 +42,17 @@ async function algorithm() {
             counter++;
         }
     }
-    sosTot /= counter;
+    if (counter > 0) {
+        sosTot /= counter;
+    } else {
+        counter = 0;
+    }
+    console.log(sosTot)
 
+    let count = 0;
     for (arr of arrs) {
+        console.log(count)
+        count++;
 
         const skills = arr.skills;
         const rankings = arr.rankings;
@@ -146,5 +154,5 @@ async function algorithm() {
     }
 }
 
-// algorithm()
+algorithm()
 module.exports = algorithm;
