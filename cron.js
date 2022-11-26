@@ -12,14 +12,13 @@ async function cron1() {
 }
 
 
-// let running = false;
-// cron.schedule('52 16 * * *', async () => {
-//     if (running === false) {
-//         running = true;
-//         console.log('scheduled')
-//         await cron1()
-//         running = false;
-//     }
-// })
+let running = false;
+cron.schedule('0 16 * * *', async () => {
+    if (running === false) {
+        running = true;
+        console.log('scheduled')
+        await cron1()
+        running = false;
+    }
+})
 
-await cron1()
