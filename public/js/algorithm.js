@@ -153,4 +153,5 @@ async function algorithm() {
         await Team.findOneAndUpdate({ id: id }, { trueSkill: trueSkill });
     }
 }
+
 module.exports = algorithm;
