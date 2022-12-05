@@ -17,5 +17,3 @@ cron.schedule('0 12 * * *', async () => {
     await cron1()
 }
 )
-
-cron1()
