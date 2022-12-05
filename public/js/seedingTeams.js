@@ -6,7 +6,7 @@ const Team = require('../../models/teams');
 const axios1 = require('axios').default;
 const config = require('../../config');
 const rateLimit = require('axios-rate-limit');
-const axios = rateLimit(axios1.create(), { maxRequests: 1, perMilliseconds: 1000 })
+const axios = rateLimit(axios1.create(), { maxRequests: 1, perMilliseconds: 750 })
 
 mongoose.connect('mongodb://127.0.0.1:27017/vexScouting')
     .then(() => {
@@ -375,7 +375,7 @@ async function getAllElse() {
     }
 
 
-    //ABOVE IS AWARDS
+    //ABOVE IS WORLDS
     // SECTION BELOW = AWARDS
 
     counter = 0;
@@ -708,7 +708,7 @@ async function insertTeams() {
         const arrs = await Team.find({});
         const newArrs = [];
         for (arr1 of arrs) {
-            if ((arr1.fourmdrive === true) || (arr1.twomdrive === true) || (arr1.sixmdrive === true) || (arr1.dbflywheel === true) || (arr1.snflywheel === true) || (arr1.cata === true) || (arr1.auton === true) || (arr.wpauton === true) || (arr1.endgame === true) || (arr1.goodEndg === true) || (arr1.notes.length)) {
+            if ((arr1.fourmdrive === true) || (arr1.twomdrive === true) || (arr1.sixmdrive === true) || (arr1.dbflywheel === true) || (arr1.snflywheel === true) || (arr1.cata === true) || (arr1.auton === true) || (arr.wpauton === true) || (arr1.endgame === true) || (arr1.goodEndg === true) || (arr1.notes)) {
                 newArrs.push(arr1);
             }
         }
