@@ -11,9 +11,13 @@ async function cron1() {
     await insertEvents()
 }
 
-
-cron.schedule('0 12 * * *', async () => {
-    console.log('scheduled')
-    await cron1()
+let running = false;
+cron.schedule('0 16 * * *', async () => {
+    if (running === false) {
+        running = true;
+        console.log('scheduled')
+        await cron1()
+        running = false;
+    }
 }
 )
