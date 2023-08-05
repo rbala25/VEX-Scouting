@@ -22,7 +22,7 @@ const auth = config.auth;
 async function getEvents() {
     async function getFirst() {
         const config2 = { headers: { 'Authorization': 'Bearer ' + auth } }
-        const res = await axios.get(`https://www.robotevents.com/api/v2/events?season%5B%5D=173&myEvents=false&eventTypes%5B%5D=tournament&eventTypes%5B%5D=league&page=1&per_page=250`, config2)
+        const res = await axios.get(`https://www.robotevents.com/api/v2/events?season%5B%5D=181&myEvents=false&eventTypes%5B%5D=tournament&eventTypes%5B%5D=league&page=1&per_page=250`, config2)
 
         return res
     }
@@ -31,7 +31,7 @@ async function getEvents() {
         const arr = []
         for (i = 1; i <= iterator; i++) {
             const config = { headers: { 'Authorization': 'Bearer ' + auth } }
-            const res2 = await axios.get(`https://www.robotevents.com/api/v2/events?season%5B%5D=173&myEvents=false&eventTypes%5B%5D=tournament&eventTypes%5B%5D=league&page=${i}&per_page=250`, config)
+            const res2 = await axios.get(`https://www.robotevents.com/api/v2/events?season%5B%5D=181&myEvents=false&eventTypes%5B%5D=tournament&eventTypes%5B%5D=league&page=${i}&per_page=250`, config)
                 .catch(async (e) => {
                     console.log(i)
                     let time = e.response.headers['retry-after']
@@ -41,7 +41,7 @@ async function getEvents() {
                     }
                     await new Promise(r => setTimeout(r, time * 1000));
                     try {
-                        const res2 = await axios.get(`https://www.robotevents.com/api/v2/events?season%5B%5D=173&myEvents=false&eventTypes%5B%5D=tournament&eventTypes%5B%5D=league&page=${i}&per_page=250`, config)
+                        const res2 = await axios.get(`https://www.robotevents.com/api/v2/events?season%5B%5D=181&myEvents=false&eventTypes%5B%5D=tournament&eventTypes%5B%5D=league&page=${i}&per_page=250`, config)
                         return res2;
                     } catch (e) {
 

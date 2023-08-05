@@ -10,7 +10,7 @@
           
 <br>
         <h3>Inspiration</h3>
-        <p>I have competed in some form of VEX Robotics since 2015, over 7 years as of right now. In my last 2 years of
+        <p>I have competed in some form of VEX Robotics since 2015, over 8 years as of right now. In my last 3 years of
             VRC,
             I have come to realize that winning tournaments takes more than building a good robot. While that is
             certainly

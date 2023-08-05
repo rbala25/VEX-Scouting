@@ -101,7 +101,7 @@ async function getAllElse() {
         try {
             const auth1 = await getAuth();
             const config2 = { headers: { 'Authorization': 'Bearer ' + auth1 } }
-            const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${teamId}/skills?season%5B%5D=173&per_page=250`, config2, { retry: 3, retryDelay: 3000 })
+            const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${teamId}/skills?season%5B%5D=181&per_page=250`, config2, { retry: 3, retryDelay: 3000 })
                 .catch(async (e) => {
                     console.log(teamId)
                     let time = e.response.headers['retry-after']
@@ -111,7 +111,7 @@ async function getAllElse() {
                     }
                     await new Promise(r => setTimeout(r, time * 1000));
                     try {
-                        const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${teamId}/skills?season%5B%5D=173&per_page=250`, config2, { retry: 3, retryDelay: 3000 })
+                        const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${teamId}/skills?season%5B%5D=181&per_page=250`, config2, { retry: 3, retryDelay: 3000 })
                         return res;
                     } catch (e) {
 
@@ -407,7 +407,7 @@ async function getAllElse() {
             const auth1 = await getAuth();
             const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
 
-            let res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+            let res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=181&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                 .catch(async (e) => {
                     console.log(id)
                     let time = e.response.headers['retry-after']
@@ -416,10 +416,10 @@ async function getAllElse() {
                         time += 15;
                     }
                     await new Promise(r => setTimeout(r, time * 1000));
-                    const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+                    const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=181&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                     return res;
                 })
-            const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=154&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+            const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                 .catch(async (e) => {
                     console.log(id)
                     let time = e.response.headers['retry-after']
@@ -428,7 +428,7 @@ async function getAllElse() {
                         time += 15;
                     }
                     await new Promise(r => setTimeout(r, time * 1000));
-                    const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=154&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+                    const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                     return res2;
                 })
 
@@ -550,7 +550,7 @@ async function getAllElse() {
             const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
 
             let temporary = { needed: false }
-            let res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+            let res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=181&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                 .catch(async (e) => {
                     console.log(id)
                     let time = e.response.headers['retry-after']
@@ -560,7 +560,7 @@ async function getAllElse() {
                     }
                     await new Promise(r => setTimeout(r, time * 1000));
                     try {
-                        temporary = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+                        temporary = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=181&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                         temporary.needed = true;
                     } catch (e) {
 
