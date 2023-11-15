@@ -322,14 +322,14 @@ async function getAllElse() {
 
         const auth1 = await getAuth();
         const config2 = { headers: { 'Authorization': 'Bearer ' + auth1 } }
-        const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/45434/teams?registered=true&myTeams=false&per_page=250&page=1`, config2, { retry: 3, retryDelay: 3000 })
+        const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/49726/teams?registered=true&myTeams=false&per_page=250&page=1`, config2, { retry: 3, retryDelay: 3000 })
 
         const iterator = res2.data.meta.last_page;
 
         for (i = 1; i <= iterator; i++) {
             const auth1 = await getAuth();
             const config2 = { headers: { 'Authorization': 'Bearer ' + auth1 } }
-            const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/45434/teams?registered=true&myTeams=false&per_page=250&page=${i}`, config2, { retry: 3, retryDelay: 3000 })
+            const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/49726/teams?registered=true&myTeams=false&per_page=250&page=${i}`, config2, { retry: 3, retryDelay: 3000 })
 
             const usables = res2.data.data
             for (usable of usables) {
@@ -340,13 +340,13 @@ async function getAllElse() {
 
         const auth2 = await getAuth();
         const config3 = { headers: { 'Authorization': 'Bearer ' + auth2 } }
-        const res3 = await axios.get(`https://www.robotevents.com/api/v2/events/45258/teams?registered=true&myTeams=false&per_page=250&page=1`, config3, { retry: 3, retryDelay: 3000 })
+        const res3 = await axios.get(`https://www.robotevents.com/api/v2/events/49725/teams?registered=true&myTeams=false&per_page=250&page=1`, config3, { retry: 3, retryDelay: 3000 })
         const iterator3 = res3.data.meta.last_page;
 
         for (i = 1; i <= iterator3; i++) {
             const auth1 = await getAuth();
             const config3 = { headers: { 'Authorization': 'Bearer ' + auth1 } }
-            const res3 = await axios.get(`https://www.robotevents.com/api/v2/events/45258/teams?registered=true&myTeams=false&per_page=250&page=${i}`, config3, { retry: 3, retryDelay: 3000 })
+            const res3 = await axios.get(`https://www.robotevents.com/api/v2/events/49725/teams?registered=true&myTeams=false&per_page=250&page=${i}`, config3, { retry: 3, retryDelay: 3000 })
 
             const usables = res3.data.data
             for (usable of usables) {
