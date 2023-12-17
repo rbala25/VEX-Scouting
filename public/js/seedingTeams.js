@@ -61,12 +61,14 @@ async function getTeamsGeneral() {
             const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams?registered=true&program=1=&myTeams=false&page=${i}&per_page=250`, config, { retry: 3, retryDelay: 3000 })
                 .catch(async (e) => {
                     console.log(i);
-                    let time = e.response.headers['retry-after']
-                    console.log(time)
+                    let time = e.config.timeout;
+                    // let time = e.response.headers['retry-after']
+                    // console.log(time)
                     if (time === 0) {
-                        time += 15;
+                        time = 2000;
                     }
-                    await new Promise(r => setTimeout(r, time * 1000));
+
+                    await new Promise(r => setTimeout(r, time));
                     const res = await axios.get(`https://www.robotevents.com/api/v2/teams?registered=true&program=1=&myTeams=false&page=${i}&per_page=250`, config, { retry: 3, retryDelay: 3000 })
                     return res;
                 })
@@ -104,17 +106,19 @@ async function getAllElse() {
             const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${teamId}/skills?season%5B%5D=181&per_page=250`, config2, { retry: 3, retryDelay: 3000 })
                 .catch(async (e) => {
                     console.log(teamId)
-                    let time = e.response.headers['retry-after']
-                    console.log(time)
+                    let time = e.config.timeout;
+                    // let time = e.response.headers['retry-after']
+                    // console.log(time)
                     if (time === 0) {
-                        time += 15;
+                        time = 2000;
                     }
-                    await new Promise(r => setTimeout(r, time * 1000));
+
+                    await new Promise(r => setTimeout(r, time));
                     try {
                         const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${teamId}/skills?season%5B%5D=181&per_page=250`, config2, { retry: 3, retryDelay: 3000 })
                         return res;
                     } catch (e) {
-
+                        console.log("here")
                     }
                 })
 
@@ -410,24 +414,28 @@ async function getAllElse() {
             let res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=181&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                 .catch(async (e) => {
                     console.log(id)
-                    let time = e.response.headers['retry-after']
-                    console.log(time)
+                    let time = e.config.timeout;
+                    // let time = e.response.headers['retry-after']
+                    // console.log(time)
                     if (time === 0) {
-                        time += 15;
+                        time = 2000;
                     }
-                    await new Promise(r => setTimeout(r, time * 1000));
+
+                    await new Promise(r => setTimeout(r, time));
                     const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=181&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                     return res;
                 })
             const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                 .catch(async (e) => {
                     console.log(id)
-                    let time = e.response.headers['retry-after']
-                    console.log(time)
+                    let time = e.config.timeout;
+                    // let time = e.response.headers['retry-after']
+                    // console.log(time)
                     if (time === 0) {
-                        time += 15;
+                        time = 2000;
                     }
-                    await new Promise(r => setTimeout(r, time * 1000));
+
+                    await new Promise(r => setTimeout(r, time));
                     const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                     return res2;
                 })
@@ -553,12 +561,14 @@ async function getAllElse() {
             let res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=181&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                 .catch(async (e) => {
                     console.log(id)
-                    let time = e.response.headers['retry-after']
-                    console.log(time)
+                    let time = e.config.timeout;
+                    // let time = e.response.headers['retry-after']
+                    // console.log(time)
                     if (time === 0) {
-                        time += 15;
+                        time = 2000;
                     }
-                    await new Promise(r => setTimeout(r, time * 1000));
+
+                    await new Promise(r => setTimeout(r, time));
                     try {
                         temporary = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=181&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                         temporary.needed = true;
@@ -600,12 +610,14 @@ async function getAllElse() {
                 let res2 = await axios.get(`https://www.robotevents.com/api/v2/events/${eventId}`, config)
                     .catch(async (e) => {
                         console.log(eventId)
-                        let time = e.response.headers['retry-after']
-                        console.log(time)
+                        let time = e.config.timeout;
+                        // let time = e.response.headers['retry-after']
+                        // console.log(time)
                         if (time === 0) {
-                            time += 15;
+                            time = 2000;
                         }
-                        await new Promise(r => setTimeout(r, time * 1000));
+
+                        await new Promise(r => setTimeout(r, time));
                         try {
                             temporary = await axios.get(`https://www.robotevents.com/api/v2/events/${eventId}`, config, { retry: 3, retryDelay: 3000 })
                             temporary.needed = true;
@@ -778,4 +790,3 @@ async function insertTeams() {
 }
 
 module.exports = insertTeams;
-
