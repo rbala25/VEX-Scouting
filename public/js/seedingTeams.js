@@ -55,6 +55,7 @@ async function getTeamsGeneral() {
         //     console.log(err)
         // })
 
+
         return res
     }
 
