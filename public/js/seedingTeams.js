@@ -29,6 +29,12 @@ async function getAuth() {
         return auth;
     } else if (tester === 3) {
         const auth = config.auth3;
+        return auth;
+    } else if (tester === 4) {
+        const auth = config.auth4;
+        return auth;
+    } else if (tester === 5) {
+        const auth = config.auth5;
         tester = 0;
         return auth;
     } else {
@@ -54,6 +60,7 @@ async function getTeamsGeneral() {
 
     async function getRest(res) {
         const iterator = res.data.meta.last_page;
+        // const iterator = 1;
         const arr = []
         for (i = 1; i <= iterator; i++) {
             const auth1 = await getAuth();
@@ -88,12 +95,34 @@ async function getTeamsGeneral() {
     return arr;
 }
 
+async function reRun(str, e, config) {
+
+    // let time = e.config.timeout;
+    // let time = e.response.headers['retry-after']
+    // console.log(time)
+
+    await new Promise(r => setTimeout(r, 100));
+    try {
+        const res = await axios.get(str, config, { retry: 3, retryDelay: 3000 })
+        return res;
+    } catch (e) {
+        e.error = true;
+
+        return e;
+    }
+}
+
 
 async function getAllElse() {
+    let failCount = 0;
+
     const arrs = await getTeamsGeneral();
+    // const arr1 = await getTeamsGeneral();
+    // const arrs = arr1.slice(0, 3);
 
     let counter = 0;
 
+    console.log(new Date())
     for (arr of arrs) {
         // for (i = 0; i < 50; i++) {
         // const arr = arrs[i];
@@ -103,24 +132,43 @@ async function getAllElse() {
         try {
             const auth1 = await getAuth();
             const config2 = { headers: { 'Authorization': 'Bearer ' + auth1 } }
+
+            let failTemp = false;
             const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${teamId}/skills?season%5B%5D=181&per_page=250`, config2, { retry: 3, retryDelay: 3000 })
                 .catch(async (e) => {
+                    failTemp = true;
+                    failCount++;
                     console.log(teamId)
-                    let time = e.config.timeout;
-                    // let time = e.response.headers['retry-after']
-                    // console.log(time)
-                    if (time === 0) {
-                        time = 2000;
-                    }
+                    let res3 = null;
+                    let iterator = 0;
 
-                    await new Promise(r => setTimeout(r, time));
-                    try {
-                        const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${teamId}/skills?season%5B%5D=181&per_page=250`, config2, { retry: 3, retryDelay: 3000 })
-                        return res;
-                    } catch (e) {
-                        console.log("here")
+                    while ((res3 === null) && (iterator < 4)) {
+                        iterator++;
+                        res3 = await reRun(`https://www.robotevents.com/api/v2/teams/${teamId}/skills?season%5B%5D=181&per_page=250`, e, { headers: { 'Authorization': 'Bearer ' + getAuth() } })
+
+                        if (!res3.error) {
+                            return res3;
+                        } else {
+                            e = res3;
+                            res3 = null;
+                        }
+
+                        if (iterator === 4) {
+                            await new Promise(r => setTimeout(r, 500));
+
+                            if (failCount >= 2) {
+                                console.log("failCount")
+                                await new Promise(r => setTimeout(r, 20000))
+                                failCount = 0;
+                            }
+
+                        }
                     }
                 })
+
+            if (!failTemp) {
+                failCount = 0;
+            }
 
             if (res2.data.data.length > 0) {
                 const usables = res2.data.data;
@@ -321,12 +369,15 @@ async function getAllElse() {
     //ABOVE IS OLD MATCHES
     //BELOW IS WORLDS
 
+    await new Promise(r => setTimeout(r, 30000));
+
     for (k = 0; k < 1; k++) {
         const teamsWorlds = []
 
         const auth1 = await getAuth();
         const config2 = { headers: { 'Authorization': 'Bearer ' + auth1 } }
         const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/49726/teams?registered=true&myTeams=false&per_page=250&page=1`, config2, { retry: 3, retryDelay: 3000 })
+            .catch(async (e) => { })
 
         const iterator = res2.data.meta.last_page;
 
@@ -334,6 +385,7 @@ async function getAllElse() {
             const auth1 = await getAuth();
             const config2 = { headers: { 'Authorization': 'Bearer ' + auth1 } }
             const res2 = await axios.get(`https://www.robotevents.com/api/v2/events/49726/teams?registered=true&myTeams=false&per_page=250&page=${i}`, config2, { retry: 3, retryDelay: 3000 })
+                .catch(async (e) => { })
 
             const usables = res2.data.data
             for (usable of usables) {
@@ -342,15 +394,19 @@ async function getAllElse() {
         }
         console.log("Done Middle School")
 
+        await new Promise(r => setTimeout(r, 15000));
+
         const auth2 = await getAuth();
         const config3 = { headers: { 'Authorization': 'Bearer ' + auth2 } }
         const res3 = await axios.get(`https://www.robotevents.com/api/v2/events/49725/teams?registered=true&myTeams=false&per_page=250&page=1`, config3, { retry: 3, retryDelay: 3000 })
+            .catch(async (e) => { })
         const iterator3 = res3.data.meta.last_page;
 
         for (i = 1; i <= iterator3; i++) {
             const auth1 = await getAuth();
             const config3 = { headers: { 'Authorization': 'Bearer ' + auth1 } }
             const res3 = await axios.get(`https://www.robotevents.com/api/v2/events/49725/teams?registered=true&myTeams=false&per_page=250&page=${i}`, config3, { retry: 3, retryDelay: 3000 })
+                .catch(async (e) => { })
 
             const usables = res3.data.data
             for (usable of usables) {
@@ -411,34 +467,78 @@ async function getAllElse() {
             const auth1 = await getAuth();
             const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
 
+            let failTemp = false;
             let res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=181&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                 .catch(async (e) => {
+                    failTemp = true;
+                    failCount++;
                     console.log(id)
-                    let time = e.config.timeout;
-                    // let time = e.response.headers['retry-after']
-                    // console.log(time)
-                    if (time === 0) {
-                        time = 2000;
-                    }
+                    let res3 = null;
+                    let iterator = 0;
 
-                    await new Promise(r => setTimeout(r, time));
-                    const res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=181&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
-                    return res;
+                    while ((res3 === null) && (iterator < 4)) {
+                        iterator++;
+                        res3 = await reRun(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=181&per_page=250&page=1`, e, { headers: { 'Authorization': 'Bearer ' + getAuth() } })
+
+                        if (!res3.error) {
+                            return res3;
+                        } else {
+                            e = res3;
+                            res3 = null;
+                        }
+
+                        if (iterator === 4) {
+                            await new Promise(r => setTimeout(r, 500));
+
+                            if (failCount >= 2) {
+                                console.log("failCount")
+                                await new Promise(r => setTimeout(r, 20000))
+                                failCount = 0;
+                            }
+
+                        }
+                    }
                 })
+            if (!failTemp) {
+                failCount = 0;
+            }
+
+            let failTemp1 = false;
             const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                 .catch(async (e) => {
+                    failTemp1 = true;
+                    failCount++;
                     console.log(id)
-                    let time = e.config.timeout;
-                    // let time = e.response.headers['retry-after']
-                    // console.log(time)
-                    if (time === 0) {
-                        time = 2000;
-                    }
+                    let res3 = null;
+                    let iterator = 0;
 
-                    await new Promise(r => setTimeout(r, time));
-                    const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
-                    return res2;
+                    while ((res3 === null) && (iterator < 4)) {
+                        iterator++;
+                        res3 = await reRun(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, e, { headers: { 'Authorization': 'Bearer ' + getAuth() } })
+
+                        if (!res3.error) {
+                            return res3;
+                        } else {
+                            e = res3;
+                            res3 = null;
+                        }
+
+                        if (iterator === 4) {
+                            await new Promise(r => setTimeout(r, 500));
+
+                            if (failCount >= 2) {
+                                console.log("failCount")
+                                await new Promise(r => setTimeout(r, 20000))
+                                failCount = 0;
+                            }
+
+                        }
+                    }
                 })
+
+            if (!failTemp1) {
+                failCount = 0;
+            }
 
             const usables = res.data.data;
             for (usable of usables) {
@@ -558,24 +658,49 @@ async function getAllElse() {
             const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
 
             let temporary = { needed: false }
+            let failTemp = false;
             let res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=181&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                 .catch(async (e) => {
+                    failTemp = true;
+                    failCount++;
                     console.log(id)
-                    let time = e.config.timeout;
-                    // let time = e.response.headers['retry-after']
-                    // console.log(time)
-                    if (time === 0) {
-                        time = 2000;
-                    }
+                    let res3 = null;
+                    let iterator = 0;
 
-                    await new Promise(r => setTimeout(r, time));
-                    try {
-                        temporary = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=181&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
-                        temporary.needed = true;
-                    } catch (e) {
+                    while ((res3 === null) && (iterator < 4)) {
+                        iterator++;
+                        res3 = await reRun(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=181&per_page=250&page=1`, e, { headers: { 'Authorization': 'Bearer ' + getAuth() } })
 
+                        if (!res3.error) {
+                            return res3;
+                        } else {
+                            e = res3;
+                            res3 = null;
+                        }
+
+                        if (iterator === 4) {
+                            await new Promise(r => setTimeout(r, 500));
+
+                            if (failCount >= 2) {
+                                console.log("failCount")
+                                await new Promise(r => setTimeout(r, 20000))
+                                failCount = 0;
+                            }
+
+                        }
                     }
                 })
+
+            if (!failTemp) {
+                failCount = 0;
+            }
+            try {
+                temporary = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=181&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+                temporary.needed = true;
+            } catch (e) {
+
+            }
+
             if (temporary.needed) {
                 res = temporary;
             }
@@ -607,24 +732,49 @@ async function getAllElse() {
                 const auth1 = await getAuth();
                 const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
                 let temporary = { needed: false };
+
+                let failTemp = false;
                 let res2 = await axios.get(`https://www.robotevents.com/api/v2/events/${eventId}`, config)
                     .catch(async (e) => {
+                        failTemp = true;
+                        failCount++;
                         console.log(eventId)
-                        let time = e.config.timeout;
-                        // let time = e.response.headers['retry-after']
-                        // console.log(time)
-                        if (time === 0) {
-                            time = 2000;
-                        }
+                        let res3 = null;
+                        let iterator = 0;
 
-                        await new Promise(r => setTimeout(r, time));
-                        try {
-                            temporary = await axios.get(`https://www.robotevents.com/api/v2/events/${eventId}`, config, { retry: 3, retryDelay: 3000 })
-                            temporary.needed = true;
-                        } catch (e) {
+                        while ((res3 === null) && (iterator < 4)) {
+                            iterator++;
+                            res3 = await reRun(`https://www.robotevents.com/api/v2/events/${eventId}`, e, { headers: { 'Authorization': 'Bearer ' + getAuth() } })
 
+                            if (!res3.error) {
+                                return res3;
+                            } else {
+                                e = res3;
+                                res3 = null;
+                            }
+
+                            if (iterator === 4) {
+                                await new Promise(r => setTimeout(r, 500));
+
+                                if (failCount >= 2) {
+                                    console.log("failCount")
+                                    await new Promise(r => setTimeout(r, 20000))
+                                    failCount = 0;
+                                }
+
+                            }
                         }
                     })
+                if (!failTemp) {
+                    failCount = 0;
+                }
+
+                try {
+                    temporary = await axios.get(`https://www.robotevents.com/api/v2/events/${eventId}`, config, { retry: 3, retryDelay: 3000 })
+                    temporary.needed = true;
+                } catch (e) {
+
+                }
                 if (temporary.needed) {
                     res2 = temporary;
                 }
@@ -790,3 +940,4 @@ async function insertTeams() {
 }
 
 module.exports = insertTeams;
+
