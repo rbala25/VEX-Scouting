@@ -61,32 +61,42 @@ async function algorithm() {
         const tpawards = arr.tpawards;
         let trueSkill = 0;
 
-        const driverTrue = skills.driving / 40;
-        const autonTrue = skills.auton / 50;
+        const driverTrue = skills.driving / 33;
+        const autonTrue = skills.auton / 43;
         const skillsTrue = driverTrue + autonTrue;
 
         const weightedRateTrue = rankings.weightedRate;
-        const SoSTrue = rankings.avgSoS / sosTot;
+        let SoSTrue = rankings.avgSoS / sosTot;
+
+        if (SoSTrue > 1) {
+            SoSTrue = 1 + ((SoSTrue - 1) / 1.5)
+        } else if ((SoSTrue < 1) && (SoSTrue > 0)) {
+            SoSTrue = 1 - ((1 - SoSTrue) / 1.5)
+        }
+
         const weightedTemp = weightedRateTrue * SoSTrue;
-        const rankingsTrue = weightedTemp * 6;
+        let rankingsTrue = weightedTemp * 5.3;
+
+        rankingsTrue += rankings.autonPct * 1.5;
+        rankingsTrue += rankings.wpPct / 1.5;
 
         let worldsTrue = 0;
         if (worlds === true) {
-            worldsTrue += 2;
+            worldsTrue += 1.5;
         }
 
         let awardsTrue = 0;
         for (i = 0; i < awards.excellence; i++) {
-            awardsTrue += 1.75;
+            awardsTrue += 1.5;
         }
         for (i = 0; i < awards.champion; i++) {
-            awardsTrue += 1.75;
+            awardsTrue += 1.25;
         }
         for (i = 0; i < awards.skills; i++) {
             awardsTrue += 1.25;
         }
         for (i = 0; i < awards.finalist; i++) {
-            awardsTrue += 1;
+            awardsTrue += 0.9;
         }
         for (i = 0; i < awards.skills2; i++) {
             awardsTrue += 0.75;
@@ -95,21 +105,21 @@ async function algorithm() {
             awardsTrue += 0.5;
         }
         for (i = 0; i < awards.think; i++) {
-            awardsTrue += 0.2;
+            awardsTrue += 0.1;
         }
 
         let tpAwardsTrue = 0;
         for (i = 0; i < tpawards.excellence; i++) {
-            awardsTrue += 1;
+            awardsTrue += 0.8;
         }
         for (i = 0; i < tpawards.champion; i++) {
-            awardsTrue += 1;
+            awardsTrue += 0.6;
         }
         for (i = 0; i < tpawards.skills; i++) {
-            awardsTrue += 0.5;
+            awardsTrue += 0.6;
         }
         for (i = 0; i < tpawards.finalist; i++) {
-            awardsTrue += 0.25;
+            awardsTrue += 0.3;
         }
         for (i = 0; i < tpawards.skills2; i++) {
             awardsTrue += 0.2;
@@ -120,7 +130,6 @@ async function algorithm() {
         for (i = 0; i < tpawards.think; i++) {
             awardsTrue += 0.05;
         }
-
 
 
         if (skillsTrue) {

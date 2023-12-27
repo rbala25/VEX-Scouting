@@ -6,6 +6,7 @@ const Team = require('../../models/teams');
 const axios1 = require('axios').default;
 const config = require('../../config');
 const rateLimit = require('axios-rate-limit');
+const allevents = require('../../models/allEvents');
 const axios = rateLimit(axios1.create(), { maxRequests: 1, perMilliseconds: 1000 })
 
 mongoose.connect('mongodb://127.0.0.1:27017/vexScouting')
@@ -62,6 +63,7 @@ async function getTeamsGeneral() {
     async function getRest(res) {
         const iterator = res.data.meta.last_page;
         // const iterator = 1;
+
         const arr = []
         for (i = 1; i <= iterator; i++) {
             const auth1 = await getAuth();
@@ -119,12 +121,13 @@ async function getAllElse() {
 
     const arrs = await getTeamsGeneral();
     // const arr1 = await getTeamsGeneral();
-    // const arrs = arr1.slice(0, 3);
+    // const arrs = arr1.slice(0, 10);
 
     let counter = 0;
 
     console.log(new Date())
     for (arr of arrs) {
+        await new Promise(r => setTimeout(r, 3000));
         // for (i = 0; i < 50; i++) {
         // const arr = arrs[i];
         const teamId = arr.id;
@@ -223,8 +226,8 @@ async function getAllElse() {
     }
 
 
-    //SKILLS IS ABOVE
-    //BELOW IS OLD MATCHES
+    // SKILLS IS ABOVE
+    // BELOW IS OLD MATCHES
 
     // counter = 0;
 
@@ -367,8 +370,8 @@ async function getAllElse() {
     //     }
     // }
 
-    //ABOVE IS OLD MATCHES
-    //BELOW IS WORLDS
+    // ABOVE IS OLD MATCHES
+    // BELOW IS WORLDS
 
     await new Promise(r => setTimeout(r, 30000));
 
@@ -436,12 +439,13 @@ async function getAllElse() {
     }
 
 
-    //ABOVE IS WORLDS
-    // SECTION BELOW = AWARDS
+    // //ABOVE IS WORLDS
+    // // SECTION BELOW = AWARDS
 
     counter = 0;
     // for (i = 0; i < 50; i++) {
     for (arr of arrs) {
+        await new Promise(r => setTimeout(r, 2500));
         // const arr = arrs[i];
         let excellence = 0;
         let champion = 0;
@@ -464,6 +468,7 @@ async function getAllElse() {
 
         const id = arr.id;
 
+        await new Promise(r => setTimeout(r, 2500));
         try {
             const auth1 = await getAuth();
             const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
@@ -507,6 +512,7 @@ async function getAllElse() {
             let failTemp1 = false;
             const res2 = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/awards?season%5B%5D=173&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                 .catch(async (e) => {
+
                     failTemp1 = true;
                     failCount++;
                     console.log(id)
@@ -633,11 +639,12 @@ async function getAllElse() {
 
     }
 
-    // //SECTIOn ABOVE IS AWARDS
-    // //BELOW IS RANKINGS
+    //SECTIOn ABOVE IS AWARDS
+    //BELOW IS RANKINGS
 
     counter = 0;
     for (arr of arrs) {
+        await new Promise(r => setTimeout(r, 3000));
         // for (j = 0; j < 2100; j++) {
         // let arr = arrs[j]
         // console.log(arr.number)
@@ -658,7 +665,7 @@ async function getAllElse() {
             const auth1 = await getAuth();
             const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
 
-            let temporary = { needed: false }
+            // let temporary = { needed: false }
             let failTemp = false;
             let res = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=181&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
                 .catch(async (e) => {
@@ -695,24 +702,32 @@ async function getAllElse() {
             if (!failTemp) {
                 failCount = 0;
             }
-            try {
-                temporary = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=181&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
-                temporary.needed = true;
-            } catch (e) {
+            // try {
+            //     temporary = await axios.get(`https://www.robotevents.com/api/v2/teams/${id}/rankings?season%5B%5D=181&per_page=250&page=1`, config, { retry: 3, retryDelay: 3000 })
+            //     temporary.needed = true;
+            // } catch (e) {
 
-            }
+            // }
 
-            if (temporary.needed) {
-                res = temporary;
-            }
+            // if (temporary.needed) {
+            //     res = temporary;
+            // }
 
             const usables = res.data.data;
+
+            let avgPoints = 0;
+            let totalAp = 0;
+            let totalWp = 0;
             // console.log(usables)
             for (i = 0; i < usables.length; i++) {
                 // console.log(arr.number)
                 const usable = usables[i];
                 const eWins = usable.wins;
                 const eLosses = usable.losses;
+
+                avgPoints += usable.average_points;
+                totalAp += usable.ap
+                totalWp += usable.wp
                 wins += eWins;
                 losses += eLosses;
 
@@ -730,61 +745,66 @@ async function getAllElse() {
                 // console.log(eventId)
                 const eventId = usable.event.id;
 
-                const auth1 = await getAuth();
-                const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
-                let temporary = { needed: false };
+                // const auth1 = await getAuth();
+                // const config = { headers: { 'Authorization': 'Bearer ' + auth1 } }
+                // let temporary = { needed: false };
 
-                let failTemp = false;
-                let res2 = await axios.get(`https://www.robotevents.com/api/v2/events/${eventId}`, config)
-                    .catch(async (e) => {
-                        failTemp = true;
-                        failCount++;
-                        console.log(eventId)
-                        let res3 = null;
-                        let iterator = 0;
+                let res2 = await allevents.findOne({ id: eventId })
+                // let failTemp = false;
+                // let res2 = await axios.get(`https://www.robotevents.com/api/v2/events/${eventId}`, config)
+                //     .catch(async (e) => {
+                //         failTemp = true;
+                //         failCount++;
+                //         console.log(eventId)
+                //         let res3 = null;
+                //         let iterator = 0;
 
-                        while ((res3 === null) && (iterator < 4)) {
-                            iterator++;
-                            res3 = await reRun(`https://www.robotevents.com/api/v2/events/${eventId}`, e, { headers: { 'Authorization': 'Bearer ' + getAuth() } })
+                //         while ((res3 === null) && (iterator < 4)) {
+                //             iterator++;
+                //             res3 = await reRun(`https://www.robotevents.com/api/v2/events/${eventId}`, e, { headers: { 'Authorization': 'Bearer ' + getAuth() } })
 
-                            if (!res3.error) {
-                                return res3;
-                            } else {
-                                e = res3;
-                                res3 = null;
-                            }
+                //             if (!res3.error) {
+                //                 return res3;
+                //             } else {
+                //                 e = res3;
+                //                 res3 = null;
+                //             }
 
-                            if (iterator === 4) {
-                                await new Promise(r => setTimeout(r, 500));
+                //             if (iterator === 4) {
+                //                 await new Promise(r => setTimeout(r, 500));
 
-                                if (failCount >= 2) {
-                                    console.log("failCount")
-                                    await new Promise(r => setTimeout(r, 20000))
-                                    failCount = 0;
-                                }
+                //                 if (failCount >= 2) {
+                //                     console.log("failCount")
+                //                     await new Promise(r => setTimeout(r, 20000))
+                //                     failCount = 0;
+                //                 }
 
-                            }
-                        }
-                    })
-                if (!failTemp) {
-                    failCount = 0;
-                }
+                //             }
+                //         }
+                //     })
+                // if (!failTemp) {
+                //     failCount = 0;
+                // }
 
-                try {
-                    temporary = await axios.get(`https://www.robotevents.com/api/v2/events/${eventId}`, config, { retry: 3, retryDelay: 3000 })
-                    temporary.needed = true;
-                } catch (e) {
 
-                }
-                if (temporary.needed) {
-                    res2 = temporary;
+                // try {
+                //     temporary = await axios.get(`https://www.robotevents.com/api/v2/events/${eventId}`, config, { retry: 3, retryDelay: 3000 })
+                //     temporary.needed = true;
+                // } catch (e) {
+
+                // }
+                // if (temporary.needed) {
+                //     res2 = temporary;
+                // }
+
+                if (res2 === null) {
+                    continue;
                 }
 
                 const level = res2.data.level;
-                // console.log(level)
 
                 if (level == 'Signature') {
-                    const weightedWinsCalc = eWins * 1.4;
+                    const weightedWinsCalc = eWins * 1.6;
                     weightedWins += weightedWinsCalc;
                 } else if (level == "World") {
                     const weightedWinsCalc = eWins * 2.0;
@@ -835,12 +855,23 @@ async function getAllElse() {
                 losses = 0;
             }
 
+            let autonPct = 0;
+            let wpPct = 0;
+
+            if (totalMatches > 0) {
+                autonPct = (totalAp / 8) / totalMatches;
+                wpPct = (totalWp / 2) / totalMatches;
+            }
+
             const Obj = {
                 wins: wins,
                 losses: losses,
                 weightedRate: weightedRate,
                 unweightedRate: unweightedRate,
-                avgSoS: avgSoS
+                avgSoS: avgSoS,
+                avgPoints: avgPoints,
+                autonPct: autonPct,
+                wpPct: wpPct, //possible to have greeater than 1 because awp
             }
 
             // Object.assign({ rankings: Obj })
@@ -854,7 +885,10 @@ async function getAllElse() {
                 losses: 0,
                 weightedRate: 0,
                 unweightedRate: 0,
-                avgSoS: 0
+                avgSoS: 0,
+                avgPoints: 0,
+                autonPct: 0,
+                wpPct: 0,
             }
             arr.rankings = Obj;
         }

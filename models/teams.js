@@ -38,6 +38,9 @@ const teamSchema = new mongoose.Schema({
         weightedRate: Number,
         unweightedRate: Number,
         avgSoS: Number,
+        avgPoints: Number,
+        autonPct: Number,
+        wpPct: Number,
     },
     worlds: Boolean,
     awards: {
