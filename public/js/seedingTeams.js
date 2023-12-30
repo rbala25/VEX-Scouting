@@ -121,7 +121,7 @@ async function getAllElse() {
 
     const arrs = await getTeamsGeneral();
     // const arr1 = await getTeamsGeneral();
-    // const arrs = arr1.slice(0, 10);
+    // const arrs = arr1.slice(0, 15);
 
     let counter = 0;
 

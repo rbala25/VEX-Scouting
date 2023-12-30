@@ -13,7 +13,7 @@ async function cron1() {
 }
 
 let running = false;
-cron.schedule('0 18 27,4,12,20 * *', async () => {
+cron.schedule('0 16 30,8,16,23 * *', async () => {
     if (running === false) {
         running = true;
         console.log('scheduled')
@@ -22,5 +22,3 @@ cron.schedule('0 18 27,4,12,20 * *', async () => {
     }
 }
 )
-
-// cron1()
